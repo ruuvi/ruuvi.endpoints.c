@@ -1,22 +1,31 @@
 #include "sdk_application_config.h"
-#ifdef RUUVI_ENDPOINTS
+#if RUUVI_ENDPOINTS
 #include "ruuvi_endpoints.h"
 
+#define PLATFORM_LOG_MODULE_NAME endpoints
+#if MAIN_LOG_ENABLED
+#define PLATFORM_LOG_LEVEL       MAIN_LOG_LEVEL
+#define PLATFORM_LOG_INFO_COLOR  MAIN_INFO_COLOR
+#else
+#define PLATFORM_LOG_LEVEL       0
+#endif
+#include "platform_log.h"
+PLATFORM_LOG_MODULE_REGISTER();
 
-
-#include "nrf_log.h"
-#include "nrf_log_ctrl.h"
 
 /** Sensor data handlers **/
 //static message_handler p_battery_handler           = NULL;
 //static message_handler p_rng_handler               = NULL;
 //static message_handler p_rtc_handler               = NULL;
+//static message_handler p_nfc_handler               = NULL;
+//static message_handler p_gpio_handler              = NULL;
+static message_handler p_led_handler               = NULL;
 //static message_handler p_temperature_handler       = NULL;
 //static message_handler p_humidity_handler          = NULL;
 //static message_handler p_pressure_handler          = NULL;
 //static message_handler p_air_quality_handler       = NULL;
-static message_handler p_environmental_handle      = NULL;
-static message_handler p_acceleration_handler      = NULL;
+static message_handler p_environmental_handler      = NULL;
+static message_handler p_acceleration_handler       = NULL;
 //static message_handler p_magnetometer_handler      = NULL;
 //static message_handler p_gyroscope_handler         = NULL;
 //static message_handler p_movement_detector_handler = NULL;
@@ -48,100 +57,111 @@ static message_handler p_mam_handler               = NULL;
 /** Routes message to appropriate endpoint handler.
  *  Messages will send data to their configured transmission points
  **/
-void route_message(const ruuvi_standard_message_t* message)
+ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message)
 {
-    NRF_LOG_INFO("Routing message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
-    switch(message->destination_endpoint)
-    {
-      // case PLAINTEXT_MESSAGE:
-      //   unknown_handler(message); // Application does not handle plain text - TODO: Not implemented hander?
-      //   break;
-      
-      // case BATTERY:
-      //   if(p_battery_handler) {p_battery_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-        
-      // case RNG:
-      //   if(p_rng_handler) {p_rng_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
+  PLATFORM_LOG_INFO("Routing message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
+  switch (message->destination_endpoint)
+  {
+  // case PLAINTEXT_MESSAGE:
+  //   unknown_handler(message); // Application does not handle plain text - TODO: Not implemented hander?
+  //   break;
 
-      // case RTC:
-      //   if(p_rtc_handler) {p_rtc_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
+  // case BATTERY:
+  //   if(p_battery_handler) {p_battery_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
 
-      // case TEMPERATURE:
-      //   NRF_LOG_DEBUG("Message is a temperature message.\r\n");
-      //   if(p_temperature_handler) {p_temperature_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
+  // case RNG:
+  //   if(p_rng_handler) {p_rng_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
 
-      // case HUMIDITY:
-      //   if(p_humidity_handler) {p_humidity_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-      
-      // case PRESSURE:
-      //   if(p_pressure_handler) {p_pressure_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-      
-      // case AIR_QUALITY:
-      //   if(p_air_quality_handler) {p_air_quality_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-      case ENVRIONMENTAL:
-        if(p_environmental_handler) {p_environmental_handler(message); } 
-        else {unknown_handler(message); }
-        break;
-        
-      case ACCELERATION:
-        if(p_acceleration_handler) {p_acceleration_handler(message); } 
-        else {unknown_handler(message); }
-        break;
-      
-      // case MAGNETOMETER:
-      //   if(p_magnetometer_handler) {p_magnetometer_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-      
-      // case GYROSCOPE:
-      //   if(p_gyroscope_handler) {p_gyroscope_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
-        
-      // case MOVEMENT_DETECTOR:
-      //   if(p_movement_detector_handler) {p_movement_detector_handler(message); } 
-      //   else {unknown_handler(message); }
-      //   break;
+  // case RTC:
+  //   if(p_rtc_handler) {p_rtc_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
 
-      case MAM:
-        if(p_mam_handler) {p_mam_handler(message); } 
-        else {unknown_handler(message); }
-        break;
-    
-      default:
-        //Call chain handler if applicable
-        // if(ENDPOINT_CHAIN_OFFSET <= message.destination_endpoint && 
-        //   (ENDPOINT_CHAIN_OFFSET + NUM_CHAIN_CHANNELS) > message.destination_endpoint &&
-        //   p_chain_handler)
-        // {
-        //   p_chain_handler(message);
-        // }
-        // else
-        // {
-          unknown_handler(message);
-        //}
-        break;
-    }
+  case LED:
+    if (p_led_handler) { p_led_handler(message); }
+    else { unknown_handler(message); }
+    break;
+
+  // case TEMPERATURE:
+  //   NRF_LOG_DEBUG("Message is a temperature message.\r\n");
+  //   if(p_temperature_handler) {p_temperature_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  // case HUMIDITY:
+  //   if(p_humidity_handler) {p_humidity_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  // case PRESSURE:
+  //   if(p_pressure_handler) {p_pressure_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  // case AIR_QUALITY:
+  //   if(p_air_quality_handler) {p_air_quality_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+  case ENVIRONMENTAL:
+    if (p_environmental_handler) { p_environmental_handler(message); }
+    else { unknown_handler(message); }
+    break;
+
+  case ACCELERATION:
+    if (p_acceleration_handler) { p_acceleration_handler(message); }
+    else { unknown_handler(message); }
+    break;
+
+  // case MAGNETOMETER:
+  //   if(p_magnetometer_handler) {p_magnetometer_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  // case GYROSCOPE:
+  //   if(p_gyroscope_handler) {p_gyroscope_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  // case MOVEMENT_DETECTOR:
+  //   if(p_movement_detector_handler) {p_movement_detector_handler(message); }
+  //   else {unknown_handler(message); }
+  //   break;
+
+  case MAM:
+    if (p_mam_handler) { p_mam_handler(message); }
+    else { unknown_handler(message); }
+    break;
+
+  default:
+    //Call chain handler if applicable
+    // if(ENDPOINT_CHAIN_OFFSET <= message.destination_endpoint &&
+    //   (ENDPOINT_CHAIN_OFFSET + NUM_CHAIN_CHANNELS) > message.destination_endpoint &&
+    //   p_chain_handler)
+    // {
+    //   p_chain_handler(message);
+    // }
+    // else
+    // {
+    unknown_handler(message);
+    //}
+    break;
+  }
+  return ENDPOINT_SUCCESS;
 }
 
 // void set_temperature_handler(message_handler handler)
 // {
 //   p_temperature_handler = handler;
 // }
+
+void set_led_handler(message_handler handler)
+{
+  p_led_handler = handler;
+}
 
 void set_acceleration_handler(message_handler handler)
 {
@@ -249,9 +269,9 @@ void set_mam_handler(message_handler handler)
 // }
 
 // Mark payload as "unknown"
-ret_code_t unknown_handler(const ruuvi_standard_message_t* message)
+ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message)
 {
-  NRF_LOG_INFO("Unknown message. %x, %x, %x, \r\n",message.destination_endpoint, message.source_endpoint, message.type);
+  NRF_LOG_INFO("Unknown message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
   message->type = UNKNOWN;
 
   return ENDPOINT_HANDLER_ERROR;
