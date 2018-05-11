@@ -271,7 +271,7 @@ void set_mam_handler(message_handler handler)
 // Mark payload as "unknown"
 ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message)
 {
-  NRF_LOG_INFO("Unknown message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
+  PLATFORM_LOG_INFO("Unknown message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
   message->type = UNKNOWN;
 
   return ENDPOINT_HANDLER_ERROR;
