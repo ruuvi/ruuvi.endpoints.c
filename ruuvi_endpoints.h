@@ -80,9 +80,6 @@ typedef struct __attribute__((packed)){
   uint8_t payload[8];
 }ruuvi_standard_message_t;
 
-/**
- *  Configuration message for a sensor, fits into std message payoad
- */
 typedef struct __attribute__((packed)){
   uint8_t sample_rate;
   uint8_t transmission_rate;
@@ -92,7 +89,7 @@ typedef struct __attribute__((packed)){
   uint8_t dsp_parameter;
   uint8_t target;
   uint8_t reserved;
-}ruuvi_sensor_configuration_t;
+}ruuvi_endpoint_sensor_configuration_t;
 
 /**
  *  Configuration message for an actuator, fits into std message payoad
