@@ -9,7 +9,7 @@ typedef enum{
   PLAINTEXT_MESSAGE       = 0x10, // Plaintext data for info, debug etc
   BATTERY                 = 0x20, // Battery state message
   RNG                     = 0x21, // Random number
-  RTC                     = 0x22, // Real time clock 
+  RTC                     = 0x22, // Real time clock
   NFC                     = 0x23, // NFC message
   GPIO                    = 0x24, // GPIO message
   LED                     = 0x2A, // LED message
@@ -21,7 +21,7 @@ typedef enum{
   ACCELERATION            = 0x40,
   MAGNETOMETER            = 0x41,
   GYROSCOPE               = 0x42,
-  MOVEMENT_DETECTOR       = 0x43, 
+  MOVEMENT_DETECTOR       = 0x43,
   MAM                     = 0xE0  // IOTA Masked Authenticated Messaging
 }ruuvi_endpoint_t;
 
@@ -70,7 +70,7 @@ typedef enum{
 }ruuvi_endpoint_ret_t;
 
 
-/** 
+/**
  * 11 byte message fits into BLE MESH single payload
  */
 typedef struct __attribute__((packed)){
@@ -92,7 +92,7 @@ typedef struct __attribute__((packed)){
   uint8_t dsp_parameter;
   uint8_t target;
   uint8_t reserved;
-}ruuvi_sensor_configuration_t;
+}ruuvi_endpoint_sensor_configuration_t;
 
 /**
  *  Configuration message for an actuator, fits into std message payoad
