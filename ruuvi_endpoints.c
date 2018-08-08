@@ -1,17 +1,7 @@
-#include "sdk_application_config.h"
-#if RUUVI_ENDPOINTS
+#include "application_config.h"
+#if RUUVI_ENDPOINTS_ENABLED
+#include <stddef.h>
 #include "ruuvi_endpoints.h"
-
-#define PLATFORM_LOG_MODULE_NAME endpoints
-#if MAIN_LOG_ENABLED
-#define PLATFORM_LOG_LEVEL       MAIN_LOG_LEVEL
-#define PLATFORM_LOG_INFO_COLOR  MAIN_INFO_COLOR
-#else
-#define PLATFORM_LOG_LEVEL       0
-#endif
-#include "platform_log.h"
-PLATFORM_LOG_MODULE_REGISTER();
-
 
 /** Sensor data handlers **/
 //static message_handler p_battery_handler           = NULL;
@@ -59,7 +49,6 @@ static message_handler p_mam_handler               = NULL;
  **/
 ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message)
 {
-  PLATFORM_LOG_INFO("Routing message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
   switch (message->destination_endpoint)
   {
   // case PLAINTEXT_MESSAGE:
@@ -271,7 +260,6 @@ void set_mam_handler(message_handler handler)
 // Mark payload as "unknown"
 ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message)
 {
-  PLATFORM_LOG_INFO("Unknown message. %x, %x, %x, \r\n", message->destination_endpoint, message->source_endpoint, message->type);
   message->type = UNKNOWN;
 
   return ENDPOINT_HANDLER_ERROR;
