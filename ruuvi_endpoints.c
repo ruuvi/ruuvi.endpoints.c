@@ -9,20 +9,17 @@
 //static message_handler p_rtc_handler               = NULL;
 //static message_handler p_nfc_handler               = NULL;
 //static message_handler p_gpio_handler              = NULL;
-static message_handler p_led_handler               = NULL;
+static message_handler p_led_handler                 = NULL;
 //static message_handler p_temperature_handler       = NULL;
 //static message_handler p_humidity_handler          = NULL;
 //static message_handler p_pressure_handler          = NULL;
 //static message_handler p_air_quality_handler       = NULL;
-static message_handler p_environmental_handler      = NULL;
-static message_handler p_acceleration_handler       = NULL;
+static message_handler p_environmental_handler       = NULL;
+static message_handler p_acceleration_handler        = NULL;
 //static message_handler p_magnetometer_handler      = NULL;
 //static message_handler p_gyroscope_handler         = NULL;
 //static message_handler p_movement_detector_handler = NULL;
-static message_handler p_mam_handler               = NULL;
-
-/** Chain handler **/
-//static message_handler p_chain_handler = NULL;
+static message_handler p_app0_handler                = NULL;
 
 /** Data traffic handlers **/
 // static message_handler p_reply_handler       = NULL;
@@ -34,15 +31,6 @@ static message_handler p_mam_handler               = NULL;
 // static message_handler p_ram_handler         = NULL;
 // static message_handler p_flash_handler       = NULL;
 
-/** Scheduler handler to call message router **/
-// TODO rename as incoming message handler and parse all messages through this function?
-// void ble_gatt_scheduler_event_handler(void *p_event_data, uint16_t event_size)
-// {
-//   //TODO: Handle incoming bulk writes
-//   ruuvi_standard_message_t message = {};
-//   memcpy(&message, p_event_data, sizeof(message));
-//   route_message(message);
-// }
 
 /** Routes message to appropriate endpoint handler.
  *  Messages will send data to their configured transmission points
@@ -120,8 +108,8 @@ ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message)
   //   else {unknown_handler(message); }
   //   break;
 
-  case MAM:
-    if (p_mam_handler) { p_mam_handler(message); }
+  case APP0:
+    if (p_app0_handler) { p_app0_handler(message); }
     else { unknown_handler(message); }
     break;
 
@@ -162,9 +150,9 @@ void set_environmental_handler(message_handler handler)
   p_environmental_handler = handler;
 }
 
-void set_mam_handler(message_handler handler)
+void set_app0_handler(message_handler handler)
 {
-  p_mam_handler = handler;
+  p_app0_handler = handler;
 }
 
 // void set_reply_handler(message_handler handler)

@@ -22,7 +22,7 @@ typedef enum{
   MAGNETOMETER            = 0x41,
   GYROSCOPE               = 0x42,
   MOVEMENT_DETECTOR       = 0x43,
-  MAM                     = 0xE0  // IOTA Masked Authenticated Messaging
+  APP0                    = 0xD0 // Application specific handler
 }ruuvi_endpoint_t;
 
 /** Possible message types. Commented ones are on roadmap, but not implemented any time soon **/
@@ -69,6 +69,17 @@ typedef enum{
   ENDPOINT_HANDLER_NULL    = 32  // Null ptr passed to handler
 }ruuvi_endpoint_ret_t;
 
+/**
+ *
+ */
+typedef enum{
+  RUUVI_ENDPOINT_CMD_RESET     = 0,
+  RUUVI_ENDPOINT_CMD_START     = 1,
+  RUUVI_ENDPOINT_CMD_PAUSE     = 2,
+  RUUVI_ENDPOINT_CMD_RESUME    = 3,
+  RUUVI_ENDPOINT_CMD_NO_CHANGE = 255
+}ruuvi_endpoint_sensor_cmd_t;
+
 
 /**
  * 11 byte message fits into BLE MESH single payload
@@ -88,7 +99,7 @@ typedef struct __attribute__((packed)){
   uint8_t dsp_function;
   uint8_t dsp_parameter;
   uint8_t target;
-  uint8_t reserved;
+  uint8_t cmd;
 }ruuvi_endpoint_sensor_configuration_t;
 
 /**
@@ -103,7 +114,7 @@ typedef struct __attribute__((packed)){
   uint8_t reserved3;
   uint8_t reserved4;
   uint8_t reserved5;
-}ruuvi_actuator_configuration_t;
+}ruuvi_endpoint_actuator_configuration_t;
 
 // Declare message handler type
 typedef ruuvi_endpoint_status_t(*message_handler)(ruuvi_standard_message_t* const message);
@@ -118,7 +129,7 @@ ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message)
 void set_environmental_handler(message_handler handler);
 void set_acceleration_handler(message_handler handler);
 void set_led_handler(message_handler handler);
-void set_mam_handler(message_handler handler);
+void set_app0_handler(message_handler handler);
 void set_unknown_handler(message_handler handler);
 
 
