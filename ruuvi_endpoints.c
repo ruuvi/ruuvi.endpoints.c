@@ -17,7 +17,7 @@ static message_handler p_led_handler                 = NULL;
 static message_handler p_environmental_handler       = NULL;
 static message_handler p_acceleration_handler        = NULL;
 //static message_handler p_magnetometer_handler      = NULL;
-//static message_handler p_gyroscope_handler         = NULL;
+static message_handler p_gyration_handler            = NULL;
 //static message_handler p_movement_detector_handler = NULL;
 static message_handler p_app0_handler                = NULL;
 
@@ -98,10 +98,10 @@ ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message)
   //   else {unknown_handler(message); }
   //   break;
 
-  // case GYROSCOPE:
-  //   if(p_gyroscope_handler) {p_gyroscope_handler(message); }
-  //   else {unknown_handler(message); }
-  //   break;
+   case GYRATION:
+     if(p_gyration_handler) {p_gyration_handler(message); }
+     else {unknown_handler(message); }
+     break;
 
   // case MOVEMENT_DETECTOR:
   //   if(p_movement_detector_handler) {p_movement_detector_handler(message); }
@@ -148,6 +148,11 @@ void set_acceleration_handler(message_handler handler)
 void set_environmental_handler(message_handler handler)
 {
   p_environmental_handler = handler;
+}
+
+void set_gyration_handler(message_handler handler)
+{
+  p_gyration_handler = handler;
 }
 
 void set_app0_handler(message_handler handler)
@@ -198,51 +203,6 @@ void set_app0_handler(message_handler handler)
 // void set_chain_handler(message_handler handler)
 // {
 //   p_chain_handler = handler;
-// }
-
-// message_handler get_reply_handler(void)
-// {
-//   return p_reply_handler;
-// }
-
-// message_handler get_ble_adv_handler(void)
-// {
-//   return p_ble_adv_handler;
-// }
-
-// message_handler get_ble_gatt_handler(void)
-// {
-//   return p_ble_gatt_handler;
-// }
-
-// message_handler get_ble_mesh_handler(void)
-// {
-//   return p_ble_mesh_handler;
-// }
-
-// message_handler get_proprietary_handler(void)
-// {
-//   return p_proprietary_handler;
-// }
-
-// message_handler get_nfc_handler(void)
-// {
-//   return p_nfc_handler;
-// }
-
-// message_handler get_ram_handler(void)
-// {
-//   return p_ram_handler;
-// }
-
-// message_handler get_flash_handler(void)
-// {
-//   return p_flash_handler;
-// }
-
-// message_handler get_chain_handler(void)
-// {
-//   return p_chain_handler;
 // }
 
 // Mark payload as "unknown"

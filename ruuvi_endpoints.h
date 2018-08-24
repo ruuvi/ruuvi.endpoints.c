@@ -19,8 +19,8 @@ typedef enum{
   AIR_QUALITY             = 0x34,
   ENVIRONMENTAL           = 0x3A, // Aggregate of temperature, humidity, pressure. 2+2+4 bytes.
   ACCELERATION            = 0x40,
-  MAGNETOMETER            = 0x41,
-  GYROSCOPE               = 0x42,
+  MAGNETISM               = 0x41,
+  GYRATION                = 0x42,
   MOVEMENT_DETECTOR       = 0x43,
   APP0                    = 0xD0 // Application specific handler
 }ruuvi_endpoint_t;
@@ -42,8 +42,6 @@ typedef enum{
   TIMESTAMP                      = 0x13, // Timestamp related to next event
   UNKNOWN                        = 0x14, // Unknown, may be a reply if incoming message was not understood
   ERROR                          = 0x15, // Error, payload may contain details
-  //CHAIN_UPSTREAM_CONFIGURATION   = 0x16, // Configure a chain endpoint
-  //CHAIN_DOWNSTREAM_CONFIGURATION = 0x17, // Pass a function pointer to call with new data from actual sensor
   UINT8                          = 0x80, // Array of uint8
   INT8                           = 0x81,
   UINT16                         = 0x82,
@@ -126,8 +124,9 @@ ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message);
 ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message);
 
 // Peripheral handlers
-void set_environmental_handler(message_handler handler);
 void set_acceleration_handler(message_handler handler);
+void set_environmental_handler(message_handler handler);
+void set_gyration_handler(message_handler handler);
 void set_led_handler(message_handler handler);
 void set_app0_handler(message_handler handler);
 void set_unknown_handler(message_handler handler);
