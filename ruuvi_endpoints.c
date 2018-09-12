@@ -16,7 +16,7 @@ static message_handler p_led_handler                 = NULL;
 //static message_handler p_air_quality_handler       = NULL;
 static message_handler p_environmental_handler       = NULL;
 static message_handler p_acceleration_handler        = NULL;
-//static message_handler p_magnetometer_handler      = NULL;
+static message_handler p_magnetism_handler           = NULL;
 static message_handler p_gyration_handler            = NULL;
 //static message_handler p_movement_detector_handler = NULL;
 static message_handler p_app0_handler                = NULL;
@@ -93,10 +93,10 @@ ruuvi_endpoint_status_t route_message(ruuvi_standard_message_t* const message)
     else { unknown_handler(message); }
     break;
 
-  // case MAGNETOMETER:
-  //   if(p_magnetometer_handler) {p_magnetometer_handler(message); }
-  //   else {unknown_handler(message); }
-  //   break;
+  case MAGNETISM:
+     if(p_magnetism_handler) {p_magnetism_handler(message); }
+     else {unknown_handler(message); }
+     break;
 
    case GYRATION:
      if(p_gyration_handler) {p_gyration_handler(message); }
@@ -153,6 +153,11 @@ void set_environmental_handler(message_handler handler)
 void set_gyration_handler(message_handler handler)
 {
   p_gyration_handler = handler;
+}
+
+void set_magnetism_handler(message_handler handler)
+{
+  p_magnetism_handler = handler;
 }
 
 void set_app0_handler(message_handler handler)

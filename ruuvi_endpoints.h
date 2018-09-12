@@ -127,6 +127,7 @@ ruuvi_endpoint_status_t unknown_handler(ruuvi_standard_message_t* const message)
 void set_acceleration_handler(message_handler handler);
 void set_environmental_handler(message_handler handler);
 void set_gyration_handler(message_handler handler);
+void set_magnetism_handler(message_handler handler);
 void set_led_handler(message_handler handler);
 void set_app0_handler(message_handler handler);
 void set_unknown_handler(message_handler handler);
