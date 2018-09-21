@@ -1,7 +1,6 @@
 /**
  * Ruuvi Endpoint 3 helper. Defines necessary data for creating a Ruuvi data format 3 broadcast.
  *
- *
  * License: BSD-3
  * Author: Otso Jousimaa <otso@ojousima.net>
  */
