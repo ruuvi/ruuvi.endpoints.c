@@ -79,7 +79,8 @@ ruuvi_endpoint_status_t ruuvi_endpoint_3_encode(uint8_t* const buffer, const ruu
   // voltage
   if(invalid != data->battery_v)
   {
-    uint32_t voltage = data->battery_v*1000;
+
+    uint32_t voltage = (data->battery_v*1000 > 0) ? data->battery_v*1000 : 0;
     buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB] = voltage>>8;
     buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB] = voltage&0xFF;
   }
