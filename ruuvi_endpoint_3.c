@@ -8,7 +8,7 @@ static void ruuvi_endpoint_3_encode_acceleration(uint8_t* const buffer, const fl
 {
   if(invalid != acceleration)
   {
-    int16_t decimal = (int16_t) (acceleration*1000);
+    int16_t decimal = (int16_t) (acceleration * 1000);
     buffer[0] = decimal >> 8;
     buffer[1] = decimal & 0xFF;
   }
@@ -29,7 +29,7 @@ ruuvi_endpoint_status_t ruuvi_endpoint_3_encode(uint8_t* const buffer, const ruu
   if(invalid != data->humidity_rh)
   {
     //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
-    buffer[RUUVI_ENDPOINT_3_OFFSET_HUMIDITY] = (uint8_t)((data->humidity_rh*2) + 0.5);
+    buffer[RUUVI_ENDPOINT_3_OFFSET_HUMIDITY] = (uint8_t)((data->humidity_rh * 2) + 0.5);
   }
   else
   {
@@ -62,8 +62,8 @@ ruuvi_endpoint_status_t ruuvi_endpoint_3_encode(uint8_t* const buffer, const ruu
   {
     uint32_t pressure = data->pressure_pa;
     pressure -= 50000;
-    buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_MSB] = pressure>>8;
-    buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_LSB] = pressure&0xFF;
+    buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_MSB] = pressure >> 8;
+    buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_LSB] = pressure & 0xFF;
   }
   else
   {
@@ -80,9 +80,9 @@ ruuvi_endpoint_status_t ruuvi_endpoint_3_encode(uint8_t* const buffer, const ruu
   if(invalid != data->battery_v)
   {
 
-    uint32_t voltage = (data->battery_v*1000 > 0) ? data->battery_v*1000 : 0;
-    buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB] = voltage>>8;
-    buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB] = voltage&0xFF;
+    uint32_t voltage = (data->battery_v * 1000 > 0) ? data->battery_v * 1000 : 0;
+    buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB] = voltage >> 8;
+    buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB] = voltage & 0xFF;
   }
   else
   {
