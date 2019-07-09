@@ -4,7 +4,8 @@
 #include <stdint.h>
 
 #define RUUVI_ENDPOINT_SUCCESS 0
-#define RUUVI_ENDPOINT_ERROR_NULL (1<<11) //!< Null Pointer
+#define RUUVI_ENDPOINT_ERROR_INVALID_PARAM (1<<4)  //!< Invalid Parameter
+#define RUUVI_ENDPOINT_ERROR_NULL          (1<<11) //!< Null Pointer
 
 typedef int32_t ruuvi_endpoint_status_t;
 
@@ -37,6 +38,10 @@ typedef int32_t ruuvi_endpoint_status_t;
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_ACCELERATION_X 0x40 //!< X acceleration
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_ACCELERATION_Y 0x41 //!< Y acceleration
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_ACCELERATION_Z 0x42 //!< Z acceleration
+#define RUUVI_ENDPOINT_STANDARD_DESTINATION_GYRATION       0x4B //!< XYZ gyration combined
+#define RUUVI_ENDPOINT_STANDARD_DESTINATION_GYRATION_X     0x43 //!< X gyration
+#define RUUVI_ENDPOINT_STANDARD_DESTINATION_GYRATION_Y     0x44 //!< Y gyration
+#define RUUVI_ENDPOINT_STANDARD_DESTINATION_GYRATION_Z     0x45 //!< Z gyration
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_ADC_BATTERY    0x20 //!< ADC battery vs GND
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_TEMPERATURE    0x30 //!< Temperature
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_HUMIDITY       0x31 //!< Humidity
