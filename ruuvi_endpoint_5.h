@@ -56,13 +56,13 @@ typedef struct{
 }ruuvi_endpoint_5_data_t;
 
 /**
- * Encode given data to given buffer in Ruuvi DF5.
+ * @brief Encode given data to given buffer in Ruuvi DF5.
  *
- * parameter data: uint8_t array with length of 24 bytes.
- * parameter data: Struct containing all necessary information for encoding the data into buffer
- * parameter invalid: A float which signals that given data point is invalid.
+ * @param[in] buffer uint8_t array with length of 24 bytes.
+ * @param[in] data Struct containing all necessary information for encoding the data into buffer.
+ * @return RUUVI_DRIVER_SUCCESS if data was encoded
  */
-ruuvi_endpoint_status_t ruuvi_endpoint_5_encode(uint8_t* const buffer, const ruuvi_endpoint_5_data_t* data, const float invalid);
+ruuvi_endpoint_status_t ruuvi_endpoint_5_encode(uint8_t* const buffer, const ruuvi_endpoint_5_data_t* data);
 
 
 #endif
