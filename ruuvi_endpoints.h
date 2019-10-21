@@ -6,6 +6,7 @@
 #define RUUVI_ENDPOINT_SUCCESS 0
 #define RUUVI_ENDPOINT_ERROR_INVALID_PARAM (1<<4)  //!< Invalid Parameter
 #define RUUVI_ENDPOINT_ERROR_NULL          (1<<11) //!< Null Pointer
+#define RUUVI_ENDPOINT_ERROR_ENCODING      (1<<12) //!< Data encoding failed
 
 typedef int32_t ruuvi_endpoint_status_t;
 
