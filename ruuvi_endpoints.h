@@ -8,7 +8,7 @@
 #define RUUVI_ENDPOINT_ERROR_NULL          (1<<11) //!< Null Pointer
 #define RUUVI_ENDPOINT_ERROR_ENCODING      (1<<12) //!< Data encoding failed
 
-typedef int32_t ruuvi_endpoint_status_t;
+typedef uint32_t ruuvi_endpoint_status_t;
 
 /**
  *  Ruuvi Standard Message consists of 11 bytes: 3 are a header, 8 are payload.
