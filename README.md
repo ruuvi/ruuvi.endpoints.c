@@ -5,7 +5,7 @@ Data endpoints for abstracting source (e.g. bme280) from data (e.g. temperature)
 ![Ceedling](https://github.com/ruuvi/ruuvi.endpoints.c/workflows/Ceedling/badge.svg)
 ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=alert_status)
 ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=coverage)
-[Bugs](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=bugs)
+![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=bugs)
 ![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=code_smells)
 
 # Embedding to your application
