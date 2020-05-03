@@ -59,9 +59,11 @@ typedef struct
 /**
  * @brief Encode given data to given buffer in Ruuvi DF5.
  *
+ * NAN can be used as a placeholder for invalid / not available values.
+ *
  * @param[in] buffer uint8_t array with length of 24 bytes.
  * @param[in] data Struct containing all necessary information for encoding the data into buffer.
- * @return RUUVI_DRIVER_SUCCESS if data was encoded
+ * @retval RUUVI_ENDPOINT_SUCCESS if data was encoded successfully.
  */
 ruuvi_endpoint_status_t ruuvi_endpoint_5_encode (uint8_t * const buffer,
         const ruuvi_endpoint_5_data_t * data);

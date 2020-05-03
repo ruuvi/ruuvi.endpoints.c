@@ -40,8 +40,16 @@ typedef struct
     float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
 } ruuvi_endpoint_3_data_t;
 
+/**
+ * @brief Encode data to Ruuvi Format 3.
+ *
+ * @param[out] buffer 14-byte buffer into which data is encoded.
+ * @param[in]  data Data to encode.
+ * @param[in] invalid Float value treated as not available. NAN recommended.
+ * @retval RUUVI_ENDPOINT_SUCCESS if data was encoded successfully.
+ */
 ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,
-        const ruuvi_endpoint_3_data_t * data, const float invalid);
+        const ruuvi_endpoint_3_data_t * const data, const float invalid);
 
 
 #endif

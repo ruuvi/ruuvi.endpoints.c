@@ -21,7 +21,7 @@ static void ruuvi_endpoint_3_encode_acceleration (uint8_t * const buffer,
 }
 
 ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,
-        const ruuvi_endpoint_3_data_t * data, const float invalid)
+        const ruuvi_endpoint_3_data_t * const data, const float invalid)
 {
     if (NULL == buffer  || NULL == data) { return RUUVI_ENDPOINT_ERROR_NULL; }
 
