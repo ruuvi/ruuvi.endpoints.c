@@ -40,7 +40,7 @@
 #define RUUVI_ENDPOINT_5_OFFSET_SEQUENCE_COUNTER_LSB 17
 #define RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB          18
 
-
+/** @brief All data required for Ruuvi dataformat 5 package. */
 typedef struct
 {
     float humidity_rh;     //!< Humidity in relative humidity percentage.
@@ -54,7 +54,7 @@ typedef struct
     uint8_t movement_count;     //!< Number of detected movements.
     uint64_t address;           //!< BLE address of device, most significant byte first.
     int8_t tx_power;            //!< Transmission power of radio, in dBm.
-} ruuvi_endpoint_5_data_t; //!< All data required for Ruuvi dataformat 5 package.
+} ruuvi_endpoint_5_data_t;
 
 /**
  * @brief Encode given data to given buffer in Ruuvi DF5.

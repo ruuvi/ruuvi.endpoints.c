@@ -28,6 +28,7 @@
 #define RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB          12
 #define RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB          13
 
+/** @brief All data required for Ruuvi dataformat 3 package. */
 typedef struct
 {
     float humidity_rh;     //!< Humidity in relative humidity percentage.
@@ -37,7 +38,7 @@ typedef struct
     float accelerationy_g; //!< Acceleration along Y-axis, can be RMS over some period.
     float accelerationz_g; //!< Acceleration along Z-axis, can be RMS over some period.
     float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
-} ruuvi_endpoint_3_data_t; //!< All data required for Ruuvi dataformat 3 package.
+} ruuvi_endpoint_3_data_t;
 
 ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,
         const ruuvi_endpoint_3_data_t * data, const float invalid);
