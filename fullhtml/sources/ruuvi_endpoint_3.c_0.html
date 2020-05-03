@@ -17,7 +17,7 @@
 <a name="ln4">#include &lt;stdbool.h&gt;</a>
 <a name="ln5">#include &lt;math.h&gt;</a>
 <a name="ln6"> </a>
-<a name="ln7">static void ruuvi_endpoint_3_encode_acceleration (uint8_t * const buffer,</a>
+<a name="ln7">static void re_3_encode_acceleration (uint8_t * const buffer,</a>
 <a name="ln8">        const float acceleration, const float invalid)</a>
 <a name="ln9">{</a>
 <a name="ln10">    if (invalid != acceleration)</a>
@@ -28,27 +28,27 @@
 <a name="ln15">    }</a>
 <a name="ln16">    else</a>
 <a name="ln17">    {</a>
-<a name="ln18">        buffer[0] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
-<a name="ln19">        buffer[1] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
+<a name="ln18">        buffer[0] = RE_3_INVALID_DATA;</a>
+<a name="ln19">        buffer[1] = RE_3_INVALID_DATA;</a>
 <a name="ln20">    }</a>
 <a name="ln21">}</a>
 <a name="ln22"> </a>
-<a name="ln23">ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,</a>
-<a name="ln24">        const ruuvi_endpoint_3_data_t * const data, const float invalid)</a>
+<a name="ln23">re_status_t re_3_encode (uint8_t * const buffer,</a>
+<a name="ln24">        const re_3_data_t * const data, const float invalid)</a>
 <a name="ln25">{</a>
-<a name="ln26">    if (NULL == buffer  || NULL == data) { return RUUVI_ENDPOINT_ERROR_NULL; }</a>
+<a name="ln26">    if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }</a>
 <a name="ln27"> </a>
-<a name="ln28">    buffer[RUUVI_ENDPOINT_3_OFFSET_HEADER] = RUUVI_ENDPOINT_3_DESTINATION;</a>
+<a name="ln28">    buffer[RE_3_OFFSET_HEADER] = RE_3_DESTINATION;</a>
 <a name="ln29"> </a>
 <a name="ln30">    // HUMIDITY</a>
 <a name="ln31">    if (invalid != data-&gt;humidity_rh)</a>
 <a name="ln32">    {</a>
 <a name="ln33">        //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value</a>
-<a name="ln34">        buffer[RUUVI_ENDPOINT_3_OFFSET_HUMIDITY] = (uint8_t) ( (data-&gt;humidity_rh * 2) + 0.5);</a>
+<a name="ln34">        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( (data-&gt;humidity_rh * 2) + 0.5);</a>
 <a name="ln35">    }</a>
 <a name="ln36">    else</a>
 <a name="ln37">    {</a>
-<a name="ln38">        buffer[RUUVI_ENDPOINT_3_OFFSET_HUMIDITY] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
+<a name="ln38">        buffer[RE_3_OFFSET_HUMIDITY] = RE_3_INVALID_DATA;</a>
 <a name="ln39">    }</a>
 <a name="ln40"> </a>
 <a name="ln41">    // Temperature</a>
@@ -64,14 +64,14 @@
 <a name="ln51">        // cap the temperature</a>
 <a name="ln52">        if (127 &lt; temperature) {temperature = 127; }</a>
 <a name="ln53"> </a>
-<a name="ln54">        buffer[RUUVI_ENDPOINT_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (sign &lt;&lt; 7);</a>
+<a name="ln54">        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (sign &lt;&lt; 7);</a>
 <a name="ln55">        uint8_t temperature_fraction = (uint8_t) ( (temperature - floor (temperature)) * 100);</a>
-<a name="ln56">        buffer[RUUVI_ENDPOINT_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;</a>
+<a name="ln56">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;</a>
 <a name="ln57">    }</a>
 <a name="ln58">    else</a>
 <a name="ln59">    {</a>
-<a name="ln60">        buffer[RUUVI_ENDPOINT_3_OFFSET_TEMPERATURE_DECIMAL]  = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
-<a name="ln61">        buffer[RUUVI_ENDPOINT_3_OFFSET_TEMPERATURE_FRACTION] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
+<a name="ln60">        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL]  = RE_3_INVALID_DATA;</a>
+<a name="ln61">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = RE_3_INVALID_DATA;</a>
 <a name="ln62">    }</a>
 <a name="ln63"> </a>
 <a name="ln64">    // Pressure</a>
@@ -79,37 +79,37 @@
 <a name="ln66">    {</a>
 <a name="ln67">        uint32_t pressure = data-&gt;pressure_pa;</a>
 <a name="ln68">        pressure -= 50000;</a>
-<a name="ln69">        buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_MSB] = pressure &gt;&gt; 8;</a>
-<a name="ln70">        buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_LSB] = pressure &amp; 0xFF;</a>
+<a name="ln69">        buffer[RE_3_OFFSET_PRESSURE_MSB] = pressure &gt;&gt; 8;</a>
+<a name="ln70">        buffer[RE_3_OFFSET_PRESSURE_LSB] = pressure &amp; 0xFF;</a>
 <a name="ln71">    }</a>
 <a name="ln72">    else</a>
 <a name="ln73">    {</a>
-<a name="ln74">        buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_MSB] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
-<a name="ln75">        buffer[RUUVI_ENDPOINT_3_OFFSET_PRESSURE_LSB] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
+<a name="ln74">        buffer[RE_3_OFFSET_PRESSURE_MSB] = RE_3_INVALID_DATA;</a>
+<a name="ln75">        buffer[RE_3_OFFSET_PRESSURE_LSB] = RE_3_INVALID_DATA;</a>
 <a name="ln76">    }</a>
 <a name="ln77"> </a>
 <a name="ln78">    // acceleration</a>
-<a name="ln79">    ruuvi_endpoint_3_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_3_OFFSET_ACCELERATIONX_MSB],</a>
+<a name="ln79">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONX_MSB],</a>
 <a name="ln80">                                          data-&gt;accelerationx_g, invalid);</a>
-<a name="ln81">    ruuvi_endpoint_3_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_3_OFFSET_ACCELERATIONY_MSB],</a>
+<a name="ln81">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONY_MSB],</a>
 <a name="ln82">                                          data-&gt;accelerationy_g, invalid);</a>
-<a name="ln83">    ruuvi_endpoint_3_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_3_OFFSET_ACCELERATIONZ_MSB],</a>
+<a name="ln83">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],</a>
 <a name="ln84">                                          data-&gt;accelerationz_g, invalid);</a>
 <a name="ln85"> </a>
 <a name="ln86">    // voltage</a>
 <a name="ln87">    if (invalid != data-&gt;battery_v)</a>
 <a name="ln88">    {</a>
 <a name="ln89">        uint32_t voltage = (data-&gt;battery_v * 1000 &gt; 0) ? data-&gt;battery_v * 1000 : 0;</a>
-<a name="ln90">        buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB] = voltage &gt;&gt; 8;</a>
-<a name="ln91">        buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB] = voltage &amp; 0xFF;</a>
+<a name="ln90">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = voltage &gt;&gt; 8;</a>
+<a name="ln91">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = voltage &amp; 0xFF;</a>
 <a name="ln92">    }</a>
 <a name="ln93">    else</a>
 <a name="ln94">    {</a>
-<a name="ln95">        buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
-<a name="ln96">        buffer[RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB] = RUUVI_ENDPOINT_3_INVALID_DATA;</a>
+<a name="ln95">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = RE_3_INVALID_DATA;</a>
+<a name="ln96">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = RE_3_INVALID_DATA;</a>
 <a name="ln97">    }</a>
 <a name="ln98"> </a>
-<a name="ln99">    return RUUVI_ENDPOINT_SUCCESS;</a>
+<a name="ln99">    return RE_SUCCESS;</a>
 <a name="ln100">}</a>
 
 </code></pre>
