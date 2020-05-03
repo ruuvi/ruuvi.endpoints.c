@@ -106,4 +106,17 @@
   :enabled:
     - stdout_pretty_tests_report
     - module_generator
+    - gcov 
+
+:flags:
+  :test:
+    :compile:
+      :*:
+        - -Wall
+        - -std=c11
+  :gcov:
+    :compile:
+      :*:
+        - -Wall
+        - -std=c11
 ...
