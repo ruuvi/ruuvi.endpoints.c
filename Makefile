@@ -214,7 +214,7 @@ DOXYGEN_DIR=./doxygen
 
 CFLAGS  = -c -Wall -pedantic -Wno-variadic-macros -Wno-long-long -Wno-shadow -std=c11
 OFLAGS=-g3
-LDFLAGS=
+LDFLAGS=-lm
 DFLAGS=
 INCLUDES+=src/
 INC_PARAMS=$(foreach d, $(INCLUDES), -I$d)
@@ -238,9 +238,9 @@ $(EXECUTABLE): $(OBJECTS)
 
 .c.o:
 # Build
-	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
+	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) $(LDFLAGS) -o $@
 # Preprocessing
-	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) -E -o $@.PVS-Studio.i
+	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(LDFLAGS) -E -o $@.PVS-Studio.i
 # Analysis
 	pvs-studio --cfg $(PVS_CFG) --source-file $< --i-file $@.PVS-Studio.i --output-file $@.PVS-Studio.log
 
