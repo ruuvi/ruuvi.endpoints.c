@@ -41,19 +41,20 @@
 #define RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB          18
 
 
-typedef struct{
-  float humidity_rh;
-  float pressure_pa;
-  float temperature_c;
-  float accelerationx_g;
-  float accelerationy_g;
-  float accelerationz_g;
-  float battery_v;
-  uint16_t measurement_count;
-  uint8_t movement_count;
-  uint64_t address;
-  int8_t tx_power;
-}ruuvi_endpoint_5_data_t;
+typedef struct
+{
+    float humidity_rh;
+    float pressure_pa;
+    float temperature_c;
+    float accelerationx_g;
+    float accelerationy_g;
+    float accelerationz_g;
+    float battery_v;
+    uint16_t measurement_count;
+    uint8_t movement_count;
+    uint64_t address;
+    int8_t tx_power;
+} ruuvi_endpoint_5_data_t;
 
 /**
  * @brief Encode given data to given buffer in Ruuvi DF5.
@@ -62,7 +63,8 @@ typedef struct{
  * @param[in] data Struct containing all necessary information for encoding the data into buffer.
  * @return RUUVI_DRIVER_SUCCESS if data was encoded
  */
-ruuvi_endpoint_status_t ruuvi_endpoint_5_encode(uint8_t* const buffer, const ruuvi_endpoint_5_data_t* data);
+ruuvi_endpoint_status_t ruuvi_endpoint_5_encode (uint8_t * const buffer,
+        const ruuvi_endpoint_5_data_t * data);
 
 
 #endif

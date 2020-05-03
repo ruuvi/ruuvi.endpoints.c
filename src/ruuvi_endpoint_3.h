@@ -28,17 +28,19 @@
 #define RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_MSB          12
 #define RUUVI_ENDPOINT_3_OFFSET_VOLTAGE_LSB          13
 
-typedef struct{
-  float humidity_rh;
-  float pressure_pa;
-  float temperature_c;
-  float accelerationx_g;
-  float accelerationy_g;
-  float accelerationz_g;
-  float battery_v;
-}ruuvi_endpoint_3_data_t;
+typedef struct
+{
+    float humidity_rh;
+    float pressure_pa;
+    float temperature_c;
+    float accelerationx_g;
+    float accelerationy_g;
+    float accelerationz_g;
+    float battery_v;
+} ruuvi_endpoint_3_data_t;
 
-ruuvi_endpoint_status_t ruuvi_endpoint_3_encode(uint8_t* const buffer, const ruuvi_endpoint_3_data_t* data, const float invalid);
+ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,
+        const ruuvi_endpoint_3_data_t * data, const float invalid);
 
 
 #endif

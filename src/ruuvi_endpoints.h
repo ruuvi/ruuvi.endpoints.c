@@ -13,7 +13,7 @@ typedef uint32_t ruuvi_endpoint_status_t;
 /**
  *  Ruuvi Standard Message consists of 11 bytes: 3 are a header, 8 are payload.
  *  Header has destination, source and type.
- *  Payload format is determined by the type of a message. 
+ *  Payload format is determined by the type of a message.
  */
 #define RUUVI_ENDPOINT_STANDARD_DESTINATION_INDEX   0
 #define RUUVI_ENDPOINT_STANDARD_SOURCE_INDEX        1
