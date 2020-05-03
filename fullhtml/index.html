@@ -1,0 +1,1106 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PVS-Studio HTML Report</title>
+<style type="text/css">
+   TABLE {
+    width: 100%;
+   }
+   #col_group, #col_level, #col_code, #col_cwe, #col_misra {
+    text-align: center;
+    white-space: nowrap;
+    width: 0;
+   }
+   #col_file, #col_info, #col_projects {
+    white-space: nowrap;
+    text-align: left;
+    width: 0;
+   }
+   #col_info {
+    width: 120px;
+   }
+   #col_message {
+    text-align: left;
+   }
+  </style>
+<link rel="stylesheet" href="style.css" />
+<script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+  <div class="header">
+    <img src="images/logo.png" alt=""/>
+    <h1>PVS-Studio Analysis Results</h1>
+    <br class="clear">
+  </div>
+
+  <table cellpadding="0" cellspacing="0" border="0" class="infotopic">
+     <tr><th id="col_info">Date:</th><td>Sun May  3 16:13:40 2020</td></tr>
+     <tr><th id="col_info">PVS-Studio Version:</th><td>7.07.38234.46</td></tr>
+     <tr><th id="col_info">Command Line:</th><td>plog-converter -a GA\:1,2,3\;OP\:1,2,3\;CS\:1,2,3\;MISRA\:1,2,3 -t fullhtml src/ruuvi_endpoint_3.o.PVS-Studio.log src/ruuvi_endpoint_5.o.PVS-Studio.log -o ./doxygen/html </td></tr>
+     <tr><th id="col_info">Total Warnings (GA):</th><td>5</td></tr>
+     <tr><th id="col_info">Total Warnings (OP):</th><td>1</td></tr>
+     <tr><th id="col_info">Total Warnings (CS):</th><td>7</td></tr>
+     <tr><th id="col_info">Total Warnings (MISRA):</th><td>136</td></tr>
+  </table>
+  <table cellpadding="0" cellspacing="0" border="0" class="sortable" id="sorter">
+    <tr>
+      <th class="gsort">Group</th>
+      <th>Location</th>
+      <th class="lsort">Level</th>
+      <th class="vsort">Code</th>
+      <th>Message</th>
+    </tr>
+    <tr>
+      <td id="col_group">General Analysis</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln10">ruuvi_endpoint_3.c:10</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v550/">V550</td>
+      <td id="col_message">An odd precise comparison: invalid != acceleration. It's probably better to use a comparison with defined precision: fabs(A - B) &gt; Epsilon.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln12">ruuvi_endpoint_3.c:12</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln12">ruuvi_endpoint_3.c:12</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2003/">V2003</td>
+      <td id="col_message">Explicit conversion from 'float' type to signed integer type: (int16_t)(acceleration * 1000)</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln13">ruuvi_endpoint_3.c:13</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand 'decimal' of the '&gt;&gt;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln13">ruuvi_endpoint_3.c:13</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'decimal &gt;&gt; 8' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln13">ruuvi_endpoint_3.c:13</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln14">ruuvi_endpoint_3.c:14</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left and right operands of the '&amp;' operator should not have essential 'signed' and 'signed' types respectively. Consider inspecting operands: left - 'decimal', right - '0xFF'</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln14">ruuvi_endpoint_3.c:14</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'decimal &amp; 0xFF' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln14">ruuvi_endpoint_3.c:14</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln18">ruuvi_endpoint_3.c:18</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln19">ruuvi_endpoint_3.c:19</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln26">ruuvi_endpoint_3.c:26</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand '1' of the '&lt;&lt;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln28">ruuvi_endpoint_3.c:28</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">General Analysis</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln31">ruuvi_endpoint_3.c:31</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v550/">V550</td>
+      <td id="col_message">An odd precise comparison: invalid != data-&gt;humidity_rh. It's probably better to use a comparison with defined precision: fabs(A - B) &gt; Epsilon.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln34">ruuvi_endpoint_3.c:34</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln34">ruuvi_endpoint_3.c:34</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2004/">V2004</td>
+      <td id="col_message">Explicit conversion from 'double' type to unsigned integer type: (uint8_t)((data-&gt;humidity_rh * 2) + 0.5)</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln38">ruuvi_endpoint_3.c:38</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">General Analysis</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln42">ruuvi_endpoint_3.c:42</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v550/">V550</td>
+      <td id="col_message">An odd precise comparison: invalid != data-&gt;temperature_c. It's probably better to use a comparison with defined precision: fabs(A - B) &gt; Epsilon.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln46">ruuvi_endpoint_3.c:46</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&lt;' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln46">ruuvi_endpoint_3.c:46</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(temperature &lt; 0) ? 1 : 0' expression should not be converted from the essential 'signed' type to the essential 'Boolean' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln49">ruuvi_endpoint_3.c:49</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&gt;' operator should have the same essential type. The current types are: 'signed' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln49">ruuvi_endpoint_3.c:49</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '-' operator should have the same essential type. The current types are: 'signed' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln52">ruuvi_endpoint_3.c:52</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&lt;' operator should have the same essential type. The current types are: 'signed' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln52">ruuvi_endpoint_3.c:52</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '127' expression should not be converted from the essential 'signed' type to the essential 'floating' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln52">ruuvi_endpoint_3.c:52</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2004/">V2004</td>
+      <td id="col_message">Explicit conversion from 'float' type to unsigned integer type: (uint8_t) temperature</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand 'sign' of the '&lt;&lt;' operator should not have the essential 'Boolean' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '|' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '(sign &lt;&lt; 7)' of the '|' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(uint8_t) temperature | (sign &lt;&lt; 7)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln54">ruuvi_endpoint_3.c:54</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln55">ruuvi_endpoint_3.c:55</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln55">ruuvi_endpoint_3.c:55</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2004/">V2004</td>
+      <td id="col_message">Explicit conversion from 'double' type to unsigned integer type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln60">ruuvi_endpoint_3.c:60</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln61">ruuvi_endpoint_3.c:61</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">General Analysis</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln65">ruuvi_endpoint_3.c:65</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v550/">V550</td>
+      <td id="col_message">An odd precise comparison: invalid != data-&gt;pressure_pa. It's probably better to use a comparison with defined precision: fabs(A - B) &gt; Epsilon.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln67">ruuvi_endpoint_3.c:67</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'data-&gt;pressure_pa' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln68">ruuvi_endpoint_3.c:68</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '-=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln69">ruuvi_endpoint_3.c:69</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'pressure &gt;&gt; 8' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln70">ruuvi_endpoint_3.c:70</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln70">ruuvi_endpoint_3.c:70</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln70">ruuvi_endpoint_3.c:70</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'pressure &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln74">ruuvi_endpoint_3.c:74</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln75">ruuvi_endpoint_3.c:75</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">General Analysis</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln87">ruuvi_endpoint_3.c:87</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v550/">V550</td>
+      <td id="col_message">An odd precise comparison: invalid != data-&gt;battery_v. It's probably better to use a comparison with defined precision: fabs(A - B) &gt; Epsilon.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln89">ruuvi_endpoint_3.c:89</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln89">ruuvi_endpoint_3.c:89</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&gt;' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln89">ruuvi_endpoint_3.c:89</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '?:' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln89">ruuvi_endpoint_3.c:89</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">Value of the expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln90">ruuvi_endpoint_3.c:90</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'voltage &gt;&gt; 8' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln91">ruuvi_endpoint_3.c:91</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln91">ruuvi_endpoint_3.c:91</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln91">ruuvi_endpoint_3.c:91</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'voltage &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln95">ruuvi_endpoint_3.c:95</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln96">ruuvi_endpoint_3.c:96</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_3.c_0.html#ln23">ruuvi_endpoint_3.c:23</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2506/">V2506</td>
+      <td id="col_message">A function should have a single point of exit at the end.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Micro-optimizations</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.h_1.html#ln45">ruuvi_endpoint_5.h:45</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v802/">V802</td>
+      <td id="col_message">On 64-bit platform, structure size can be reduced from 48 to 40 bytes by rearranging the fields according to their sizes in decreasing order.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln11">ruuvi_endpoint_5.c:11</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '0x8000' expression should not be converted to the narrower essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln13">ruuvi_endpoint_5.c:13</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The '__builtin_isnan(acceleration)' operand of the '!' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln13">ruuvi_endpoint_5.c:13</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2570/">V2570</td>
+      <td id="col_message">Operands of the '!' operator should have bool essential type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln16">ruuvi_endpoint_5.c:16</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln16">ruuvi_endpoint_5.c:16</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2003/">V2003</td>
+      <td id="col_message">Explicit conversion from 'float' type to signed integer type: (int16_t)(acceleration * 1000)</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln19">ruuvi_endpoint_5.c:19</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand 'decimal' of the '&gt;&gt;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln19">ruuvi_endpoint_5.c:19</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(decimal &gt;&gt; 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln19">ruuvi_endpoint_5.c:19</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln20">ruuvi_endpoint_5.c:20</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left and right operands of the '&amp;' operator should not have essential 'signed' and 'signed' types respectively. Consider inspecting operands: left - 'decimal', right - '0xFF'</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln20">ruuvi_endpoint_5.c:20</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'decimal &amp; 0xFF' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln20">ruuvi_endpoint_5.c:20</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln26">ruuvi_endpoint_5.c:26</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand '1' of the '&lt;&lt;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln28">ruuvi_endpoint_5.c:28</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln31">ruuvi_endpoint_5.c:31</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The '__builtin_isnan(data-&gt;humidity_rh)' operand of the '!' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln31">ruuvi_endpoint_5.c:31</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2570/">V2570</td>
+      <td id="col_message">Operands of the '!' operator should have bool essential type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln31">ruuvi_endpoint_5.c:31</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&lt;' operator should have the same essential type. The current types are: 'signed' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln34">ruuvi_endpoint_5.c:34</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln34">ruuvi_endpoint_5.c:34</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2004/">V2004</td>
+      <td id="col_message">Explicit conversion from 'float' type to unsigned integer type: (uint16_t)(data-&gt;humidity_rh * 400)</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln37">ruuvi_endpoint_5.c:37</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(humidity &gt;&gt; 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln37">ruuvi_endpoint_5.c:37</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln38">ruuvi_endpoint_5.c:38</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln38">ruuvi_endpoint_5.c:38</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln38">ruuvi_endpoint_5.c:38</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'humidity &amp; 0xFF' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln38">ruuvi_endpoint_5.c:38</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln40">ruuvi_endpoint_5.c:40</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '0x8000' expression should not be converted to the narrower essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln42">ruuvi_endpoint_5.c:42</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The '__builtin_isnan(data-&gt;temperature_c)' operand of the '!' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln42">ruuvi_endpoint_5.c:42</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2570/">V2570</td>
+      <td id="col_message">Operands of the '!' operator should have bool essential type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln45">ruuvi_endpoint_5.c:45</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">Customers Specific</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln45">ruuvi_endpoint_5.c:45</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2003/">V2003</td>
+      <td id="col_message">Explicit conversion from 'float' type to signed integer type: (int16_t)(data-&gt;temperature_c * 200)</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln48">ruuvi_endpoint_5.c:48</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand 'temperature' of the '&gt;&gt;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln48">ruuvi_endpoint_5.c:48</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(temperature &gt;&gt; 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln48">ruuvi_endpoint_5.c:48</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln49">ruuvi_endpoint_5.c:49</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left and right operands of the '&amp;' operator should not have essential 'signed' and 'signed' types respectively. Consider inspecting operands: left - 'temperature', right - '0xFF'</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln49">ruuvi_endpoint_5.c:49</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(temperature &amp; 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln49">ruuvi_endpoint_5.c:49</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln53">ruuvi_endpoint_5.c:53</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The '__builtin_isnan(data-&gt;pressure_pa)' operand of the '!' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln53">ruuvi_endpoint_5.c:53</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2570/">V2570</td>
+      <td id="col_message">Operands of the '!' operator should have bool essential type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln53">ruuvi_endpoint_5.c:53</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&lt;' operator should have the same essential type. The current types are: 'signed' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln55">ruuvi_endpoint_5.c:55</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the 'data-&gt;pressure_pa' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln55">ruuvi_endpoint_5.c:55</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln56">ruuvi_endpoint_5.c:56</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '-=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln59">ruuvi_endpoint_5.c:59</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln59">ruuvi_endpoint_5.c:59</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln59">ruuvi_endpoint_5.c:59</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(pressure &gt;&gt; 8) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln60">ruuvi_endpoint_5.c:60</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln60">ruuvi_endpoint_5.c:60</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln60">ruuvi_endpoint_5.c:60</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(pressure &amp; 0xFF)' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln72">ruuvi_endpoint_5.c:72</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The '__builtin_isnan(data-&gt;battery_v)' operand of the '!' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln72">ruuvi_endpoint_5.c:72</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2570/">V2570</td>
+      <td id="col_message">Operands of the '!' operator should have bool essential type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln75">ruuvi_endpoint_5.c:75</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln75">ruuvi_endpoint_5.c:75</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '-' operator should have the same essential type. The current types are: 'floating' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln75">ruuvi_endpoint_5.c:75</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;battery_v * 1000 - 1600)' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln75">ruuvi_endpoint_5.c:75</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'floating'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln78">ruuvi_endpoint_5.c:78</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '!=' operator should have the same essential type. The current types are: 'signed' and 'character'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln78">ruuvi_endpoint_5.c:78</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&gt;=' operator should have the same essential type. The current types are: 'character' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln79">ruuvi_endpoint_5.c:79</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&lt;=' operator should have the same essential type. The current types are: 'character' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln82">ruuvi_endpoint_5.c:82</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '/' operator should have the same essential type. The current types are: 'character' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln82">ruuvi_endpoint_5.c:82</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The left operand '(data-&gt;tx_power + 40)' of the '/' operator should not have the essential 'character' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln82">ruuvi_endpoint_5.c:82</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;tx_power + 40) / 2' expression should not be converted from the essential 'signed' type to the essential 'character' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln82">ruuvi_endpoint_5.c:82</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'character' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln85">ruuvi_endpoint_5.c:85</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(voltage &lt;&lt; 5) + tx_power' expression should not be converted from the essential 'character' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln86">ruuvi_endpoint_5.c:86</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(power_info &gt;&gt; 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln86">ruuvi_endpoint_5.c:86</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln87">ruuvi_endpoint_5.c:87</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln87">ruuvi_endpoint_5.c:87</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln87">ruuvi_endpoint_5.c:87</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(power_info &amp; 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln87">ruuvi_endpoint_5.c:87</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln89">ruuvi_endpoint_5.c:89</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;measurement_count &gt;&gt; 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln89">ruuvi_endpoint_5.c:89</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln90">ruuvi_endpoint_5.c:90</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln90">ruuvi_endpoint_5.c:90</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln90">ruuvi_endpoint_5.c:90</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;measurement_count &amp; 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln90">ruuvi_endpoint_5.c:90</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln92">ruuvi_endpoint_5.c:92</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln92">ruuvi_endpoint_5.c:92</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln92">ruuvi_endpoint_5.c:92</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 40) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln93">ruuvi_endpoint_5.c:93</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln93">ruuvi_endpoint_5.c:93</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln93">ruuvi_endpoint_5.c:93</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 32) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln94">ruuvi_endpoint_5.c:94</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln94">ruuvi_endpoint_5.c:94</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln94">ruuvi_endpoint_5.c:94</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 24) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln95">ruuvi_endpoint_5.c:95</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln95">ruuvi_endpoint_5.c:95</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln95">ruuvi_endpoint_5.c:95</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 16) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln96">ruuvi_endpoint_5.c:96</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln96">ruuvi_endpoint_5.c:96</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln96">ruuvi_endpoint_5.c:96</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 8) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln97">ruuvi_endpoint_5.c:97</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2568/">V2568</td>
+      <td id="col_message">Both operands of the '&amp;' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln97">ruuvi_endpoint_5.c:97</a></td>
+      <td id="col_level" style="color:#FFA500"><b>Medium</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2544/">V2544</td>
+      <td id="col_message">The right operand '0xFF' of the '&amp;' operator should not have the essential 'signed' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln97">ruuvi_endpoint_5.c:97</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2572/">V2572</td>
+      <td id="col_message">The value of the '(data-&gt;address &gt;&gt; 0) &amp; 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</td>
+    </tr>
+    <tr>
+      <td id="col_group">MISRA</td>
+      <td id="col_file"><a target="_blank" href="sources/ruuvi_endpoint_5.c_2.html#ln23">ruuvi_endpoint_5.c:23</a></td>
+      <td id="col_level" style="color:#CACA00"><b>Low</b></td>
+      <td id="col_code"><a target="_blank" href="https://www.viva64.com/en/w/v2506/">V2506</td>
+      <td id="col_message">A function should have a single point of exit at the end.</td>
+    </tr>
+
+  </table>
+<script type="text/javascript">
+var sorter=new table.sorter("sorter");
+sorter.init("sorter",0);
+</script>
+</body>
+</html>
+

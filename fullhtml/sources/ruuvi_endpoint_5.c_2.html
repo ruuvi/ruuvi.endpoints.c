@@ -1,0 +1,236 @@
+
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+  <title>ruuvi_endpoint_5.c</title>
+
+  <link rel="stylesheet" href="../style.css"/>
+  <script src="../jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+<pre><code class = "cpp">
+<a name="ln1">#include &quot;ruuvi_endpoint_5.h&quot;</a>
+<a name="ln2">#include &quot;ruuvi_endpoints.h&quot;</a>
+<a name="ln3">#include &lt;stddef.h&gt;</a>
+<a name="ln4">#include &lt;stdbool.h&gt;</a>
+<a name="ln5">#include &lt;string.h&gt;</a>
+<a name="ln6">#include &lt;math.h&gt;</a>
+<a name="ln7"> </a>
+<a name="ln8">static void ruuvi_endpoint_5_encode_acceleration (uint8_t * const buffer,</a>
+<a name="ln9">        const float acceleration)</a>
+<a name="ln10">{</a>
+<a name="ln11">    int16_t decimal = RUUVI_ENDPOINT_5_INVALID_ACCELERATION;</a>
+<a name="ln12"> </a>
+<a name="ln13">    if (!isnan (acceleration))</a>
+<a name="ln14">    {</a>
+<a name="ln15">        // convert to mG</a>
+<a name="ln16">        decimal = (int16_t) (acceleration * 1000);</a>
+<a name="ln17">    }</a>
+<a name="ln18"> </a>
+<a name="ln19">    buffer[0] = (decimal &gt;&gt; 8);</a>
+<a name="ln20">    buffer[1] = decimal &amp; 0xFF;</a>
+<a name="ln21">}</a>
+<a name="ln22"> </a>
+<a name="ln23">ruuvi_endpoint_status_t ruuvi_endpoint_5_encode (uint8_t * const buffer,</a>
+<a name="ln24">        const ruuvi_endpoint_5_data_t * data)</a>
+<a name="ln25">{</a>
+<a name="ln26">    if (NULL == buffer  || NULL == data) { return RUUVI_ENDPOINT_ERROR_NULL; }</a>
+<a name="ln27"> </a>
+<a name="ln28">    buffer[RUUVI_ENDPOINT_5_OFFSET_HEADER] = RUUVI_ENDPOINT_5_DESTINATION;</a>
+<a name="ln29">    uint16_t humidity = RUUVI_ENDPOINT_5_INVALID_HUMIDITY;</a>
+<a name="ln30"> </a>
+<a name="ln31">    if (!isnan (data-&gt;humidity_rh) &amp;&amp; 0 &lt; data-&gt;humidity_rh)</a>
+<a name="ln32">    {</a>
+<a name="ln33">        // Humidity (16bit unsigned) in 0.0025% (0-163.83% range, though realistically 0-100%)</a>
+<a name="ln34">        humidity = (uint16_t) (data-&gt;humidity_rh * 400);</a>
+<a name="ln35">    }</a>
+<a name="ln36"> </a>
+<a name="ln37">    buffer[RUUVI_ENDPOINT_5_OFFSET_HUMIDITY_MSB] = (humidity &gt;&gt; 8);</a>
+<a name="ln38">    buffer[RUUVI_ENDPOINT_5_OFFSET_HUMIDITY_LSB] = humidity &amp; 0xFF;</a>
+<a name="ln39">    // Temperature is in 0.005 degrees</a>
+<a name="ln40">    int16_t temperature = RUUVI_ENDPOINT_5_INVALID_TEMPERATURE;</a>
+<a name="ln41"> </a>
+<a name="ln42">    if (!isnan (data-&gt;temperature_c))</a>
+<a name="ln43">    {</a>
+<a name="ln44">        //</a>
+<a name="ln45">        temperature = (int16_t) (data-&gt;temperature_c * 200);</a>
+<a name="ln46">    }</a>
+<a name="ln47"> </a>
+<a name="ln48">    buffer[RUUVI_ENDPOINT_5_OFFSET_TEMPERATURE_MSB] = (temperature &gt;&gt; 8);</a>
+<a name="ln49">    buffer[RUUVI_ENDPOINT_5_OFFSET_TEMPERATURE_LSB] = (temperature &amp; 0xFF);</a>
+<a name="ln50">    // Pressure</a>
+<a name="ln51">    uint32_t pressure = RUUVI_ENDPOINT_5_INVALID_PRESSURE;</a>
+<a name="ln52"> </a>
+<a name="ln53">    if (!isnan (data-&gt;pressure_pa) &amp;&amp; 50000 &lt; data-&gt;pressure_pa)</a>
+<a name="ln54">    {</a>
+<a name="ln55">        pressure = data-&gt;pressure_pa;</a>
+<a name="ln56">        pressure -= 50000;</a>
+<a name="ln57">    }</a>
+<a name="ln58"> </a>
+<a name="ln59">    buffer[RUUVI_ENDPOINT_5_OFFSET_PRESSURE_MSB] = (pressure &gt;&gt; 8) &amp; 0xFF;</a>
+<a name="ln60">    buffer[RUUVI_ENDPOINT_5_OFFSET_PRESSURE_LSB] = (pressure  &amp; 0xFF);</a>
+<a name="ln61">    // acceleration</a>
+<a name="ln62">    ruuvi_endpoint_5_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_5_OFFSET_ACCELERATIONX_MSB],</a>
+<a name="ln63">                                          data-&gt;accelerationx_g);</a>
+<a name="ln64">    ruuvi_endpoint_5_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_5_OFFSET_ACCELERATIONY_MSB],</a>
+<a name="ln65">                                          data-&gt;accelerationy_g);</a>
+<a name="ln66">    ruuvi_endpoint_5_encode_acceleration (&amp;buffer[RUUVI_ENDPOINT_5_OFFSET_ACCELERATIONZ_MSB],</a>
+<a name="ln67">                                          data-&gt;accelerationz_g);</a>
+<a name="ln68">    // voltage, tx power</a>
+<a name="ln69">    uint16_t voltage = RUUVI_ENDPOINT_5_INVALID_VOLTAGE;</a>
+<a name="ln70">    int8_t tx_power = RUUVI_ENDPOINT_5_INVALID_POWER;</a>
+<a name="ln71"> </a>
+<a name="ln72">    if (!isnan (data-&gt;battery_v) &amp;&amp; 1.6 &lt; data-&gt;battery_v)</a>
+<a name="ln73">    {</a>
+<a name="ln74">        // first 11 bits unsigned is the battery voltage above 1.6V, in millivolts (1.6V to 3.647V range)</a>
+<a name="ln75">        voltage = (data-&gt;battery_v * 1000 - 1600);</a>
+<a name="ln76">    }</a>
+<a name="ln77"> </a>
+<a name="ln78">    if (RUUVI_ENDPOINT_5_INVALID_POWER != data-&gt;tx_power &amp;&amp; data-&gt;tx_power &gt;= -40</a>
+<a name="ln79">            &amp;&amp; data-&gt;tx_power &lt;= 24)</a>
+<a name="ln80">    {</a>
+<a name="ln81">        // Last 5 bits unsigned is the TX power above -40dBm, in 2dBm steps. (-40dBm to +24dBm range)</a>
+<a name="ln82">        tx_power = (data-&gt;tx_power + 40) / 2;</a>
+<a name="ln83">    }</a>
+<a name="ln84"> </a>
+<a name="ln85">    uint16_t power_info = (voltage &lt;&lt; 5) + tx_power;</a>
+<a name="ln86">    buffer[RUUVI_ENDPOINT_5_OFFSET_POWER_MSB] = (power_info &gt;&gt; 8);</a>
+<a name="ln87">    buffer[RUUVI_ENDPOINT_5_OFFSET_POWER_LSB] = (power_info &amp; 0xFF);</a>
+<a name="ln88">    buffer[RUUVI_ENDPOINT_5_OFFSET_MOVEMENT_COUNTER]     = data-&gt;movement_count;</a>
+<a name="ln89">    buffer[RUUVI_ENDPOINT_5_OFFSET_SEQUENCE_COUNTER_MSB] = (data-&gt;measurement_count &gt;&gt; 8);</a>
+<a name="ln90">    buffer[RUUVI_ENDPOINT_5_OFFSET_SEQUENCE_COUNTER_LSB] = (data-&gt;measurement_count &amp; 0xFF);</a>
+<a name="ln91">    // Address is 64 bits, skip 2 first bytes</a>
+<a name="ln92">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB]     = (data-&gt;address &gt;&gt; 40) &amp; 0xFF;</a>
+<a name="ln93">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB + 1] = (data-&gt;address &gt;&gt; 32) &amp; 0xFF;</a>
+<a name="ln94">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB + 2] = (data-&gt;address &gt;&gt; 24) &amp; 0xFF;</a>
+<a name="ln95">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB + 3] = (data-&gt;address &gt;&gt; 16) &amp; 0xFF;</a>
+<a name="ln96">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB + 4] = (data-&gt;address &gt;&gt; 8) &amp; 0xFF;</a>
+<a name="ln97">    buffer[RUUVI_ENDPOINT_5_OFFSET_ADDRESS_MSB + 5] = (data-&gt;address &gt;&gt; 0) &amp; 0xFF;</a>
+<a name="ln98">    return RUUVI_ENDPOINT_SUCCESS;</a>
+<a name="ln99">}</a>
+
+</code></pre>
+<div class="balloon" rel="11"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '0x8000' expression should not be converted to the narrower essential 'signed' type.</p></div>
+<div class="balloon" rel="13"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The '__builtin_isnan(acceleration)' operand of the '!' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="13"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2570/" target="_blank">V2570</a> Operands of the '!' operator should have bool essential type.</p></div>
+<div class="balloon" rel="16"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="16"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2003/" target="_blank">V2003</a> Explicit conversion from 'float' type to signed integer type: (int16_t)(acceleration * 1000)</p></div>
+<div class="balloon" rel="19"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand 'decimal' of the '>>' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="19"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(decimal >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="19"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left and right operands of the '&' operator should not have essential 'signed' and 'signed' types respectively. Consider inspecting operands: left - 'decimal', right - '0xFF'</p></div>
+<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'decimal & 0xFF' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="26"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '1' of the '<<' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="28"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="31"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The '__builtin_isnan(data->humidity_rh)' operand of the '!' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="31"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2570/" target="_blank">V2570</a> Operands of the '!' operator should have bool essential type.</p></div>
+<div class="balloon" rel="31"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '<' operator should have the same essential type. The current types are: 'signed' and 'floating'.</p></div>
+<div class="balloon" rel="34"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="34"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2004/" target="_blank">V2004</a> Explicit conversion from 'float' type to unsigned integer type: (uint16_t)(data->humidity_rh * 400)</p></div>
+<div class="balloon" rel="37"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(humidity >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="37"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="38"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="38"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="38"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'humidity & 0xFF' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="38"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="40"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '0x8000' expression should not be converted to the narrower essential 'signed' type.</p></div>
+<div class="balloon" rel="42"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The '__builtin_isnan(data->temperature_c)' operand of the '!' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="42"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2570/" target="_blank">V2570</a> Operands of the '!' operator should have bool essential type.</p></div>
+<div class="balloon" rel="45"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="45"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2003/" target="_blank">V2003</a> Explicit conversion from 'float' type to signed integer type: (int16_t)(data->temperature_c * 200)</p></div>
+<div class="balloon" rel="48"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand 'temperature' of the '>>' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="48"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(temperature >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="48"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="49"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left and right operands of the '&' operator should not have essential 'signed' and 'signed' types respectively. Consider inspecting operands: left - 'temperature', right - '0xFF'</p></div>
+<div class="balloon" rel="49"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(temperature & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="49"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="53"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The '__builtin_isnan(data->pressure_pa)' operand of the '!' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="53"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2570/" target="_blank">V2570</a> Operands of the '!' operator should have bool essential type.</p></div>
+<div class="balloon" rel="53"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '<' operator should have the same essential type. The current types are: 'signed' and 'floating'.</p></div>
+<div class="balloon" rel="55"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'data->pressure_pa' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="55"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'floating'.</p></div>
+<div class="balloon" rel="56"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '-=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="59"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="59"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="59"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(pressure >> 8) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="60"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="60"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="60"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(pressure & 0xFF)' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="72"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The '__builtin_isnan(data->battery_v)' operand of the '!' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="72"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2570/" target="_blank">V2570</a> Operands of the '!' operator should have bool essential type.</p></div>
+<div class="balloon" rel="75"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="75"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '-' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="75"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->battery_v * 1000 - 1600)' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="75"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'floating'.</p></div>
+<div class="balloon" rel="78"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '!=' operator should have the same essential type. The current types are: 'signed' and 'character'.</p></div>
+<div class="balloon" rel="78"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '>=' operator should have the same essential type. The current types are: 'character' and 'signed'.</p></div>
+<div class="balloon" rel="79"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '<=' operator should have the same essential type. The current types are: 'character' and 'signed'.</p></div>
+<div class="balloon" rel="82"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '/' operator should have the same essential type. The current types are: 'character' and 'signed'.</p></div>
+<div class="balloon" rel="82"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '(data->tx_power + 40)' of the '/' operator should not have the essential 'character' type.</p></div>
+<div class="balloon" rel="82"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->tx_power + 40) / 2' expression should not be converted from the essential 'signed' type to the essential 'character' type.</p></div>
+<div class="balloon" rel="82"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'character' and 'signed'.</p></div>
+<div class="balloon" rel="85"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(voltage << 5) + tx_power' expression should not be converted from the essential 'character' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="86"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(power_info >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="86"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="87"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="87"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="87"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(power_info & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="87"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->measurement_count >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->measurement_count & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 40) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="93"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="93"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="93"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 32) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="94"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="94"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="94"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 24) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="95"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="95"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="95"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 16) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="96"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="96"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="96"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 8) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="97"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="97"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="97"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(data->address >> 0) & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="23"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2506/" target="_blank">V2506</a> A function should have a single point of exit at the end.</p></div>
+
+<link rel="stylesheet" href="highlight.css">
+<script src="highlight.pack.js"></script>
+<script src="highlightjs-line-numbers.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>hljs.initLineNumbersOnLoad();</script>
+<script>
+  $(document).ready(function() {
+      $('.balloon').each(function () {
+          var bl = $(this);
+          var line = bl.attr('rel');
+          var text = $('a[name="ln'+line+'"]').text();
+
+          var space_count = 0;
+          for(var i = 0; i<text.length; i++){
+              var char = text[i];
+              if((char !== ' ')&&(char !== '\t'))break;
+              if(char === '\t')space_count++;
+              space_count++;
+          }
+
+          bl.css('margin-left', space_count*8);
+          $('a[name="ln'+line+'"]').after(bl);
+      });
+
+      window.location = window.location;
+  });
+</script>
+</body>
+</html>
