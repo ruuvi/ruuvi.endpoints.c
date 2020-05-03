@@ -72,15 +72,17 @@
 <a name="ln59">/**</a>
 <a name="ln60"> * @brief Encode given data to given buffer in Ruuvi DF5.</a>
 <a name="ln61"> *</a>
-<a name="ln62"> * @param[in] buffer uint8_t array with length of 24 bytes.</a>
-<a name="ln63"> * @param[in] data Struct containing all necessary information for encoding the data into buffer.</a>
-<a name="ln64"> * @return RUUVI_DRIVER_SUCCESS if data was encoded</a>
-<a name="ln65"> */</a>
-<a name="ln66">ruuvi_endpoint_status_t ruuvi_endpoint_5_encode (uint8_t * const buffer,</a>
-<a name="ln67">        const ruuvi_endpoint_5_data_t * data);</a>
-<a name="ln68"> </a>
-<a name="ln69"> </a>
-<a name="ln70">#endif</a>
+<a name="ln62"> * NAN can be used as a placeholder for invalid / not available values.</a>
+<a name="ln63"> *</a>
+<a name="ln64"> * @param[in] buffer uint8_t array with length of 24 bytes.</a>
+<a name="ln65"> * @param[in] data Struct containing all necessary information for encoding the data into buffer.</a>
+<a name="ln66"> * @retval RUUVI_ENDPOINT_SUCCESS if data was encoded successfully.</a>
+<a name="ln67"> */</a>
+<a name="ln68">ruuvi_endpoint_status_t ruuvi_endpoint_5_encode (uint8_t * const buffer,</a>
+<a name="ln69">        const ruuvi_endpoint_5_data_t * data);</a>
+<a name="ln70"> </a>
+<a name="ln71"> </a>
+<a name="ln72">#endif</a>
 
 </code></pre>
 <div class="balloon" rel="45"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v802/" target="_blank">V802</a> On 64-bit platform, structure size can be reduced from 48 to 40 bytes by rearranging the fields according to their sizes in decreasing order.</p></div>
