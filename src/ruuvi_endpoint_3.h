@@ -30,14 +30,14 @@
 
 typedef struct
 {
-    float humidity_rh;
-    float pressure_pa;
-    float temperature_c;
-    float accelerationx_g;
-    float accelerationy_g;
-    float accelerationz_g;
-    float battery_v;
-} ruuvi_endpoint_3_data_t;
+    float humidity_rh;     //!< Humidity in relative humidity percentage.
+    float pressure_pa;     //!< Pressure in pascals.
+    float temperature_c;   //!< Temperature in celcius.
+    float accelerationx_g; //!< Acceleration along X-axis, can be RMS over some period.
+    float accelerationy_g; //!< Acceleration along Y-axis, can be RMS over some period.
+    float accelerationz_g; //!< Acceleration along Z-axis, can be RMS over some period.
+    float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
+} ruuvi_endpoint_3_data_t; //!< All data required for Ruuvi dataformat 3 package.
 
 ruuvi_endpoint_status_t ruuvi_endpoint_3_encode (uint8_t * const buffer,
         const ruuvi_endpoint_3_data_t * data, const float invalid);

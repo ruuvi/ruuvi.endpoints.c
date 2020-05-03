@@ -43,18 +43,18 @@
 
 typedef struct
 {
-    float humidity_rh;
-    float pressure_pa;
-    float temperature_c;
-    float accelerationx_g;
-    float accelerationy_g;
-    float accelerationz_g;
-    float battery_v;
-    uint16_t measurement_count;
-    uint8_t movement_count;
-    uint64_t address;
-    int8_t tx_power;
-} ruuvi_endpoint_5_data_t;
+    float humidity_rh;     //!< Humidity in relative humidity percentage.
+    float pressure_pa;     //!< Pressure in pascals.
+    float temperature_c;   //!< Temperature in celcius.
+    float accelerationx_g; //!< Acceleration along X-axis, can be RMS over some period.
+    float accelerationy_g; //!< Acceleration along Y-axis, can be RMS over some period.
+    float accelerationz_g; //!< Acceleration along Z-axis, can be RMS over some period.
+    float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
+    uint16_t measurement_count; //!< Running counter of measurement.
+    uint8_t movement_count;     //!< Number of detected movements.
+    uint64_t address;           //!< BLE address of device, most significant byte first.
+    int8_t tx_power;            //!< Transmission power of radio, in dBm.
+} ruuvi_endpoint_5_data_t; //!< All data required for Ruuvi dataformat 5 package.
 
 /**
  * @brief Encode given data to given buffer in Ruuvi DF5.
