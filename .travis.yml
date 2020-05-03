@@ -19,5 +19,5 @@ script:
 
 addons:
   sonarcloud:
-    organization: "vcf"
-    projectKey: "VentilatorCrowdFinland_vcf.npa-700.c"
+    organization: "ruuvi"
+    projectKey: "ruuvi.endpoints.c"
