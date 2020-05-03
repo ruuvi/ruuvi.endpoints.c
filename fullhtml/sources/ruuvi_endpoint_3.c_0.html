@@ -18,7 +18,7 @@
 <a name="ln5">#include &lt;math.h&gt;</a>
 <a name="ln6"> </a>
 <a name="ln7">static void re_3_encode_acceleration (uint8_t * const buffer,</a>
-<a name="ln8">        const float acceleration, const float invalid)</a>
+<a name="ln8">                                      const float acceleration, const float invalid)</a>
 <a name="ln9">{</a>
 <a name="ln10">    if (invalid != acceleration)</a>
 <a name="ln11">    {</a>
@@ -34,7 +34,7 @@
 <a name="ln21">}</a>
 <a name="ln22"> </a>
 <a name="ln23">re_status_t re_3_encode (uint8_t * const buffer,</a>
-<a name="ln24">        const re_3_data_t * const data, const float invalid)</a>
+<a name="ln24">                         const re_3_data_t * const data, const float invalid)</a>
 <a name="ln25">{</a>
 <a name="ln26">    if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }</a>
 <a name="ln27"> </a>
@@ -90,11 +90,11 @@
 <a name="ln77"> </a>
 <a name="ln78">    // acceleration</a>
 <a name="ln79">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONX_MSB],</a>
-<a name="ln80">                                          data-&gt;accelerationx_g, invalid);</a>
+<a name="ln80">                              data-&gt;accelerationx_g, invalid);</a>
 <a name="ln81">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONY_MSB],</a>
-<a name="ln82">                                          data-&gt;accelerationy_g, invalid);</a>
+<a name="ln82">                              data-&gt;accelerationy_g, invalid);</a>
 <a name="ln83">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],</a>
-<a name="ln84">                                          data-&gt;accelerationz_g, invalid);</a>
+<a name="ln84">                              data-&gt;accelerationz_g, invalid);</a>
 <a name="ln85"> </a>
 <a name="ln86">    // voltage</a>
 <a name="ln87">    if (invalid != data-&gt;battery_v)</a>

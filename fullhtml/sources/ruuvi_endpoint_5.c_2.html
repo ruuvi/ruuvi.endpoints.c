@@ -19,7 +19,7 @@
 <a name="ln6">#include &lt;math.h&gt;</a>
 <a name="ln7"> </a>
 <a name="ln8">static void re_5_encode_acceleration (uint8_t * const buffer,</a>
-<a name="ln9">        const float acceleration)</a>
+<a name="ln9">                                      const float acceleration)</a>
 <a name="ln10">{</a>
 <a name="ln11">    int16_t decimal = RE_5_INVALID_ACCELERATION;</a>
 <a name="ln12"> </a>
@@ -34,7 +34,7 @@
 <a name="ln21">}</a>
 <a name="ln22"> </a>
 <a name="ln23">re_status_t re_5_encode (uint8_t * const buffer,</a>
-<a name="ln24">        const re_5_data_t * data)</a>
+<a name="ln24">                         const re_5_data_t * data)</a>
 <a name="ln25">{</a>
 <a name="ln26">    if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }</a>
 <a name="ln27"> </a>
@@ -73,11 +73,11 @@
 <a name="ln60">    buffer[RE_5_OFFSET_PRESSURE_LSB] = (pressure  &amp; 0xFF);</a>
 <a name="ln61">    // acceleration</a>
 <a name="ln62">    re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCELERATIONX_MSB],</a>
-<a name="ln63">                                          data-&gt;accelerationx_g);</a>
+<a name="ln63">                              data-&gt;accelerationx_g);</a>
 <a name="ln64">    re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCELERATIONY_MSB],</a>
-<a name="ln65">                                          data-&gt;accelerationy_g);</a>
+<a name="ln65">                              data-&gt;accelerationy_g);</a>
 <a name="ln66">    re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCELERATIONZ_MSB],</a>
-<a name="ln67">                                          data-&gt;accelerationz_g);</a>
+<a name="ln67">                              data-&gt;accelerationz_g);</a>
 <a name="ln68">    // voltage, tx power</a>
 <a name="ln69">    uint16_t voltage = RE_5_INVALID_VOLTAGE;</a>
 <a name="ln70">    int8_t tx_power = RE_5_INVALID_POWER;</a>
