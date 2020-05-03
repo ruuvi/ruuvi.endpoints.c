@@ -5,7 +5,7 @@
 #include <math.h>
 
 static void re_3_encode_acceleration (uint8_t * const buffer,
-        const float acceleration, const float invalid)
+                                      const float acceleration, const float invalid)
 {
     if (invalid != acceleration)
     {
@@ -21,7 +21,7 @@ static void re_3_encode_acceleration (uint8_t * const buffer,
 }
 
 re_status_t re_3_encode (uint8_t * const buffer,
-        const re_3_data_t * const data, const float invalid)
+                         const re_3_data_t * const data, const float invalid)
 {
     if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }
 
@@ -77,11 +77,11 @@ re_status_t re_3_encode (uint8_t * const buffer,
 
     // acceleration
     re_3_encode_acceleration (&buffer[RE_3_OFFSET_ACCELERATIONX_MSB],
-                                          data->accelerationx_g, invalid);
+                              data->accelerationx_g, invalid);
     re_3_encode_acceleration (&buffer[RE_3_OFFSET_ACCELERATIONY_MSB],
-                                          data->accelerationy_g, invalid);
+                              data->accelerationy_g, invalid);
     re_3_encode_acceleration (&buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],
-                                          data->accelerationz_g, invalid);
+                              data->accelerationz_g, invalid);
 
     // voltage
     if (invalid != data->battery_v)

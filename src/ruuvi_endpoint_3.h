@@ -49,7 +49,7 @@ typedef struct
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_3_encode (uint8_t * const buffer,
-        const re_3_data_t * const data, const float invalid);
+                         const re_3_data_t * const data, const float invalid);
 
 
 #endif

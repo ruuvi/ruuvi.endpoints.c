@@ -6,7 +6,7 @@
 #include <math.h>
 
 static void re_5_encode_acceleration (uint8_t * const buffer,
-        const float acceleration)
+                                      const float acceleration)
 {
     int16_t decimal = RE_5_INVALID_ACCELERATION;
 
@@ -21,7 +21,7 @@ static void re_5_encode_acceleration (uint8_t * const buffer,
 }
 
 re_status_t re_5_encode (uint8_t * const buffer,
-        const re_5_data_t * data)
+                         const re_5_data_t * data)
 {
     if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }
 
@@ -60,11 +60,11 @@ re_status_t re_5_encode (uint8_t * const buffer,
     buffer[RE_5_OFFSET_PRESSURE_LSB] = (pressure  & 0xFF);
     // acceleration
     re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONX_MSB],
-                                          data->accelerationx_g);
+                              data->accelerationx_g);
     re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONY_MSB],
-                                          data->accelerationy_g);
+                              data->accelerationy_g);
     re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONZ_MSB],
-                                          data->accelerationz_g);
+                              data->accelerationz_g);
     // voltage, tx power
     uint16_t voltage = RE_5_INVALID_VOLTAGE;
     int8_t tx_power = RE_5_INVALID_POWER;
