@@ -3,9 +3,9 @@ Data endpoints for abstracting source (e.g. bme280) from data (e.g. temperature)
 
 ![GH-Pages](https://github.com/ruuvi/ruuvi.endpoints.c/workflows/GH-Pages/badge.svg)
 ![Ceedling](https://github.com/ruuvi/ruuvi.endpoints.c/workflows/Ceedling/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=alert_status)](https://sonarcloud.io/dashboard?id=ruuvi.endpoints.c)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=coverage)](https://sonarcloud.io/dashboard?id=ruuvi.endpoints.c)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=code_smells)](https://sonarcloud.io/dashboard?id=ruuvi.endpoints.c)
+![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=alert_status)
+![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=coverage)
+![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=code_smells)
 
 # Embedding to your application
 Include a tagged release to your application as a git submodule. 
