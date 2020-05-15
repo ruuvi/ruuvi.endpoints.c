@@ -40,8 +40,14 @@ void tearDown (void)
 void test_ruuvi_endpoint_ibeacon_get_ok (void)
 {
     re_status_t err_code = RE_SUCCESS;
-    uint8_t test_buffer[20] = {0};
-    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, &m_ibeacon_data_ok);
+#ifndef RE_IBEACON_OFFSET_EXCEPT_HEADER
+    uint8_t test_buffer[21] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer;
+#else
+    uint8_t test_buffer[30] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer[9];
+#endif
+    err_code = re_ibeacon_encode (p_test_buffer, &m_ibeacon_data_ok);
     TEST_ASSERT (RE_SUCCESS == err_code);
 }
 
@@ -53,8 +59,14 @@ void test_ruuvi_endpoint_ibeacon_get_ok (void)
 void test_ruuvi_endpoint_ibeacon_get_error_invalid (void)
 {
     re_status_t err_code = RE_ERROR_INVALID_PARAM;
-    uint8_t test_buffer[20] = {0};
-    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, &m_ibeacon_data_invalid);
+#ifndef RE_IBEACON_OFFSET_EXCEPT_HEADER
+    uint8_t test_buffer[21] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer;
+#else
+    uint8_t test_buffer[30] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer[9];
+#endif
+    err_code = re_ibeacon_encode (p_test_buffer, &m_ibeacon_data_invalid);
     TEST_ASSERT (RE_ERROR_INVALID_PARAM == err_code);
 }
 
@@ -79,13 +91,19 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_buffer (void)
 void test_ruuvi_endpoint_ibeacon_get_error_null_data (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
-    uint8_t test_buffer[20] = {0};
+#ifndef RE_IBEACON_OFFSET_EXCEPT_HEADER
+    uint8_t test_buffer[21] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer;
+#else
+    uint8_t test_buffer[30] = {0};
+    uint8_t * const p_test_buffer = (uint8_t * const) &test_buffer[9];
+#endif
     re_ibeacon_data_t * p_ibeacon_data = NULL;
-    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, p_ibeacon_data);
+    err_code = re_ibeacon_encode (p_test_buffer, p_ibeacon_data);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
 }
 
-void test_ruuvi_endpoint_ibeacon_NeedToImplement (void)
+void test_ruuvi_endpoint_ibeacon_Implemented (void)
 {
-    TEST_IGNORE_MESSAGE ("Need to Implement ruuvi_endpoint_ibeacon");
+    TEST_IGNORE_MESSAGE ("Now ruuvi_endpoint_ibeacon implemented");
 }
