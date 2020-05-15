@@ -3,8 +3,8 @@
 #include "ruuvi_endpoints.h"
 
 #define RE_IBEACON_OFFSET_EXCEPT_HEADER
-#define RE_IBEACON_PROXIMITY_UUID_SIZE                  16
-#define RE_IBEACON_INVALID_TX_POWER                     127
+#define RE_IBEACON_PROXIMITY_UUID_SIZE              16
+#define RE_IBEACON_INVALID_TX_POWER                 127
 
 #ifndef RE_IBEACON_OFFSET_EXCEPT_HEADER
 #define RE_IBEACON_OFFSET_PROXIMITY_UUID            9
@@ -25,10 +25,14 @@
 /** @brief All data required for Ruuvi ibeacon dataformat package. */
 typedef struct
 {
-    uint8_t proximity_uuid[RE_IBEACON_PROXIMITY_UUID_SIZE];     //!< Proximity UUID(user UUID)
-    uint16_t major;                                             //!< Major arbitrary value that can be used to distinguish between Beacons.
-    uint16_t minor;                                             //!< Minor arbitrary value that can be used to distinguish between Beacons.
-    int8_t tx_power;                                            //!< The Beacon's measured TX power
+    uint8_t proximity_uuid[RE_IBEACON_PROXIMITY_UUID_SIZE];
+    //!< Proximity UUID(user UUID)
+    uint16_t major;
+    //!< Major arbitrary value that can be used to distinguish between Beacons.
+    uint16_t minor;
+    //!< Minor arbitrary value that can be used to distinguish between Beacons.
+    int8_t tx_power;
+    //!< The Beacon's measured TX power
 } re_ibeacon_data_t;
 
 /**
