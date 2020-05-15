@@ -220,7 +220,8 @@ INCLUDES+=src/
 INC_PARAMS=$(foreach d, $(INCLUDES), -I$d)
 SOURCES=\
 src/ruuvi_endpoint_3.c \
-src/ruuvi_endpoint_5.c
+src/ruuvi_endpoint_5.c \
+src/ruuvi_endpoint_ibeacon.c
 OBJECTS=$(SOURCES:.c=.o)
 ANALYSIS=$(SOURCES:.c=.a)
 IOBJECTS=$(SOURCES:.c=.o.PVS-Studio.i)
@@ -255,7 +256,7 @@ $(SONAR): $(ANALYSIS)
 	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
 
 astyle:
-	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c" "test/*.h"
+	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
 
 clean:
 	rm -f $(OBJECTS) $(IOBJECTS) $(POBJECTS)
