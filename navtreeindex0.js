@@ -34,10 +34,5 @@ var NAVTREEINDEX0 =
 "structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832":[0,0,1,3],
 "structre__5__data__t.html#acfe96e7632708f739cc164a892fabd32":[0,0,1,0],
 "structre__5__data__t.html#ad2da5adb3c2851bee9dee38e55e910bf":[0,0,1,5],
-"structre__5__data__t.html#ae096b9d8f1697e0841f8cb94cc3a7816":[0,0,1,1],
-"structre__ibeacon__data__t.html":[0,0,2],
-"structre__ibeacon__data__t.html#a563fdda8fd1d9bdb2922f92860dfae74":[0,0,2,2],
-"structre__ibeacon__data__t.html#a600930655b7237315b72223c48327ea8":[0,0,2,0],
-"structre__ibeacon__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c":[0,0,2,3],
-"structre__ibeacon__data__t.html#a9f280ce3ae5b6cd9346fd7a09ff29168":[0,0,2,1]
+"structre__5__data__t.html#ae096b9d8f1697e0841f8cb94cc3a7816":[0,0,1,1]
 };
