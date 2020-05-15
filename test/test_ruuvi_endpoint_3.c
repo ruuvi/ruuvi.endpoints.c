@@ -31,6 +31,17 @@ static const re_3_data_t m_re_3_data_max =
     .battery_v = 65.535
 };
 
+static const re_3_data_t m_re_3_data_cap =
+{
+    .humidity_rh = 127.5,
+    .pressure_pa = 115535,
+    .temperature_c = 135,
+    .accelerationx_g = 32.767,
+    .accelerationy_g = 32.767,
+    .accelerationz_g = 32.767,
+    .battery_v = 65.535
+};
+
 static const uint8_t max_data[] =
 {
     0x03, 0xFF, 0x7F, 0x63, 0xFF, 0xFF, 0x7F, 0xFF, 0x7F, 0xFF, 0x7F, 0xFF, 0xFF, 0xFF
@@ -94,6 +105,17 @@ void test_ruuvi_endpoint_3_get_ok_max (void)
     const float invalid =  NAN;
     err_code = re_3_encode (test_buffer,
                             &m_re_3_data_max, invalid);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (valid_data))));
+}
+
+void test_ruuvi_endpoint_3_get_ok_cap (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t test_buffer[14] = {0};
+    const float invalid =  NAN;
+    err_code = re_3_encode (test_buffer,
+                            &m_re_3_data_cap, invalid);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (valid_data))));
 }
