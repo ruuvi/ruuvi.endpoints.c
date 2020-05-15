@@ -7,19 +7,19 @@
 #define RE_IBEACON_INVALID_TX_POWER                     127
 
 #ifndef RE_IBEACON_OFFSET_EXCEPT_HEADER
-    #define RE_IBEACON_OFFSET_PROXIMITY_UUID            9
-    #define RE_IBEACON_OFFSET_MAJOR_MSB                 25
-    #define RE_IBEACON_OFFSET_MAJOR_LSB                 26
-    #define RE_IBEACON_OFFSET_MINOR_MSB                 27
-    #define RE_IBEACON_OFFSET_MINOR_LSB                 28
-    #define RE_IBEACON_OFFSET_TX_POWER                  29
+#define RE_IBEACON_OFFSET_PROXIMITY_UUID            9
+#define RE_IBEACON_OFFSET_MAJOR_MSB                 25
+#define RE_IBEACON_OFFSET_MAJOR_LSB                 26
+#define RE_IBEACON_OFFSET_MINOR_MSB                 27
+#define RE_IBEACON_OFFSET_MINOR_LSB                 28
+#define RE_IBEACON_OFFSET_TX_POWER                  29
 #else
-    #define RE_IBEACON_OFFSET_PROXIMITY_UUID            0
-    #define RE_IBEACON_OFFSET_MAJOR_MSB                 16
-    #define RE_IBEACON_OFFSET_MAJOR_LSB                 17
-    #define RE_IBEACON_OFFSET_MINOR_MSB                 18
-    #define RE_IBEACON_OFFSET_MINOR_LSB                 19
-    #define RE_IBEACON_OFFSET_TX_POWER                  20
+#define RE_IBEACON_OFFSET_PROXIMITY_UUID            0
+#define RE_IBEACON_OFFSET_MAJOR_MSB                 16
+#define RE_IBEACON_OFFSET_MAJOR_LSB                 17
+#define RE_IBEACON_OFFSET_MINOR_MSB                 18
+#define RE_IBEACON_OFFSET_MINOR_LSB                 19
+#define RE_IBEACON_OFFSET_TX_POWER                  20
 #endif
 
 /** @brief All data required for Ruuvi ibeacon dataformat package. */
