@@ -41,8 +41,7 @@ void test_ruuvi_endpoint_ibeacon_get_ok (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t test_buffer[20] = {0};
-
-    err_code = re_ibeacon_encode ((uint8_t * const)&test_buffer, &m_ibeacon_data_ok);
+    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, &m_ibeacon_data_ok);
     TEST_ASSERT (RE_SUCCESS == err_code);
 }
 
@@ -55,8 +54,7 @@ void test_ruuvi_endpoint_ibeacon_get_error_invalid (void)
 {
     re_status_t err_code = RE_ERROR_INVALID_PARAM;
     uint8_t test_buffer[20] = {0};
-
-    err_code = re_ibeacon_encode ((uint8_t * const)&test_buffer, &m_ibeacon_data_invalid);
+    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, &m_ibeacon_data_invalid);
     TEST_ASSERT (RE_ERROR_INVALID_PARAM == err_code);
 }
 
@@ -69,7 +67,6 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_buffer (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
     uint8_t * const p_test_buffer = NULL;
-
     err_code = re_ibeacon_encode (p_test_buffer, &m_ibeacon_data_ok);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
 }
@@ -83,9 +80,8 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_data (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
     uint8_t test_buffer[20] = {0};
-    re_ibeacon_data_t *p_ibeacon_data = NULL;
-
-    err_code = re_ibeacon_encode ((uint8_t * const)&test_buffer, p_ibeacon_data);
+    re_ibeacon_data_t * p_ibeacon_data = NULL;
+    err_code = re_ibeacon_encode ( (uint8_t * const) &test_buffer, p_ibeacon_data);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
 }
 
