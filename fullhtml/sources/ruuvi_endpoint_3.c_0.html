@@ -22,7 +22,7 @@
 <a name="ln9">{</a>
 <a name="ln10">    if (invalid != acceleration)</a>
 <a name="ln11">    {</a>
-<a name="ln12">        int16_t decimal = (int16_t) (acceleration * 1000);</a>
+<a name="ln12">        int16_t decimal = (int16_t) round ( (acceleration * 1000));</a>
 <a name="ln13">        buffer[0] = decimal &gt;&gt; 8;</a>
 <a name="ln14">        buffer[1] = decimal &amp; 0xFF;</a>
 <a name="ln15">    }</a>
@@ -62,60 +62,61 @@
 <a name="ln49">        if (0 &gt; temperature) { temperature = 0 - temperature; }</a>
 <a name="ln50"> </a>
 <a name="ln51">        // cap the temperature</a>
-<a name="ln52">        if (127 &lt; temperature) {temperature = 127; }</a>
+<a name="ln52">        if (127.99 &lt; temperature) {temperature = 127.99; }</a>
 <a name="ln53"> </a>
 <a name="ln54">        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (sign &lt;&lt; 7);</a>
-<a name="ln55">        uint8_t temperature_fraction = (uint8_t) ( (temperature - floor (temperature)) * 100);</a>
-<a name="ln56">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;</a>
-<a name="ln57">    }</a>
-<a name="ln58">    else</a>
-<a name="ln59">    {</a>
-<a name="ln60">        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL]  = RE_3_INVALID_DATA;</a>
-<a name="ln61">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = RE_3_INVALID_DATA;</a>
-<a name="ln62">    }</a>
-<a name="ln63"> </a>
-<a name="ln64">    // Pressure</a>
-<a name="ln65">    if (invalid != data-&gt;pressure_pa)</a>
-<a name="ln66">    {</a>
-<a name="ln67">        uint32_t pressure = data-&gt;pressure_pa;</a>
-<a name="ln68">        pressure -= 50000;</a>
-<a name="ln69">        buffer[RE_3_OFFSET_PRESSURE_MSB] = pressure &gt;&gt; 8;</a>
-<a name="ln70">        buffer[RE_3_OFFSET_PRESSURE_LSB] = pressure &amp; 0xFF;</a>
-<a name="ln71">    }</a>
-<a name="ln72">    else</a>
-<a name="ln73">    {</a>
-<a name="ln74">        buffer[RE_3_OFFSET_PRESSURE_MSB] = RE_3_INVALID_DATA;</a>
-<a name="ln75">        buffer[RE_3_OFFSET_PRESSURE_LSB] = RE_3_INVALID_DATA;</a>
-<a name="ln76">    }</a>
-<a name="ln77"> </a>
-<a name="ln78">    // acceleration</a>
-<a name="ln79">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONX_MSB],</a>
-<a name="ln80">                              data-&gt;accelerationx_g, invalid);</a>
-<a name="ln81">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONY_MSB],</a>
-<a name="ln82">                              data-&gt;accelerationy_g, invalid);</a>
-<a name="ln83">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],</a>
-<a name="ln84">                              data-&gt;accelerationz_g, invalid);</a>
-<a name="ln85"> </a>
-<a name="ln86">    // voltage</a>
-<a name="ln87">    if (invalid != data-&gt;battery_v)</a>
-<a name="ln88">    {</a>
-<a name="ln89">        uint32_t voltage = (data-&gt;battery_v * 1000 &gt; 0) ? data-&gt;battery_v * 1000 : 0;</a>
-<a name="ln90">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = voltage &gt;&gt; 8;</a>
-<a name="ln91">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = voltage &amp; 0xFF;</a>
-<a name="ln92">    }</a>
-<a name="ln93">    else</a>
-<a name="ln94">    {</a>
-<a name="ln95">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = RE_3_INVALID_DATA;</a>
-<a name="ln96">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = RE_3_INVALID_DATA;</a>
-<a name="ln97">    }</a>
-<a name="ln98"> </a>
-<a name="ln99">    return RE_SUCCESS;</a>
-<a name="ln100">}</a>
+<a name="ln55">        uint8_t temperature_fraction = (uint8_t) round ( (temperature - floor (</a>
+<a name="ln56">                                           temperature)) * 100);</a>
+<a name="ln57">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;</a>
+<a name="ln58">    }</a>
+<a name="ln59">    else</a>
+<a name="ln60">    {</a>
+<a name="ln61">        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL]  = RE_3_INVALID_DATA;</a>
+<a name="ln62">        buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = RE_3_INVALID_DATA;</a>
+<a name="ln63">    }</a>
+<a name="ln64"> </a>
+<a name="ln65">    // Pressure</a>
+<a name="ln66">    if (invalid != data-&gt;pressure_pa)</a>
+<a name="ln67">    {</a>
+<a name="ln68">        uint32_t pressure = data-&gt;pressure_pa;</a>
+<a name="ln69">        pressure -= 50000;</a>
+<a name="ln70">        buffer[RE_3_OFFSET_PRESSURE_MSB] = pressure &gt;&gt; 8;</a>
+<a name="ln71">        buffer[RE_3_OFFSET_PRESSURE_LSB] = pressure &amp; 0xFF;</a>
+<a name="ln72">    }</a>
+<a name="ln73">    else</a>
+<a name="ln74">    {</a>
+<a name="ln75">        buffer[RE_3_OFFSET_PRESSURE_MSB] = RE_3_INVALID_DATA;</a>
+<a name="ln76">        buffer[RE_3_OFFSET_PRESSURE_LSB] = RE_3_INVALID_DATA;</a>
+<a name="ln77">    }</a>
+<a name="ln78"> </a>
+<a name="ln79">    // acceleration</a>
+<a name="ln80">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONX_MSB],</a>
+<a name="ln81">                              data-&gt;accelerationx_g, invalid);</a>
+<a name="ln82">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONY_MSB],</a>
+<a name="ln83">                              data-&gt;accelerationy_g, invalid);</a>
+<a name="ln84">    re_3_encode_acceleration (&amp;buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],</a>
+<a name="ln85">                              data-&gt;accelerationz_g, invalid);</a>
+<a name="ln86"> </a>
+<a name="ln87">    // voltage</a>
+<a name="ln88">    if (invalid != data-&gt;battery_v)</a>
+<a name="ln89">    {</a>
+<a name="ln90">        uint32_t voltage = (data-&gt;battery_v * 1000 &gt; 0) ? data-&gt;battery_v * 1000 : 0;</a>
+<a name="ln91">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = voltage &gt;&gt; 8;</a>
+<a name="ln92">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = voltage &amp; 0xFF;</a>
+<a name="ln93">    }</a>
+<a name="ln94">    else</a>
+<a name="ln95">    {</a>
+<a name="ln96">        buffer[RE_3_OFFSET_VOLTAGE_MSB] = RE_3_INVALID_DATA;</a>
+<a name="ln97">        buffer[RE_3_OFFSET_VOLTAGE_LSB] = RE_3_INVALID_DATA;</a>
+<a name="ln98">    }</a>
+<a name="ln99"> </a>
+<a name="ln100">    return RE_SUCCESS;</a>
+<a name="ln101">}</a>
 
 </code></pre>
 <div class="balloon" rel="10"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v550/" target="_blank">V550</a> An odd precise comparison: invalid != acceleration. It's probably better to use a comparison with defined precision: fabs(A - B) > Epsilon.</p></div>
 <div class="balloon" rel="12"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
-<div class="balloon" rel="12"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2003/" target="_blank">V2003</a> Explicit conversion from 'float' type to signed integer type: (int16_t)(acceleration * 1000)</p></div>
+<div class="balloon" rel="12"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2003/" target="_blank">V2003</a> Explicit conversion from 'double' type to signed integer type: (int16_t) round((acceleration * 1000))</p></div>
 <div class="balloon" rel="13"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand 'decimal' of the '>>' operator should not have the essential 'signed' type.</p></div>
 <div class="balloon" rel="13"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'decimal >> 8' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
 <div class="balloon" rel="13"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
@@ -135,9 +136,7 @@
 <div class="balloon" rel="46"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(temperature < 0) ? 1 : 0' expression should not be converted from the essential 'signed' type to the essential 'Boolean' type.</p></div>
 <div class="balloon" rel="49"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '>' operator should have the same essential type. The current types are: 'signed' and 'floating'.</p></div>
 <div class="balloon" rel="49"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '-' operator should have the same essential type. The current types are: 'signed' and 'floating'.</p></div>
-<div class="balloon" rel="52"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '<' operator should have the same essential type. The current types are: 'signed' and 'floating'.</p></div>
-<div class="balloon" rel="52"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '127' expression should not be converted from the essential 'signed' type to the essential 'floating' type.</p></div>
-<div class="balloon" rel="52"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="52"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '127.99' expression should not be converted to the narrower essential 'floating' type.</p></div>
 <div class="balloon" rel="54"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2004/" target="_blank">V2004</a> Explicit conversion from 'float' type to unsigned integer type: (uint8_t) temperature</p></div>
 <div class="balloon" rel="54"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand 'sign' of the '<<' operator should not have the essential 'Boolean' type.</p></div>
 <div class="balloon" rel="54"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '|' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
@@ -146,28 +145,28 @@
 <div class="balloon" rel="54"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
 <div class="balloon" rel="55"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
 <div class="balloon" rel="55"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2004/" target="_blank">V2004</a> Explicit conversion from 'double' type to unsigned integer type.</p></div>
-<div class="balloon" rel="60"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
 <div class="balloon" rel="61"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="65"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v550/" target="_blank">V550</a> An odd precise comparison: invalid != data->pressure_pa. It's probably better to use a comparison with defined precision: fabs(A - B) > Epsilon.</p></div>
-<div class="balloon" rel="67"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'data->pressure_pa' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="68"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '-=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="69"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'pressure >> 8' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
-<div class="balloon" rel="70"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="70"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="70"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'pressure & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
-<div class="balloon" rel="74"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="62"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="66"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v550/" target="_blank">V550</a> An odd precise comparison: invalid != data->pressure_pa. It's probably better to use a comparison with defined precision: fabs(A - B) > Epsilon.</p></div>
+<div class="balloon" rel="68"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'data->pressure_pa' expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="69"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '-=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="70"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'pressure >> 8' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="71"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="71"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="71"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'pressure & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
 <div class="balloon" rel="75"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="87"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v550/" target="_blank">V550</a> An odd precise comparison: invalid != data->battery_v. It's probably better to use a comparison with defined precision: fabs(A - B) > Epsilon.</p></div>
-<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
-<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '>' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
-<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '?:' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
-<div class="balloon" rel="89"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> Value of the expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'voltage >> 8' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
-<div class="balloon" rel="91"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="91"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="91"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'voltage & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
-<div class="balloon" rel="95"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="76"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="88"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v550/" target="_blank">V550</a> An odd precise comparison: invalid != data->battery_v. It's probably better to use a comparison with defined precision: fabs(A - B) > Epsilon.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '*' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '>' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '?:' operator should have the same essential type. The current types are: 'floating' and 'signed'.</p></div>
+<div class="balloon" rel="90"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> Value of the expression should not be converted from the essential 'floating' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="91"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'voltage >> 8' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="92"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'voltage & 0xFF' expression should not be converted to the narrower essential 'unsigned' type.</p></div>
 <div class="balloon" rel="96"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="97"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
 <div class="balloon" rel="23"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2506/" target="_blank">V2506</a> A function should have a single point of exit at the end.</p></div>
 
 <link rel="stylesheet" href="highlight.css">
