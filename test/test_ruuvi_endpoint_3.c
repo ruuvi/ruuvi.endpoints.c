@@ -94,7 +94,7 @@ void test_ruuvi_endpoint_3_get_ok_min (void)
  *
  * @retval RE_ERROR_NULL on success test.
  */
-void test_ruuvi_endpoint_ibeacon_get_error_null_buffer (void)
+void test_ruuvi_endpoint_3_get_error_null_buffer (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
     uint8_t * const p_test_buffer = NULL;
@@ -109,7 +109,7 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_buffer (void)
  *
  * @retval RE_ERROR_NULL on success test.
  */
-void test_ruuvi_endpoint_ibeacon_get_error_null_data (void)
+void test_ruuvi_endpoint_3_get_error_null_data (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
     uint8_t test_buffer[14] = {0};
@@ -125,7 +125,7 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_data (void)
  *
  * @retval RD_SUCCESS on success test.
  */
-void test_ruuvi_endpoint_ibeacon_get_invalid_data (void)
+void test_ruuvi_endpoint_3_get_invalid_data (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t test_buffer[14] = {0};
@@ -149,7 +149,7 @@ void test_ruuvi_endpoint_ibeacon_get_invalid_data (void)
                  RE_3_INVALID_DATA == test_buffer[13]);
 }
 
-void test_ruuvi_endpoint_3_NeedToImplement (void)
+void test_ruuvi_endpoint_3_Implemented (void)
 {
-    TEST_IGNORE_MESSAGE ("Need to Implement ruuvi_endpoint_3");
+    TEST_IGNORE_MESSAGE ("Now ruuvi_endpoint_3 implemented ");
 }
