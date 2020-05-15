@@ -14,48 +14,62 @@
 <a name="ln1">#include &quot;ruuvi_endpoint_ibeacon.h&quot;</a>
 <a name="ln2">#include &lt;string.h&gt;</a>
 <a name="ln3"> </a>
-<a name="ln4">re_status_t re_ibeacon_encode (uint8_t * const buffer,</a>
-<a name="ln5">                               const re_ibeacon_data_t * data)</a>
-<a name="ln6">{</a>
-<a name="ln7">    if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }</a>
-<a name="ln8"> </a>
-<a name="ln9">    if (RE_IBEACON_INVALID_TX_POWER == data-&gt;tx_power) { return RE_ERROR_INVALID_PARAM; }</a>
-<a name="ln10"> </a>
-<a name="ln11">    for (int i = 0; i &lt; RE_IBEACON_PROXIMITY_UUID_SIZE; i++)</a>
-<a name="ln12">    {</a>
-<a name="ln13">        buffer[RE_IBEACON_OFFSET_PROXIMITY_UUID + i] = data-&gt;proximity_uuid[i];</a>
-<a name="ln14">    }</a>
-<a name="ln15"> </a>
-<a name="ln16">    uint16_t major = data-&gt;major;</a>
-<a name="ln17">    buffer[RE_IBEACON_OFFSET_MAJOR_MSB] = (major &gt;&gt; 8);</a>
-<a name="ln18">    buffer[RE_IBEACON_OFFSET_MAJOR_LSB] = (major &amp; 0xFF);</a>
-<a name="ln19">    uint16_t minor = data-&gt;minor;</a>
-<a name="ln20">    buffer[RE_IBEACON_OFFSET_MAJOR_MSB] = (minor &gt;&gt; 8);</a>
-<a name="ln21">    buffer[RE_IBEACON_OFFSET_MAJOR_LSB] = (minor &amp; 0xFF);</a>
-<a name="ln22">    int8_t tx_power = data-&gt;tx_power;</a>
-<a name="ln23">    buffer[RE_IBEACON_OFFSET_TX_POWER] = tx_power;</a>
-<a name="ln24">    return RE_SUCCESS;</a>
-<a name="ln25">}</a>
+<a name="ln4">#define RE_IBEACON_BYTE_MASK    0xFF</a>
+<a name="ln5">#define RE_IBEACON_BYTE_SHIT    8</a>
+<a name="ln6"> </a>
+<a name="ln7">re_status_t re_ibeacon_encode (uint8_t * const buffer,</a>
+<a name="ln8">                               const re_ibeacon_data_t * data)</a>
+<a name="ln9">{</a>
+<a name="ln10">    re_status_t re_status = RE_SUCCESS;</a>
+<a name="ln11"> </a>
+<a name="ln12">    if ( (NULL == buffer) || (NULL == data))</a>
+<a name="ln13">    {</a>
+<a name="ln14">        re_status = RE_ERROR_NULL;</a>
+<a name="ln15">    }</a>
+<a name="ln16">    else</a>
+<a name="ln17">    {</a>
+<a name="ln18">        if (RE_IBEACON_INVALID_TX_POWER == data-&gt;tx_power) { return RE_ERROR_INVALID_PARAM; }</a>
+<a name="ln19"> </a>
+<a name="ln20">        for (uint8_t i = 0; i &lt; RE_IBEACON_PROXIMITY_UUID_SIZE; i++)</a>
+<a name="ln21">        {</a>
+<a name="ln22">            buffer[RE_IBEACON_OFFSET_PROXIMITY_UUID + i] = data-&gt;proximity_uuid[i];</a>
+<a name="ln23">        }</a>
+<a name="ln24"> </a>
+<a name="ln25">        uint16_t major = data-&gt;major;</a>
+<a name="ln26">        buffer[RE_IBEACON_OFFSET_MAJOR_MSB] = (major &gt;&gt; RE_IBEACON_BYTE_SHIT);</a>
+<a name="ln27">        buffer[RE_IBEACON_OFFSET_MAJOR_LSB] = (major &amp; RE_IBEACON_BYTE_MASK);</a>
+<a name="ln28">        uint16_t minor = data-&gt;minor;</a>
+<a name="ln29">        buffer[RE_IBEACON_OFFSET_MAJOR_MSB] = (minor &gt;&gt; RE_IBEACON_BYTE_SHIT);</a>
+<a name="ln30">        buffer[RE_IBEACON_OFFSET_MAJOR_LSB] = (minor &amp; RE_IBEACON_BYTE_MASK);</a>
+<a name="ln31">        int8_t tx_power = data-&gt;tx_power;</a>
+<a name="ln32">        buffer[RE_IBEACON_OFFSET_TX_POWER] = tx_power;</a>
+<a name="ln33">    }</a>
+<a name="ln34"> </a>
+<a name="ln35">    return re_status;</a>
+<a name="ln36">}</a>
 
 </code></pre>
-<div class="balloon" rel="7"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '1' of the '<<' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="9"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '==' operator should have the same essential type. The current types are: 'signed' and 'character'.</p></div>
-<div class="balloon" rel="9"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '1' of the '<<' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="17"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(major >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="17"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(major & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(minor >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="21"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="21"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
-<div class="balloon" rel="21"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(minor & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="21"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
-<div class="balloon" rel="23"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'tx_power' expression should not be converted from the essential 'character' type to the essential 'unsigned' type.</p></div>
-<div class="balloon" rel="23"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'character'.</p></div>
-<div class="balloon" rel="4"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2506/" target="_blank">V2506</a> A function should have a single point of exit at the end.</p></div>
+<div class="balloon" rel="14"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '1' of the '<<' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="14"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '==' operator should have the same essential type. The current types are: 'signed' and 'character'.</p></div>
+<div class="balloon" rel="18"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The left operand '1' of the '<<' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="20"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '<' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="22"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '+' operator should have the same essential type. The current types are: 'signed' and 'unsigned'.</p></div>
+<div class="balloon" rel="26"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(major >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="26"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="27"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="27"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="27"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(major & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="27"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="29"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(minor >> 8)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="29"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="30"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '&' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="30"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2544/" target="_blank">V2544</a> The right operand '0xFF' of the '&' operator should not have the essential 'signed' type.</p></div>
+<div class="balloon" rel="30"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the '(minor & 0xFF)' expression should not be converted from the essential 'signed' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="30"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'signed'.</p></div>
+<div class="balloon" rel="32"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2572/" target="_blank">V2572</a> The value of the 'tx_power' expression should not be converted from the essential 'character' type to the essential 'unsigned' type.</p></div>
+<div class="balloon" rel="32"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2568/" target="_blank">V2568</a> Both operands of the '=' operator should have the same essential type. The current types are: 'unsigned' and 'character'.</p></div>
+<div class="balloon" rel="7"><p><span style="font-size:18px">&uarr;</span> <a href="https://www.viva64.com/en/w/v2506/" target="_blank">V2506</a> A function should have a single point of exit at the end.</p></div>
 
 <link rel="stylesheet" href="highlight.css">
 <script src="highlight.pack.js"></script>
