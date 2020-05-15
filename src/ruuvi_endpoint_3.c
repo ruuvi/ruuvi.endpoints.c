@@ -9,7 +9,7 @@ static void re_3_encode_acceleration (uint8_t * const buffer,
 {
     if (invalid != acceleration)
     {
-        int16_t decimal = (int16_t) (acceleration * 1000);
+        int16_t decimal = (int16_t) round ( (acceleration * 1000));
         buffer[0] = decimal >> 8;
         buffer[1] = decimal & 0xFF;
     }
@@ -49,10 +49,11 @@ re_status_t re_3_encode (uint8_t * const buffer,
         if (0 > temperature) { temperature = 0 - temperature; }
 
         // cap the temperature
-        if (127 < temperature) {temperature = 127; }
+        if (127.99 < temperature) {temperature = 127.99; }
 
         buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (sign << 7);
-        uint8_t temperature_fraction = (uint8_t) ( (temperature - floor (temperature)) * 100);
+        uint8_t temperature_fraction = (uint8_t) round ( (temperature - floor (
+                                           temperature)) * 100);
         buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;
     }
     else
