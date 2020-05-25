@@ -6,10 +6,11 @@
 #define RUUVI_ENDPOINTS_SEMVER "0.1.0"     //!< SEMVER of endpoints.
 
 #define RE_SUCCESS               (0U)
-#define RE_ERROR_INVALID_PARAM   (1U << 4U)  //!< Invalid Parameter
-#define RE_ERROR_NULL            (1U << 11U) //!< Null Pointer
-#define RE_ERROR_ENCODING        (1U << 12U) //!< Data encoding failed
-#define RE_ERROR_NOT_IMPLEMENTED (1U<<16U)   //!< Not implemented yet
+#define RE_ERROR_INVALID_PARAM   (1U << 4U)  //!< Invalid Parameter.
+#define RE_ERROR_NULL            (1U << 11U) //!< Null Pointer.
+#define RE_ERROR_ENCODING        (1U << 12U) //!< Data encoding failed.
+#define RE_ERROR_DECODING        (1U << 13U) //!< Data decoding failed.
+#define RE_ERROR_NOT_IMPLEMENTED (1U<<16U)   //!< Not implemented yet.
 
 typedef uint32_t re_status_t; //!< Status code
 
