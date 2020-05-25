@@ -14,14 +14,14 @@
 #else
 #   define RE_CA_UART_STX (0xCAU) //!< Start UART Command. Not related to ASCII STX.
 #   define RE_CA_UART_ETX (0x12U) //!< End UART Command, '\n'. Not related to ASCII ETX.
-#   define RE_CA_UART_RSSI_MAXLEN (RE_CA_UART_RSSI_BYTES * 2U) //!< Hex-encoded i8.
+#   define RE_CA_UART_RSSI_MAXLEN (RE_CA_UART_RSSI_BYTES) //!< i8.
 #endif
-#define RE_CA_UART_MAC_MAXLEN (RE_CA_UART_MAC_BYTES * 2U) //!< 6 bytes encoded in hex.
-#define RE_CA_UART_ADV_MAXLEN (RE_CA_UART_ADV_BYTES * 2U) //!< Length of hex-encoded adv.
+#define RE_CA_UART_MAC_MAXLEN (RE_CA_UART_MAC_BYTES) //!< Length of MAC in UART.
+#define RE_CA_UART_ADV_MAXLEN (RE_CA_UART_ADV_BYTES) //!< Length of adv.
 #define RE_CA_UART_MAXFIELDS (3U)   //!< On scan: mac, data, rssi.
 #define RE_CA_UART_PAYLOAD_MAX_LEN (RE_CA_UART_MAC_MAXLEN \
                                     + RE_CA_UART_ADV_MAXLEN \
-                                    + RE_CA_UART_MAXFIELDS) //!< data + delimiters + etx.
+                                    + RE_CA_UART_MAXFIELDS - 1U) //!< data + delimiters
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 /** @brief STX, LEN, CMD, Payload, ETX */
 #define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 4U)
@@ -34,7 +34,8 @@ typedef enum
     RE_CA_UART_SET_FLTR = 1, //!< Set manufacturer ID filter.
     RE_CA_UART_CLR_FLTR = 2, //!< Clear manufacturer ID filter.
     RE_CA_UART_SET_CH   = 3, //!< Set channel mask.
-    RE_CA_UART_SET_PHY  = 4  //!< Set PHY mask.
+    RE_CA_UART_SET_PHY  = 4, //!< Set PHY mask.
+    RE_CA_UART_ADV_RPRT = 5  //!< Advertisement report
 } re_ca_uart_cmd_t;          //!< Command types.
 
 typedef struct
