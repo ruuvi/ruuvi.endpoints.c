@@ -37,13 +37,18 @@
 #define RE_CA_UART_CH39_BYTE     (4U) //!< Byte of channel 39, starting from 0.
 #define RE_CA_UART_CH39_BIT      (7U) //!< Bit of channel 39, starting from 0.
 #define RE_CA_UART_CH38_BYTE     (4U) //!< Byte of channel 38, starting from 0.
-#define RE_CA_UART_CH38_BIT      (7U) //!< Bit of channel 38, starting from 0.
+#define RE_CA_UART_CH38_BIT      (6U) //!< Bit of channel 38, starting from 0.
 #define RE_CA_UART_CH37_BYTE     (4U) //!< Byte of channel 37, starting from 0.
-#define RE_CA_UART_CH37_BIT      (7U) //!< Bit of channel 37, starting from 0.
+#define RE_CA_UART_CH37_BIT      (5U) //!< Bit of channel 37, starting from 0.
+
+#define RE_CA_UART_125KBPS_BIT   (0U) //!< Bit of 125kpbs modulation, starting from 0.
+#define RE_CA_UART_1MBPS_BIT     (1U) //!< Bit of 125kpbs modulation, starting from 0.
+#define RE_CA_UART_2MBPS_BIT     (2U) //!< Bit of 125kpbs modulation, starting from 0.
 
 #define RE_CA_UART_CMD_SFLTR_LEN (2U) //!< Length of filter set command payload.
 #define RE_CA_UART_CMD_CFLTR_LEN (0U) //!< Length of filter clear command payload. 
-#define RE_CA_UART_CMD_CH_LEN    (5U) //!< Length of channel command payloads. 
+#define RE_CA_UART_CMD_CH_LEN    (5U) //!< Length of channel command payload. 
+#define RE_CA_UART_CMD_PHY_LEN   (1U) //!< Length of phy command payload. 
 
 // ETX is at variable position after payload
 

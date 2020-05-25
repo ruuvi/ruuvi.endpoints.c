@@ -73,6 +73,28 @@ static re_status_t re_ca_uart_decode_set_ch (const uint8_t * const buffer,
     return err_code;
 }
 
+static re_status_t re_ca_uart_decode_set_phy (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_CMD_PHY_LEN)
+    {
+        err_code |= RE_ERROR_DECODING;
+    }
+    else
+    {
+        payload->cmd = RE_CA_UART_SET_PHY;
+        payload->params.phys.ble_125kbps =
+            (buffer[RE_CA_UART_PAYLOAD_INDEX] >> RE_CA_UART_125KBPS_BIT) & 1U;
+        payload->params.phys.ble_1mbps =
+            (buffer[RE_CA_UART_PAYLOAD_INDEX] >> RE_CA_UART_1MBPS_BIT) & 1U;
+        payload->params.phys.ble_2mbps =
+            (buffer[RE_CA_UART_PAYLOAD_INDEX] >> RE_CA_UART_2MBPS_BIT) & 1U;
+    }
+    return err_code;
+}
+
 re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                                re_ca_uart_payload_t * const payload)
 {
@@ -116,7 +138,7 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                 break;
 
             case RE_CA_UART_SET_PHY:
-                //err_code |= re_ca_uart_decode_set_ch (buffer, payload);
+                err_code |= re_ca_uart_decode_set_phy (buffer, payload);
                 break;
 
             case RE_CA_UART_ADV_RPRT:
