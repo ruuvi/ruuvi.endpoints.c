@@ -83,9 +83,10 @@ typedef struct
 
 typedef struct
 {
-    uint8_t mac[RE_CA_UART_MAC_BYTES];   // MAC address.
-    uint8_t adv[RE_CA_UART_ADV_BYTES];   // Advertisement.
-    uint8_t rssi[RE_CA_UART_RSSI_BYTES]; // RSSI.
+    uint8_t mac[RE_CA_UART_MAC_BYTES];   // MAC address, always 6 bytes. MSB first.
+    uint8_t adv[RE_CA_UART_ADV_BYTES];   // Advertisement, variable length.
+    uint8_t adv_len;                     // Length of advertisement.
+    int8_t rssi_db;                      // RSSI.
 } re_ca_uart_ble_adv_t;                  //!< Advertisement payload.
 
 typedef struct
@@ -111,7 +112,7 @@ typedef struct
         re_ca_uart_ble_phy_t    phys;     //!< Phy param.
         re_ca_uart_ble_adv_t    adv;      //!< Advertisement report param.
     } params;
-} re_ca_uart_payload_t; //!< Structured payload;
+} re_ca_uart_payload_t; //!< Structured payload.
 
 /**
  * @brief Encode given command with given parameters into buffer.

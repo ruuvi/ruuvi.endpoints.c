@@ -2,11 +2,27 @@
 #include "ruuvi_endpoint_ca_uart.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
+
+#define I8_MAX (127U)
+#define U8_OVERFLOW (256)
 
 re_status_t re_ca_uart_encode (uint8_t * const buffer,
                                const re_ca_uart_payload_t * const payload)
 {
     return RE_ERROR_NOT_IMPLEMENTED;
+}
+
+static inline int8_t u8toi8 (const uint8_t byte)
+{
+    int16_t rval = byte;
+
+    if (byte > I8_MAX)
+    {
+        rval -= U8_OVERFLOW;
+    }
+
+    return rval;
 }
 
 static re_status_t re_ca_uart_decode_set_fltr (const uint8_t * const buffer,
@@ -70,6 +86,7 @@ static re_status_t re_ca_uart_decode_set_ch (const uint8_t * const buffer,
             (buffer[RE_CA_UART_PAYLOAD_INDEX + RE_CA_UART_CH37_BYTE]
              >> RE_CA_UART_CH37_BIT) & 1U;
     }
+
     return err_code;
 }
 
@@ -92,6 +109,32 @@ static re_status_t re_ca_uart_decode_set_phy (const uint8_t * const buffer,
         payload->params.phys.ble_2mbps =
             (buffer[RE_CA_UART_PAYLOAD_INDEX] >> RE_CA_UART_2MBPS_BIT) & 1U;
     }
+
+    return err_code;
+}
+
+static re_status_t re_ca_uart_decode_adv_rprt (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_CMD_PHY_LEN)
+    {
+        err_code |= RE_ERROR_DECODING;
+    }
+    else
+    {
+        payload->cmd = RE_CA_UART_ADV_RPRT;
+        memcpy (payload->params.adv.mac, buffer + RE_CA_UART_PAYLOAD_INDEX, RE_CA_UART_MAC_BYTES);
+        payload->params.adv.adv_len = buffer[RE_CA_UART_LEN_INDEX] - RE_CA_UART_MAC_BYTES -
+                                      RE_CA_UART_RSSI_BYTES;
+        memcpy (payload->params.adv.adv, buffer + RE_CA_UART_PAYLOAD_INDEX + RE_CA_UART_MAC_BYTES,
+                payload->params.adv.adv_len);
+        payload->params.adv.rssi_db =
+            u8toi8 (buffer[RE_CA_UART_PAYLOAD_INDEX + buffer[RE_CA_UART_LEN_INDEX] -
+                                                    RE_CA_UART_RSSI_BYTES]);
+    }
+
     return err_code;
 }
 
@@ -142,6 +185,7 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                 break;
 
             case RE_CA_UART_ADV_RPRT:
+                err_code |= re_ca_uart_decode_adv_rprt (buffer, payload);
                 break;
 
             default:
