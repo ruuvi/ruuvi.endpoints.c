@@ -117,22 +117,47 @@ static re_status_t re_ca_uart_decode_adv_rprt (const uint8_t * const buffer,
         re_ca_uart_payload_t * const payload)
 {
     re_status_t err_code = RE_SUCCESS;
+    const uint8_t adv_len = buffer[RE_CA_UART_LEN_INDEX]
+                            - RE_CA_UART_MAC_BYTES
+                            - RE_CA_UART_RSSI_BYTES
+                            - (RE_CA_UART_MAXFIELDS) * RE_CA_UART_DELIMITER_LEN;
+    const uint8_t * const  p_rssi = buffer
+                                    + RE_CA_UART_PAYLOAD_INDEX
+                                    + buffer[RE_CA_UART_LEN_INDEX]
+                                    - RE_CA_UART_RSSI_BYTES
+                                    - RE_CA_UART_DELIMITER_LEN;
+    const uint8_t * const  p_data = buffer
+                                    + RE_CA_UART_PAYLOAD_INDEX
+                                    + RE_CA_UART_MAC_BYTES
+                                    + RE_CA_UART_DELIMITER_LEN;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_CMD_PHY_LEN)
+    if (adv_len > RE_CA_UART_ADV_BYTES)
+    {
+        err_code |= RE_ERROR_DECODING;
+    }
+    else if (RE_CA_UART_FIELD_DELIMITER != * (p_data - RE_CA_UART_DELIMITER_LEN))
+    {
+        err_code |= RE_ERROR_DECODING;
+    }
+    else if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi - RE_CA_UART_DELIMITER_LEN))
+    {
+        err_code |= RE_ERROR_DECODING;
+    }
+    else if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi + RE_CA_UART_RSSI_BYTES))
     {
         err_code |= RE_ERROR_DECODING;
     }
     else
     {
+        memcpy (payload->params.adv.mac,
+                buffer + RE_CA_UART_PAYLOAD_INDEX,
+                RE_CA_UART_MAC_BYTES);
+        memcpy (payload->params.adv.adv,
+                p_data,
+                adv_len);
         payload->cmd = RE_CA_UART_ADV_RPRT;
-        memcpy (payload->params.adv.mac, buffer + RE_CA_UART_PAYLOAD_INDEX, RE_CA_UART_MAC_BYTES);
-        payload->params.adv.adv_len = buffer[RE_CA_UART_LEN_INDEX] - RE_CA_UART_MAC_BYTES -
-                                      RE_CA_UART_RSSI_BYTES;
-        memcpy (payload->params.adv.adv, buffer + RE_CA_UART_PAYLOAD_INDEX + RE_CA_UART_MAC_BYTES,
-                payload->params.adv.adv_len);
-        payload->params.adv.rssi_db =
-            u8toi8 (buffer[RE_CA_UART_PAYLOAD_INDEX + buffer[RE_CA_UART_LEN_INDEX] -
-                                                    RE_CA_UART_RSSI_BYTES]);
+        payload->params.adv.rssi_db = u8toi8 (*p_rssi);
+        payload->params.adv.adv_len = adv_len;
     }
 
     return err_code;

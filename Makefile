@@ -226,7 +226,7 @@ OBJECTS=$(SOURCES:.c=.o)
 ANALYSIS=$(SOURCES:.c=.a)
 IOBJECTS=$(SOURCES:.c=.o.PVS-Studio.i)
 POBJECTS=$(SOURCES:.c=.o.PVS-Studio.log)
-EXECUTABLE=npa-driver
+EXECUTABLE=ruuvi-drivers
 SONAR=npa-analysis
 
 .PHONY: clean doxygen pvs sonar astyle

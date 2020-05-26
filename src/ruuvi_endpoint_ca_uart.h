@@ -23,6 +23,7 @@
                                     + RE_CA_UART_ADV_MAXLEN \
                                     + RE_CA_UART_MAXFIELDS - 1U) //!< data + delimiters
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
+#define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, ETX */
 #define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 4U)
 
