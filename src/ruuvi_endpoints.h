@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "0.1.0"     //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "0.2.0"     //!< SEMVER of endpoints.
 
 #define RE_SUCCESS               (0U)
+#define RE_ERROR_DATA_SIZE       (1U << 3U)  //!< Data size too large/small.
 #define RE_ERROR_INVALID_PARAM   (1U << 4U)  //!< Invalid Parameter.
 #define RE_ERROR_NULL            (1U << 11U) //!< Null Pointer.
 #define RE_ERROR_ENCODING        (1U << 12U) //!< Data encoding failed.

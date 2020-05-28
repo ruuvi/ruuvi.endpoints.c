@@ -3,7 +3,6 @@
 
 #include "ruuvi_endpoints.h"
 
-//032e344199bd,0206011bff9904xxxxxxxxxxxxxxxxxxxx,-72,\n
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
 #define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
 #define RE_CA_UART_RSSI_BYTES (1U) //!< Number of bytes in RSSI report.
@@ -11,17 +10,20 @@
 #   define RE_CA_UART_STX (0x02U) //!< Start UART Command. ASCII STX.
 #   define RE_CA_UART_ETX (0x03U) //!< End UART Command. ASCII ETX.
 #   define RE_CA_UART_RSSI_MAXLEN (4U) //!< minus + 3 digits. 
+#   define CMD_IN_LEN (1U) //!< Command is included in data length.
 #else
 #   define RE_CA_UART_STX (0xCAU) //!< Start UART Command. Not related to ASCII STX.
 #   define RE_CA_UART_ETX (0x12U) //!< End UART Command, '\n'. Not related to ASCII ETX.
 #   define RE_CA_UART_RSSI_MAXLEN (RE_CA_UART_RSSI_BYTES) //!< i8.
+#   define CMD_IN_LEN (0U) //!< Command is not included in data length.
 #endif
 #define RE_CA_UART_MAC_MAXLEN (RE_CA_UART_MAC_BYTES) //!< Length of MAC in UART.
 #define RE_CA_UART_ADV_MAXLEN (RE_CA_UART_ADV_BYTES) //!< Length of adv.
-#define RE_CA_UART_MAXFIELDS (3U)   //!< On scan: mac, data, rssi.
+#define RE_CA_UART_ADV_FIELDS (3U)   //!< On scan: mac, data, rssi.
+#define RE_CA_UART_MAXFIELDS (RE_CA_UART_ADV_FIELDS) //!< Maximum delimited fields.
 #define RE_CA_UART_PAYLOAD_MAX_LEN (RE_CA_UART_MAC_MAXLEN \
                                     + RE_CA_UART_ADV_MAXLEN \
-                                    + RE_CA_UART_MAXFIELDS - 1U) //!< data + delimiters
+                                    + RE_CA_UART_MAXFIELDS) //!< data + delimiters
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, ETX */
@@ -118,15 +120,17 @@ typedef struct
 /**
  * @brief Encode given command with given parameters into buffer.
  *
- * param[out] buffer Buffer to encode command into. RE_CA_UART_TX_MAX_LEN bytes.
- * param[in]  cmd Command to encode.
- * param[in]  params Parametes of command, type depends on cmd.
+ * @param[out] buffer Buffer to encode command into. RE_CA_UART_TX_MAX_LEN bytes.
+ * @param[in,out] buf_len Input: Size of buffer. Output: Number of bytes encoded.
+ * @param[in]  cmd Command to encode.
+ * @param[in]  params Parametes of command, type depends on cmd.
  *
  * @retval RE_SUCCESS If encoded successfully.
  * @retval RE_ERROR_NULL If any of params is NULL.
+ * @retval RE_ERROR_DATA_SIZE If buf_len is smaller than @ref RE_CA_UART_PAYLOAD_MAX_LEN.
  * @retval RE_ERROR_INVALID_PARAM If data cannot be encoded.
  */
-re_status_t re_ca_uart_encode (uint8_t * const buffer,
+re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
                                const re_ca_uart_payload_t * const payload);
 
 /**
