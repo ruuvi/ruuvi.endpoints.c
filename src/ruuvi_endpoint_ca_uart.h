@@ -64,10 +64,11 @@ typedef enum
     RE_CA_UART_ADV_RPRT  = 5  //!< Advertisement report.
 } re_ca_uart_cmd_t;
 
+/** @brief Manufacturer filter payload. */
 typedef struct
 {
     uint16_t manufacturer_id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
-} re_ca_uart_ble_filter_t;    //!< Manufacturer filter payload.
+} re_ca_uart_ble_filter_t;
 
 /** @brief Enabled BLE Channels. */
 typedef struct
@@ -119,7 +120,7 @@ typedef struct
         re_ca_uart_ble_ch_t     channels; //!< Channel param.
         re_ca_uart_ble_phy_t    phys;     //!< Phy param.
         re_ca_uart_ble_adv_t    adv;      //!< Advertisement report param.
-    } params;
+    } params; //!< Command payload.
 } re_ca_uart_payload_t; //!< Structured payload.
 
 /**
