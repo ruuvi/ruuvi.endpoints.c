@@ -53,8 +53,7 @@
 #define RE_CA_UART_CMD_CH_LEN    (5U) //!< Length of channel command payload. 
 #define RE_CA_UART_CMD_PHY_LEN   (1U) //!< Length of phy command payload. 
 
-// ETX is at variable position after payload
-
+/** @breif Command types. */
 typedef enum
 {
     RE_CA_UART_NOT_CODED = 0, //!< Command is not de/encoded, do not use as-is.
@@ -63,35 +62,39 @@ typedef enum
     RE_CA_UART_SET_CH    = 3, //!< Set channel mask.
     RE_CA_UART_SET_PHY   = 4, //!< Set PHY mask.
     RE_CA_UART_ADV_RPRT  = 5  //!< Advertisement report.
-} re_ca_uart_cmd_t;          //!< Command types.
+} re_ca_uart_cmd_t;
 
 typedef struct
 {
     uint16_t manufacturer_id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
 } re_ca_uart_ble_filter_t;    //!< Manufacturer filter payload.
 
+/** @brief Enabled BLE Channels. */
 typedef struct
 {
     uint8_t ch37 : 1; //!< BLE Channel 37 enabled.
     uint8_t ch38 : 1; //!< BLE Channel 38 enabled.
     uint8_t ch39 : 1; //!< BLE Channel 39 enabled.
-} re_ca_uart_ble_ch_t; //!< Enabled BLE Channels.
+} re_ca_uart_ble_ch_t;
 
+/** @brief Enabled BLE PHYs. */
 typedef struct
 {
     uint8_t ble_125kbps : 1; //!< BLE Channel 37 enabled.
     uint8_t ble_1mbps   : 1; //!< BLE Channel 38 enabled.
     uint8_t ble_2mbps   : 1; //!< BLE Channel 39 enabled.
-} re_ca_uart_ble_phy_t;     //!< Enabled BLE PHYs.
+} re_ca_uart_ble_phy_t;
 
+/** @brief Advertisement payload. */
 typedef struct
 {
-    uint8_t mac[RE_CA_UART_MAC_BYTES];   // MAC address, always 6 bytes. MSB first.
-    uint8_t adv[RE_CA_UART_ADV_BYTES];   // Advertisement, variable length.
-    uint8_t adv_len;                     // Length of advertisement.
-    int8_t rssi_db;                      // RSSI.
-} re_ca_uart_ble_adv_t;                  //!< Advertisement payload.
+    uint8_t mac[RE_CA_UART_MAC_BYTES];   //!< MAC address, always 6 bytes. MSB first.
+    uint8_t adv[RE_CA_UART_ADV_BYTES];   //!< Advertisement, variable length.
+    uint8_t adv_len;                     //!< Length of advertisement.
+    int8_t rssi_db;                      //!< RSSI.
+} re_ca_uart_ble_adv_t;
 
+/** @brief  Structure of CA_UART data. */
 typedef struct
 {
     uint8_t stx; //!< First byte, always fixed STX.
@@ -99,12 +102,14 @@ typedef struct
     re_ca_uart_cmd_t cmd; //!< Command to send.
     uint8_t payload[RE_CA_UART_PAYLOAD_MAX_LEN]; //!< Command payload.
     uint8_t etx;    //!< Last byte always fixed ETX.
-} re_ca_uart_tx_t; //!< Structure of CA_UART data.
+} re_ca_uart_tx_t;
 
-// MISRA deviation - use of union.
-// Reasoning for using union is to allow single data type to contain information
-// of incoming binary payload, type has to be interpreted at runtime.
-// Misinterpreting the payload is avoided via member cmd which is set by decoder.
+/** @brief Structure to contain command data.
+ * MISRA deviation - use of union.
+ * Reasoning for using union is to allow single data type to contain information
+ * of incoming binary payload, type has to be interpreted at runtime.
+ * Misinterpreting the payload is avoided via member cmd which is set by decoder.
+ */
 typedef struct
 {
     re_ca_uart_cmd_t cmd; //!< Type of command discriminating the union.

@@ -15,6 +15,8 @@ void tearDown (void)
     // No action needed.
 }
 
+// Ignore tests of unimplemented functionality.
+#if 0
 void test_ruuvi_endpoint_ca_uart_encode_filter_ruuvi (void)
 {
     re_status_t err_code = RE_SUCCESS;
@@ -137,6 +139,7 @@ void test_ruuvi_endpoint_ca_uart_phy_encode (void)
     TEST_ASSERT (expected_size == sizeof (expected));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
+#endif
 
 void test_ruuvi_endpoint_ca_uart_adv_encode (void)
 {
