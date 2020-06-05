@@ -23,6 +23,7 @@
 #define RE_CA_UART_MAXFIELDS (RE_CA_UART_ADV_FIELDS) //!< Maximum delimited fields.
 #define RE_CA_UART_PAYLOAD_MAX_LEN (RE_CA_UART_MAC_MAXLEN \
                                     + RE_CA_UART_ADV_MAXLEN \
+                                    + RE_CA_UART_RSSI_MAXLEN \
                                     + RE_CA_UART_MAXFIELDS) //!< data + delimiters
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
