@@ -247,6 +247,7 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
     else
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
         buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_MAC_BYTES
                                        + payload->params.adv.adv_len
                                        + RE_CA_UART_RSSI_BYTES
@@ -265,12 +266,7 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         buffer[written++] = i8tou8 (payload->params.adv.rssi_db);
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
-        // ETX is not counted in payload bytes
-        buffer[written] = RE_CA_UART_ETX;
-        // Subtract header which is not counted in payload length.
-        written -= RE_CA_UART_HEADER_SIZE;
-        // Add command type to length if applicable.
-        written += CMD_IN_LEN;
+        buffer[written++] = RE_CA_UART_ETX;
         *buf_len = written;
     }
 

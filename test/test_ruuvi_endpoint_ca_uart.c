@@ -178,7 +178,7 @@ void test_ruuvi_endpoint_ca_uart_adv_encode (void)
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
-    TEST_ASSERT (buffer_len == expected_size);
+    TEST_ASSERT (buffer_len == sizeof (expected));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 

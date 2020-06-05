@@ -244,8 +244,3 @@ void test_ruuvi_endpoint_5_get_max_invalid_data (void)
                  0x70 != (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x70) &&
                  RE_5_INVALID_POWER == (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x1F));
 }
-
-void test_ruuvi_endpoint_5_Implemented (void)
-{
-    TEST_IGNORE_MESSAGE ("Now ruuvi_endpoint_5 implemented ");
-}
