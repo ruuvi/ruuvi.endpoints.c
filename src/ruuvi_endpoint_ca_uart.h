@@ -96,14 +96,19 @@ typedef struct
     int8_t rssi_db;                      //!< RSSI.
 } re_ca_uart_ble_adv_t;
 
-/** @brief  Structure of CA_UART data. */
+/**
+ * @brief  Structure of CA_UART data.
+ *
+ * @note: Order of elements here is not representative of order of serialized
+ *        structure.  Data is serialized as STX LEN CMD PAYLOAD ETX.
+ */
 typedef struct
 {
+    uint8_t payload[RE_CA_UART_PAYLOAD_MAX_LEN]; //!< Command payload.
     uint8_t stx; //!< First byte, always fixed STX.
     uint8_t len; //!< Length of payload, + length(cmd) in legacy mode.
-    re_ca_uart_cmd_t cmd; //!< Command to send.
-    uint8_t payload[RE_CA_UART_PAYLOAD_MAX_LEN]; //!< Command payload.
     uint8_t etx;    //!< Last byte always fixed ETX.
+    re_ca_uart_cmd_t cmd; //!< Command to send.
 } re_ca_uart_tx_t;
 
 /** @brief Structure to contain command data.
@@ -115,7 +120,7 @@ typedef struct
 typedef struct
 {
     re_ca_uart_cmd_t cmd; //!< Type of command discriminating the union.
-    union
+    union // -V2514
     {
         re_ca_uart_ble_filter_t filter;   //!< Filter param.
         re_ca_uart_ble_ch_t     channels; //!< Channel param.
