@@ -94,6 +94,10 @@ $(document).ready(function(){initNavTree('structre__ca__uart__tx__t.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
+<tr class="memitem:acd42488d2ec0d050d1092e920e7e3ee8"><td class="memItemLeft" align="right" valign="top"><a id="acd42488d2ec0d050d1092e920e7e3ee8"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#acd42488d2ec0d050d1092e920e7e3ee8">payload</a> [RE_CA_UART_PAYLOAD_MAX_LEN]</td></tr>
+<tr class="memdesc:acd42488d2ec0d050d1092e920e7e3ee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command payload. <br /></td></tr>
+<tr class="separator:acd42488d2ec0d050d1092e920e7e3ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0016500d356f9144ad98cf2db5243a70"><td class="memItemLeft" align="right" valign="top"><a id="a0016500d356f9144ad98cf2db5243a70"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#a0016500d356f9144ad98cf2db5243a70">stx</a></td></tr>
 <tr class="memdesc:a0016500d356f9144ad98cf2db5243a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">First byte, always fixed STX. <br /></td></tr>
@@ -102,23 +106,20 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#a5723e60ffd628510c699eddbce90be23">len</a></td></tr>
 <tr class="memdesc:a5723e60ffd628510c699eddbce90be23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length of payload, + length(cmd) in legacy mode. <br /></td></tr>
 <tr class="separator:a5723e60ffd628510c699eddbce90be23"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="memItemLeft" align="right" valign="top"><a id="aa0c189d39b519ae4f2bc1287a4be1fd9"></a>
-re_ca_uart_cmd_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a></td></tr>
-<tr class="memdesc:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command to send. <br /></td></tr>
-<tr class="separator:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd42488d2ec0d050d1092e920e7e3ee8"><td class="memItemLeft" align="right" valign="top"><a id="acd42488d2ec0d050d1092e920e7e3ee8"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#acd42488d2ec0d050d1092e920e7e3ee8">payload</a> [RE_CA_UART_PAYLOAD_MAX_LEN]</td></tr>
-<tr class="memdesc:acd42488d2ec0d050d1092e920e7e3ee8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command payload. <br /></td></tr>
-<tr class="separator:acd42488d2ec0d050d1092e920e7e3ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac338740da2d43391b100413d9278e582"><td class="memItemLeft" align="right" valign="top"><a id="ac338740da2d43391b100413d9278e582"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#ac338740da2d43391b100413d9278e582">etx</a></td></tr>
 <tr class="memdesc:ac338740da2d43391b100413d9278e582"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last byte always fixed ETX. <br /></td></tr>
 <tr class="separator:ac338740da2d43391b100413d9278e582"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="memItemLeft" align="right" valign="top"><a id="aa0c189d39b519ae4f2bc1287a4be1fd9"></a>
+re_ca_uart_cmd_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__tx__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a></td></tr>
+<tr class="memdesc:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command to send. <br /></td></tr>
+<tr class="separator:aa0c189d39b519ae4f2bc1287a4be1fd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure of CA_UART data. </p>
+<dl class="section note"><dt>Note</dt><dd>: Order of elements here is not representative of order of serialized structure. Data is serialized as STX LEN CMD PAYLOAD ETX. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html#l00100">100</a> of file <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html#l00105">105</a> of file <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a></li>
 </ul>
