@@ -4,14 +4,61 @@
 #include <stdbool.h>
 #include <math.h>
 
-static void re_3_encode_acceleration (uint8_t * const buffer,
-                                      const float acceleration, const float invalid)
+#define RE_3_ENCODE_INVALID_PRECISION       0.00001f
+#define RE_3_ENCODE_ACC_CONVERT_RATIO       1000
+#define RE_3_ENCODE_HUMIDITY_CONVERT_RATIO  2
+#define RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET 0.5
+#define RE_3_ENCODE_PRESSURE_INIT_OFFSET    50000
+#define RE_3_ENCODE_BATTERY_CONVERT_RATIO   1000
+#define RE_3_ENCODE_TEMP_CONVERT_RATIO      100
+#define RE_3_ENCODE_TEMP_CONVERT_CAP        127.99
+
+#define RE_3_BYTE_SIGN_OFFSET               7
+#define RE_3_BYTE_OFFSET                    8
+#define RE_3_BYTE_MASK                      0xFF
+
+static re_float re_3_encode_check_invalid (const re_float data,
+        const re_float invalid)
 {
-    if (invalid != acceleration)
+    re_float result;
+
+    if (isnan (invalid))
     {
-        int16_t decimal = (int16_t) round ( (acceleration * 1000));
-        buffer[0] = decimal >> 8;
-        buffer[1] = decimal & 0xFF;
+        if (!isnan (data))
+        {
+            result = RE_3_ENCODE_INVALID_PRECISION;
+        }
+        else
+        {
+            result = NAN;
+        }
+    }
+    else
+    {
+        result = fabsf (invalid - data);
+
+        if (result > (RE_3_ENCODE_INVALID_PRECISION))
+        {
+            result = RE_3_ENCODE_INVALID_PRECISION;
+        }
+        else
+        {
+            result = NAN;
+        }
+    }
+
+    return result;
+}
+
+static void re_3_encode_acceleration (uint8_t * const buffer,
+                                      const re_float acceleration, const re_float invalid)
+{
+    if (!isnan (re_3_encode_check_invalid (acceleration, invalid)))
+    {
+        int16_t decimal = (int16_t) round ( (acceleration *
+                                             RE_3_ENCODE_ACC_CONVERT_RATIO));
+        buffer[0] = ( (uint16_t) decimal) >> RE_3_BYTE_OFFSET;
+        buffer[1] = ( (uint16_t) decimal) & RE_3_BYTE_MASK;
     }
     else
     {
@@ -20,18 +67,18 @@ static void re_3_encode_acceleration (uint8_t * const buffer,
     }
 }
 
-re_status_t re_3_encode (uint8_t * const buffer,
-                         const re_3_data_t * const data, const float invalid)
+static void re_3_encode_data (uint8_t * const buffer,
+                              const re_3_data_t * data, const re_float invalid)
 {
-    if (NULL == buffer  || NULL == data) { return RE_ERROR_NULL; }
-
     buffer[RE_3_OFFSET_HEADER] = RE_3_DESTINATION;
 
     // HUMIDITY
-    if (invalid != data->humidity_rh)
+    if (!isnan (re_3_encode_check_invalid (data->humidity_rh, invalid)))
     {
         //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
-        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( (data->humidity_rh * 2) + 0.5);
+        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( (re_float) ( (data->humidity_rh *
+                                       RE_3_ENCODE_HUMIDITY_CONVERT_RATIO) +
+                                       RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET));
     }
     else
     {
@@ -39,21 +86,36 @@ re_status_t re_3_encode (uint8_t * const buffer,
     }
 
     // Temperature
-    if (invalid != data->temperature_c)
+
+    if (!isnan (re_3_encode_check_invalid (data->temperature_c, invalid)))
     {
         //Temperature (MSB is sign, next 7 bits are decimal value)
-        float temperature = data->temperature_c;
-        bool sign = (temperature < 0) ? 1 : 0;
+        re_float temperature = data->temperature_c;
+        uint8_t sign = 0;
+
+        if (temperature < 0)
+        {
+            sign = 1;
+        }
+        else
+        {
+            sign = 0;
+        }
 
         // abs value
         if (0 > temperature) { temperature = 0 - temperature; }
 
         // cap the temperature
-        if (127.99 < temperature) {temperature = 127.99; }
+        if (RE_3_ENCODE_TEMP_CONVERT_CAP < temperature)
+        {
+            temperature = (re_float) RE_3_ENCODE_TEMP_CONVERT_CAP;
+        }
 
-        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (sign << 7);
+        buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (uint8_t) (
+                    sign << RE_3_BYTE_SIGN_OFFSET);
         uint8_t temperature_fraction = (uint8_t) round ( (temperature - floor (
-                                           temperature)) * 100);
+                                           temperature)) *
+                                       RE_3_ENCODE_TEMP_CONVERT_RATIO);
         buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;
     }
     else
@@ -63,12 +125,13 @@ re_status_t re_3_encode (uint8_t * const buffer,
     }
 
     // Pressure
-    if (invalid != data->pressure_pa)
+
+    if (!isnan (re_3_encode_check_invalid (data->pressure_pa, invalid)))
     {
-        uint32_t pressure = data->pressure_pa;
-        pressure -= 50000;
-        buffer[RE_3_OFFSET_PRESSURE_MSB] = pressure >> 8;
-        buffer[RE_3_OFFSET_PRESSURE_LSB] = pressure & 0xFF;
+        uint32_t pressure = (uint32_t) data->pressure_pa;
+        pressure -= RE_3_ENCODE_PRESSURE_INIT_OFFSET;
+        buffer[RE_3_OFFSET_PRESSURE_MSB] = (uint8_t) (pressure >> RE_3_BYTE_OFFSET);
+        buffer[RE_3_OFFSET_PRESSURE_LSB] = (uint8_t) (pressure & RE_3_BYTE_MASK);
     }
     else
     {
@@ -83,19 +146,43 @@ re_status_t re_3_encode (uint8_t * const buffer,
                               data->accelerationy_g, invalid);
     re_3_encode_acceleration (&buffer[RE_3_OFFSET_ACCELERATIONZ_MSB],
                               data->accelerationz_g, invalid);
-
     // voltage
-    if (invalid != data->battery_v)
+
+    if (!isnan (re_3_encode_check_invalid (data->battery_v, invalid)))
     {
-        uint32_t voltage = (data->battery_v * 1000 > 0) ? data->battery_v * 1000 : 0;
-        buffer[RE_3_OFFSET_VOLTAGE_MSB] = voltage >> 8;
-        buffer[RE_3_OFFSET_VOLTAGE_LSB] = voltage & 0xFF;
+        uint32_t voltage = 0;
+        re_float voltage_in_mv = (data->battery_v *
+                                  RE_3_ENCODE_BATTERY_CONVERT_RATIO);
+
+        if (voltage_in_mv > 0)
+        {
+            voltage = (uint32_t) (voltage_in_mv);
+        }
+
+        buffer[RE_3_OFFSET_VOLTAGE_MSB] = (uint8_t) (voltage >> RE_3_BYTE_OFFSET);
+        buffer[RE_3_OFFSET_VOLTAGE_LSB] = (uint8_t) (voltage & RE_3_BYTE_MASK);
     }
     else
     {
         buffer[RE_3_OFFSET_VOLTAGE_MSB] = RE_3_INVALID_DATA;
         buffer[RE_3_OFFSET_VOLTAGE_LSB] = RE_3_INVALID_DATA;
     }
+}
 
-    return RE_SUCCESS;
+re_status_t re_3_encode (uint8_t * const buffer,
+                         const re_3_data_t * const data, const re_float invalid)
+{
+    re_status_t result = RE_SUCCESS;
+
+    if ( (NULL == buffer) ||
+            (NULL == data))
+    {
+        result = RE_ERROR_NULL;
+    }
+    else
+    {
+        re_3_encode_data (buffer, data, invalid);
+    }
+
+    return result;
 }
