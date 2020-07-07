@@ -1,5 +1,6 @@
 /**
- * Ruuvi Endpoint 5 helper. Defines necessary data for creating a Ruuvi data format 5 broadcast.
+ * Ruuvi Endpoint 5 helper.
+ * Defines necessary data for creating a Ruuvi data format 5 broadcast.
  *
  * License: BSD-3
  * Author: Otso Jousimaa <otso@ojousima.net>
@@ -43,17 +44,28 @@
 /** @brief All data required for Ruuvi dataformat 5 package. */
 typedef struct
 {
-    float humidity_rh;     //!< Humidity in relative humidity percentage.
-    float pressure_pa;     //!< Pressure in pascals.
-    float temperature_c;   //!< Temperature in celcius.
-    float accelerationx_g; //!< Acceleration along X-axis, can be RMS over some period.
-    float accelerationy_g; //!< Acceleration along Y-axis, can be RMS over some period.
-    float accelerationz_g; //!< Acceleration along Z-axis, can be RMS over some period.
-    float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
-    uint16_t measurement_count; //!< Running counter of measurement.
-    uint8_t movement_count;     //!< Number of detected movements.
-    uint64_t address;           //!< BLE address of device, most significant byte first.
-    int8_t tx_power;            //!< Transmission power of radio, in dBm.
+    re_float humidity_rh;
+    //!< Humidity in relative humidity percentage.
+    re_float pressure_pa;
+    //!< Pressure in pascals.
+    re_float temperature_c;
+    //!< Temperature in celcius.
+    re_float accelerationx_g;
+    //!< Acceleration along X-axis, can be RMS over some period.
+    re_float accelerationy_g;
+    //!< Acceleration along Y-axis, can be RMS over some period.
+    re_float accelerationz_g;
+    //!< Acceleration along Z-axis, can be RMS over some period.
+    re_float battery_v;
+    //!< Battery voltage, preferably under load such as radio TX.
+    uint16_t measurement_count;
+    //!< Running counter of measurement.
+    uint8_t movement_count;
+    //!< Number of detected movements.
+    uint64_t address;
+    //!< BLE address of device, most significant byte first.
+    int8_t tx_power;
+    //!< Transmission power of radio, in dBm.
 } re_5_data_t;
 
 /**
@@ -62,7 +74,8 @@ typedef struct
  * NAN can be used as a placeholder for invalid / not available values.
  *
  * @param[in] buffer uint8_t array with length of 24 bytes.
- * @param[in] data Struct containing all necessary information for encoding the data into buffer.
+ * @param[in] data Struct containing all necessary information
+ *            for encoding the data into buffer.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_5_encode (uint8_t * const buffer,

@@ -1,5 +1,6 @@
 /**
- * Ruuvi Endpoint 3 helper. Defines necessary data for creating a Ruuvi data format 3 broadcast.
+ * Ruuvi Endpoint 3 helper.
+ * Defines necessary data for creating a Ruuvi data format 3 broadcast.
  *
  * License: BSD-3
  * Author: Otso Jousimaa <otso@ojousima.net>
@@ -31,13 +32,20 @@
 /** @brief All data required for Ruuvi dataformat 3 package. */
 typedef struct
 {
-    float humidity_rh;     //!< Humidity in relative humidity percentage.
-    float pressure_pa;     //!< Pressure in pascals.
-    float temperature_c;   //!< Temperature in celcius.
-    float accelerationx_g; //!< Acceleration along X-axis, can be RMS over some period.
-    float accelerationy_g; //!< Acceleration along Y-axis, can be RMS over some period.
-    float accelerationz_g; //!< Acceleration along Z-axis, can be RMS over some period.
-    float battery_v;       //!< Battery voltage, preferably under load such as radio TX.
+    re_float humidity_rh;
+    //!< Humidity in relative humidity percentage.
+    re_float pressure_pa;
+    //!< Pressure in pascals.
+    re_float temperature_c;
+    //!< Temperature in celcius.
+    re_float accelerationx_g;
+    //!< Acceleration along X-axis, can be RMS over some period.
+    re_float accelerationy_g;
+    //!< Acceleration along Y-axis, can be RMS over some period.
+    re_float accelerationz_g;
+    //!< Acceleration along Z-axis, can be RMS over some period.
+    re_float battery_v;
+    //!< Battery voltage, preferably under load such as radio TX.
 } re_3_data_t;
 
 /**
@@ -45,11 +53,11 @@ typedef struct
  *
  * @param[out] buffer 14-byte buffer into which data is encoded.
  * @param[in]  data Data to encode.
- * @param[in] invalid Float value treated as not available. NAN recommended.
+ * @param[in] invalid re_float value treated as not available. NAN recommended.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_3_encode (uint8_t * const buffer,
-                         const re_3_data_t * const data, const float invalid);
+                         const re_3_data_t * const data, const re_float invalid);
 
 
 #endif

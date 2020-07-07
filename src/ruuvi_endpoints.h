@@ -14,6 +14,7 @@
 #define RE_ERROR_NOT_IMPLEMENTED (1U<<16U)   //!< Not implemented yet.
 
 typedef uint32_t re_status_t; //!< Status code
+typedef float   re_float; //!< Ruuvi endpoint float type
 
 /**
  *  Ruuvi Standard Message consists of 11 bytes: 3 are a header, 8 are payload.
@@ -26,20 +27,29 @@ typedef uint32_t re_status_t; //!< Status code
 #define RE_STANDARD_PAYLOAD_START_INDEX (3U)
 #define RE_STANDARD_HEADER_LENGTH       (3U)
 #define RE_STANDARD_PAYLOAD_LENGTH      (8U)
-#define RE_STANDARD_MESSAGE_LENGTH      (RE_STANDARD_HEADER_LENGTH + RE_STANDARD_PAYLOAD_LENGTH)
+#define RE_STANDARD_MESSAGE_LENGTH      (RE_STANDARD_HEADER_LENGTH + \
+                                            RE_STANDARD_PAYLOAD_LENGTH)
 
-/** @brief If endpoint is even, type of a message is considered a write. If it is odd, type is considered a read. */
+/** @brief If endpoint is even, type of a message is considered a write.
+ *  If it is odd, type is considered a read.
+ */
 #define RE_STANDARD_TYPE_READ_BIT              (1U << 0U)
 #define RE_STANDARD_SENSOR_CONFIGURATION_WRITE (0x02U)
-#define RE_STANDARD_SENSOR_CONFIGURATION_READ  (RE_STANDARD_SENSOR_CONFIGURATION_WRITE | RE_STANDARD_TYPE_READ_BIT)
+#define RE_STANDARD_SENSOR_CONFIGURATION_READ  (RE_STANDARD_SENSOR_CONFIGURATION_WRITE | \
+                                                    RE_STANDARD_TYPE_READ_BIT)
 #define RE_STANDARD_SENSOR_OFFSET_WRITE        (0x04U)
-#define RE_STANDARD_SENSOR_OFFSET_READ         (RE_STANDARD_SENSOR_OFFSET_WRITE | RE_STANDARD_TYPE_READ_BIT)
+#define RE_STANDARD_SENSOR_OFFSET_READ         (RE_STANDARD_SENSOR_OFFSET_WRITE | \
+                                                    RE_STANDARD_TYPE_READ_BIT)
 #define RE_STANDARD_LOG_CONFIGURATION_WRITE    (0x06U)
-#define RE_STANDARD_LOG_CONFIGURATION_READ     (RE_STANDARD_LOG_CONFIGURATION_WRITE | RE_STANDARD_TYPE_READ_BIT)
-#define RE_STANDARD_VALUE_WRITE                (0x08U) //!< Sensor reads are acknowledged by setting type as value write
-#define RE_STANDARD_VALUE_READ                 (RE_STANDARD_VALUE_WRITE | RE_STANDARD_TYPE_READ_BIT)
+#define RE_STANDARD_LOG_CONFIGURATION_READ     (RE_STANDARD_LOG_CONFIGURATION_WRITE | \
+                                                    RE_STANDARD_TYPE_READ_BIT)
+#define RE_STANDARD_VALUE_WRITE                (0x08U)
+//!< Sensor reads are acknowledged by setting type as value write
+#define RE_STANDARD_VALUE_READ                 (RE_STANDARD_VALUE_WRITE | \
+                                                    RE_STANDARD_TYPE_READ_BIT)
 #define RE_STANDARD_LOG_VALUE_WRITE            (0x10U)
-#define RE_STANDARD_LOG_VALUE_READ             (RE_STANDARD_LOG_VALUE_WRITE | RE_STANDARD_TYPE_READ_BIT)
+#define RE_STANDARD_LOG_VALUE_READ             (RE_STANDARD_LOG_VALUE_WRITE | \
+                                                    RE_STANDARD_TYPE_READ_BIT)
 #define RE_STANDARD_TYPE_ERROR                 (0xFFU) //!< internal error has occured
 
 #define RE_STANDARD_DESTINATION_ACCELERATION   (0x4AU) //!< XYZ acceleration combined
