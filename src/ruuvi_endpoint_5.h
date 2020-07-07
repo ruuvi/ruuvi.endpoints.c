@@ -19,6 +19,7 @@
 #define RE_5_INVALID_MOVEMENT     0xFF
 #define RE_5_INVALID_VOLTAGE      0x07FF
 #define RE_5_INVALID_POWER        0x1F
+#define RE_5_INVALID_MAC          0xFFFFFFFFFFFF
 #define RE_5_DATA_LENGTH          24
 
 #define RE_5_OFFSET_HEADER               0
