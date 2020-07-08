@@ -102,8 +102,3 @@ void test_ruuvi_endpoint_ibeacon_get_error_null_data (void)
     err_code = re_ibeacon_encode (p_test_buffer, p_ibeacon_data);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
 }
-
-void test_ruuvi_endpoint_ibeacon_Implemented (void)
-{
-    TEST_IGNORE_MESSAGE ("Now ruuvi_endpoint_ibeacon implemented");
-}
