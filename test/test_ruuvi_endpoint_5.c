@@ -1,4 +1,4 @@
-#include "unity.h"
+﻿#include "unity.h"
 
 #include "ruuvi_endpoint_5.h"
 
@@ -17,11 +17,18 @@ static const re_5_data_t m_re_5_data_ok =
     .tx_power = 4
 };
 
+static const uint8_t valid_data[] =
+{
+    0x05, 0x12, 0xFC, 0x53, 0x94, 0xC3, 0x7C, 0x00,
+    0x04, 0xFF, 0xFC, 0x04, 0x0C, 0xAC, 0x36, 0x42,
+    0x00, 0xCD, 0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F
+};
+
 static const re_5_data_t m_re_5_data_ok_max =
 {
     .humidity_rh = 163.8350,
     .pressure_pa = 115534,
-    .temperature_c = 163.835,
+    .temperature_c = 163.8350,
     .accelerationx_g = 32.767,
     .accelerationy_g = 32.767,
     .accelerationz_g = 32.767,
@@ -30,6 +37,13 @@ static const re_5_data_t m_re_5_data_ok_max =
     .movement_count = 254,
     .address = 0xCBB8334C884F,
     .tx_power = 20
+};
+
+static const uint8_t max_data[] =
+{
+    0x05, 0x7F, 0xFF, 0xFF, 0xFE, 0xFF, 0xFE, 0x7F,
+    0xFF, 0x7F, 0xFF, 0x7F, 0xFF, 0xFF, 0xDE, 0xFE,
+    0xFF, 0xFE, 0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F
 };
 
 static const re_5_data_t m_re_5_data_ok_min =
@@ -45,6 +59,13 @@ static const re_5_data_t m_re_5_data_ok_min =
     .movement_count = 0,
     .address = 0xCBB8334C884F,
     .tx_power = -40
+};
+
+static const uint8_t min_data[] =
+{
+    0x05, 0x80, 0x01, 0x00, 0x00, 0x00, 0x00, 0x80,
+    0x01, 0x80, 0x01, 0x80, 0x01, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F
 };
 
 static const re_5_data_t m_re_5_data_invalid_min_1 =
@@ -101,10 +122,17 @@ static const re_5_data_t m_re_5_data_invalid =
     .accelerationy_g = NAN,
     .accelerationz_g = NAN,
     .battery_v = NAN,
-    .measurement_count = 205,
-    .movement_count = 66,
-    .address = 0xCBB8334C884F,
-    .tx_power = RE_5_INVALID_POWER
+    .measurement_count = 65535,
+    .movement_count = 255,
+    .address = 0xFFFFFFFFFFFF,
+    .tx_power = 26
+};
+
+static const uint8_t invalid_data[] =
+{
+    0x05, 0x80, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x80,
+    0x00, 0x80, 0x00, 0x80, 0x00, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 };
 
 void setUp (void)
@@ -127,6 +155,7 @@ void test_ruuvi_endpoint_5_get_ok (void)
     err_code = re_5_encode ( (uint8_t * const) &test_buffer,
                              (const re_5_data_t *) &m_re_5_data_ok);
     TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, valid_data, sizeof (valid_data))));
 }
 
 void test_ruuvi_endpoint_5_get_ok_max (void)
@@ -136,6 +165,7 @@ void test_ruuvi_endpoint_5_get_ok_max (void)
     err_code = re_5_encode ( (uint8_t * const) &test_buffer,
                              (const re_5_data_t *) &m_re_5_data_ok_max);
     TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (max_data))));
 }
 
 void test_ruuvi_endpoint_5_get_ok_min (void)
@@ -145,6 +175,7 @@ void test_ruuvi_endpoint_5_get_ok_min (void)
     err_code = re_5_encode ( (uint8_t * const) &test_buffer,
                              (const re_5_data_t *) &m_re_5_data_ok_min);
     TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, min_data, sizeof (min_data))));
 }
 
 /**
@@ -187,22 +218,8 @@ void test_ruuvi_endpoint_5_get_invalid_data (void)
     uint8_t test_buffer[24] = {0};
     err_code = re_5_encode ( (uint8_t * const) &test_buffer,
                              (const re_5_data_t *) &m_re_5_data_invalid);
-    TEST_ASSERT (RE_SUCCESS == err_code &&
-                 RE_5_DESTINATION == test_buffer[RE_5_OFFSET_HEADER] &&
-                 (RE_5_INVALID_PRESSURE >> 8) == test_buffer[RE_5_OFFSET_PRESSURE_MSB] &&
-                 (RE_5_INVALID_PRESSURE & 0xFF) == test_buffer[RE_5_OFFSET_PRESSURE_LSB] &&
-                 (RE_5_INVALID_TEMPERATURE >> 8) == test_buffer[RE_5_OFFSET_TEMPERATURE_MSB] &&
-                 (RE_5_INVALID_TEMPERATURE & 0xFF) == test_buffer[RE_5_OFFSET_TEMPERATURE_LSB] &&
-                 (RE_5_INVALID_HUMIDITY >> 8) == test_buffer[RE_5_OFFSET_HUMIDITY_MSB] &&
-                 (RE_5_INVALID_HUMIDITY & 0xFF) == test_buffer[RE_5_OFFSET_HUMIDITY_LSB] &&
-                 (RE_5_INVALID_ACCELERATION >> 8) == test_buffer[RE_5_OFFSET_ACCELERATIONX_MSB] &&
-                 (RE_5_INVALID_ACCELERATION & 0xFF) == test_buffer[RE_5_OFFSET_ACCELERATIONX_LSB] &&
-                 (RE_5_INVALID_ACCELERATION >> 8) == test_buffer[RE_5_OFFSET_ACCELERATIONY_MSB] &&
-                 (RE_5_INVALID_ACCELERATION & 0xFF) == test_buffer[RE_5_OFFSET_ACCELERATIONY_LSB] &&
-                 (RE_5_INVALID_ACCELERATION >> 8) == test_buffer[RE_5_OFFSET_ACCELERATIONZ_MSB] &&
-                 (RE_5_INVALID_ACCELERATION & 0xFF) == test_buffer[RE_5_OFFSET_ACCELERATIONZ_LSB] &&
-                 0xFF == test_buffer[RE_5_OFFSET_POWER_MSB] &&
-                 0xFF == test_buffer[RE_5_OFFSET_POWER_LSB]);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, invalid_data, sizeof (invalid_data))));
 }
 
 void test_ruuvi_endpoint_5_get_min_1_invalid_data (void)
