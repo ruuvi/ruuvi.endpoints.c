@@ -3,6 +3,14 @@
 
 #include "ruuvi_endpoints.h"
 
+//TODO!
+#define RE_CA_SUPPORT_OLD_CMD
+#define RE_CA_CRC_DEFAULT       0xFFFF
+#define RE_CA_CRC_INVALID       0
+
+#define RE_CA_ACK_OK            0
+#define RE_CA_ACK_ERROR         1
+
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
 #define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
 #define RE_CA_UART_RSSI_BYTES (1U) //!< Number of bytes in RSSI report.
@@ -49,22 +57,60 @@
 #define RE_CA_UART_1MBPS_BIT     (1U) //!< Bit of 125kpbs modulation, starting from 0.
 #define RE_CA_UART_2MBPS_BIT     (2U) //!< Bit of 125kpbs modulation, starting from 0.
 
-#define RE_CA_UART_CMD_SFLTR_LEN (2U) //!< Length of filter set command payload.
-#define RE_CA_UART_CMD_CFLTR_LEN (0U) //!< Length of filter clear command payload. 
-#define RE_CA_UART_CMD_CH_LEN    (5U) //!< Length of channel command payload. 
-#define RE_CA_UART_CMD_PHY_LEN   (1U) //!< Length of phy command payload. 
+#define RE_CA_UART_CMD_SFLTR_LEN    (2U) //!< Length of filter set command payload.
+#define RE_CA_UART_CMD_CFLTR_LEN    (0U) //!< Length of filter clear command payload. 
+#define RE_CA_UART_CMD_CH_LEN       (5U) //!< Length of channel command payload. 
+#define RE_CA_UART_CMD_PHY_LEN      (1U) //!< Length of phy command payload. 
+
+#define RE_CA_UART_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_BOOL_BIT         (1U) //!< Bit of bool params, starting from 0.
+
+#define RE_CA_UART_FLTR_ID_BYTE         (2U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_FLTR_TAG_BIT     (0U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_CODED_PHY_BIT    (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_SCAN_PHY_BIT     (2U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_EXT_PLD_BIT      (3U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_37_BIT        (4U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_38_BIT        (5U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_39_BIT        (6U) //!< Byte of bool params, starting from 0.
+
+#define RE_CA_UART_STX_ETX_LEN      (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_BOOL_LEN     (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_FLTR_ID_LEN  (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ALL_BOOL_LEN (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ALL_LEN      (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN) 
+//!< Length of all command payload
+
+#define RE_CA_UART_BOOL_FIELDS      (1U)
+#define RE_CA_UART_FLTR_ID_FIELDS   (1U)
+#define RE_CA_UART_ALL_FIELDS       (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
 /** @breif Command types. */
 typedef enum
 {
-    RE_CA_UART_NOT_CODED = 0, //!< Command is not de/encoded, do not use as-is.
-    RE_CA_UART_SET_FLTR  = 1, //!< Set manufacturer ID filter.
-    RE_CA_UART_CLR_FLTR  = 2, //!< Clear manufacturer ID filter.
-    RE_CA_UART_SET_CH    = 3, //!< Set channel mask.
-    RE_CA_UART_SET_PHY   = 4, //!< Set PHY mask.
-    RE_CA_UART_ADV_RPRT  = 5  //!< Advertisement report.
+#ifdef RE_CA_SUPPORT_OLD_CMD
+    /* Old config CMD */
+    RE_CA_UART_NOT_CODED = 0,       //!< Command is not de/encoded, do not use as-is.
+    RE_CA_UART_SET_FLTR  = 1,       //!< Set manufacturer ID filter.
+    RE_CA_UART_CLR_FLTR  = 2,       //!< Clear manufacturer ID filter.
+    RE_CA_UART_SET_CH    = 3,       //!< Set channel mask.
+    RE_CA_UART_SET_PHY   = 4,       //!< Set PHY mask.
+#endif
+    RE_CA_UART_SET_FLTR_TAGS    = 5, //!< Set filter tags.
+    RE_CA_UART_SET_FLTR_ID      = 6, //!< Set manufacturer ID filter.
+    RE_CA_UART_SET_CODED_PHY    = 7, //!< Set coded PHY.
+    RE_CA_UART_SET_SCAN_1MB_PHY = 8, //!< Set scan 1MBbit/PHY.
+    RE_CA_UART_SET_EXT_PAYLOAD  = 9, //!< Set extended payload.
+    RE_CA_UART_SET_CH_37        = 10, //!< Set channel 37.
+    RE_CA_UART_SET_CH_38        = 11, //!< Set channel 38.
+    RE_CA_UART_SET_CH_39        = 12, //!< Set channel 39.
+    RE_CA_UART_SET_ALL          = 15,//!< Set all config.
+    RE_CA_UART_ADV_RPRT         = 16,//!< Advertisement report. ACK no need.
+    RE_CA_UART_ACK              = 32,//!< ACK
 } re_ca_uart_cmd_t;
 
+#pragma pack(push,1)
 /** @brief Manufacturer filter payload. */
 typedef struct
 {
@@ -87,6 +133,36 @@ typedef struct
     uint8_t ble_2mbps   : 1; //!< BLE Channel 39 enabled.
 } re_ca_uart_ble_phy_t;
 
+/** @brief Enabled BLE Channel. */
+typedef struct
+{
+    uint8_t state : 1; //!< BLE Channel enabled.
+} re_ca_uart_ble_bool_t;
+
+/** @brief Manufacturer filter payload. */
+typedef struct
+{
+    uint16_t id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
+} re_ca_uart_ble_fltr_id_t;
+
+typedef struct
+{
+  re_ca_uart_ble_bool_t fltr_tags;
+  re_ca_uart_ble_bool_t coded_phy;
+  re_ca_uart_ble_bool_t scan_phy;
+  re_ca_uart_ble_bool_t ext_payload;
+  re_ca_uart_ble_bool_t ch_37;
+  re_ca_uart_ble_bool_t ch_38;
+  re_ca_uart_ble_bool_t ch_39;
+} re_ca_uart_ble_all_bools_t;
+
+/** @brief BLE config struct. */
+typedef struct
+{
+  re_ca_uart_ble_fltr_id_t fltr_id;
+  re_ca_uart_ble_all_bools_t bools;
+} re_ca_uart_ble_all_t;
+
 /** @brief Advertisement payload. */
 typedef struct
 {
@@ -96,6 +172,7 @@ typedef struct
     int8_t rssi_db;                      //!< RSSI.
 } re_ca_uart_ble_adv_t;
 
+#if 0
 /**
  * @brief  Structure of CA_UART data.
  *
@@ -110,6 +187,7 @@ typedef struct
     uint8_t etx;    //!< Last byte always fixed ETX.
     re_ca_uart_cmd_t cmd; //!< Command to send.
 } re_ca_uart_tx_t;
+#endif
 
 /** @brief Structure to contain command data.
  * MISRA deviation - use of union.
@@ -122,12 +200,16 @@ typedef struct
     re_ca_uart_cmd_t cmd; //!< Type of command discriminating the union.
     union // -V2514
     {
-        re_ca_uart_ble_filter_t filter;   //!< Filter param.
-        re_ca_uart_ble_ch_t     channels; //!< Channel param.
-        re_ca_uart_ble_phy_t    phys;     //!< Phy param.
-        re_ca_uart_ble_adv_t    adv;      //!< Advertisement report param.
+        re_ca_uart_ble_filter_t   filter;   //!< Filter param.
+        re_ca_uart_ble_ch_t       channels; //!< Channel param.
+        re_ca_uart_ble_phy_t      phys;     //!< Phy param.
+        re_ca_uart_ble_adv_t      adv;      //!< Advertisement report param.
+        re_ca_uart_ble_bool_t     bool_param;
+        re_ca_uart_ble_fltr_id_t  fltr_id_param;
+        re_ca_uart_ble_all_t      all_params;
     } params; //!< Command payload.
 } re_ca_uart_payload_t; //!< Structured payload.
+#pragma pack(pop)
 
 /**
  * @brief Encode given command with given parameters into buffer.
