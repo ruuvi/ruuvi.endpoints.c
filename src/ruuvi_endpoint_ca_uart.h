@@ -3,13 +3,14 @@
 
 #include "ruuvi_endpoints.h"
 
-//TODO!
-#define RE_CA_SUPPORT_OLD_CMD
 #define RE_CA_CRC_DEFAULT       0xFFFF
 #define RE_CA_CRC_INVALID       0
 
 #define RE_CA_ACK_OK            0
 #define RE_CA_ACK_ERROR         1
+
+#define RE_CA_BOOL_ENABLE       0
+#define RE_CA_BOOL_DISABLE      1
 
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
 #define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
@@ -41,6 +42,7 @@
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
 #define RE_CA_UART_HEADER_SIZE   (3U) //!< STX + len + CMD
+#define RE_CA_UART_CRC_SIZE      (2U) //!< STX + len + CMD
 #define RE_CA_UART_STX_INDEX     (0U) //!< Position of stx byte.
 #define RE_CA_UART_LEN_INDEX     (1U) //!< Position of length byte.
 #define RE_CA_UART_CMD_INDEX     (2U) //!< Position of CMD byte.
@@ -62,8 +64,11 @@
 #define RE_CA_UART_CMD_CH_LEN       (5U) //!< Length of channel command payload. 
 #define RE_CA_UART_CMD_PHY_LEN      (1U) //!< Length of phy command payload. 
 
-#define RE_CA_UART_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_BOOL_BYTE        (0U) //!< Byte of bool params, starting from 0.
 #define RE_CA_UART_BOOL_BIT         (1U) //!< Bit of bool params, starting from 0.
+
+#define RE_CA_UART_ASK_BYTE         (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ASK_BIT          (1U) //!< Bit of bool params, starting from 0.
 
 #define RE_CA_UART_FLTR_ID_BYTE         (2U) //!< Byte of bool params, starting from 0.
 #define RE_CA_UART_ALL_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
@@ -78,11 +83,13 @@
 #define RE_CA_UART_STX_ETX_LEN      (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_BOOL_LEN     (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_FLTR_ID_LEN  (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ACK_LEN      (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ALL_BOOL_LEN (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ALL_LEN      (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN) 
 //!< Length of all command payload
 
 #define RE_CA_UART_BOOL_FIELDS      (1U)
+#define RE_CA_UART_ACK_FIELDS       (2U)
 #define RE_CA_UART_FLTR_ID_FIELDS   (1U)
 #define RE_CA_UART_ALL_FIELDS       (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
@@ -111,6 +118,8 @@ typedef enum
 } re_ca_uart_cmd_t;
 
 #pragma pack(push,1)
+
+#ifdef RE_CA_SUPPORT_OLD_CMD
 /** @brief Manufacturer filter payload. */
 typedef struct
 {
@@ -132,6 +141,7 @@ typedef struct
     uint8_t ble_1mbps   : 1; //!< BLE Channel 38 enabled.
     uint8_t ble_2mbps   : 1; //!< BLE Channel 39 enabled.
 } re_ca_uart_ble_phy_t;
+#endif
 
 /** @brief Enabled BLE Channel. */
 typedef struct
@@ -144,6 +154,13 @@ typedef struct
 {
     uint16_t id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
 } re_ca_uart_ble_fltr_id_t;
+
+/** @brief Manufacturer filter payload. */
+typedef struct
+{
+    re_ca_uart_cmd_t cmd;
+    re_ca_uart_ble_bool_t ack_state; 
+} re_ca_uart_ble_ack_t;
 
 typedef struct
 {
@@ -200,10 +217,13 @@ typedef struct
     re_ca_uart_cmd_t cmd; //!< Type of command discriminating the union.
     union // -V2514
     {
+#ifdef RE_CA_SUPPORT_OLD_CMD
         re_ca_uart_ble_filter_t   filter;   //!< Filter param.
         re_ca_uart_ble_ch_t       channels; //!< Channel param.
         re_ca_uart_ble_phy_t      phys;     //!< Phy param.
+#endif
         re_ca_uart_ble_adv_t      adv;      //!< Advertisement report param.
+        re_ca_uart_ble_ack_t      ack;
         re_ca_uart_ble_bool_t     bool_param;
         re_ca_uart_ble_fltr_id_t  fltr_id_param;
         re_ca_uart_ble_all_t      all_params;
