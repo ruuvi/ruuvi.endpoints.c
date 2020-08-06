@@ -22,7 +22,7 @@
 #   define CMD_IN_LEN (1U) //!< Command is included in data length.
 #else
 #   define RE_CA_UART_STX (0xCAU) //!< Start UART Command. Not related to ASCII STX.
-#   define RE_CA_UART_ETX (0x12U) //!< End UART Command, '\n'. Not related to ASCII ETX.
+#   define RE_CA_UART_ETX (0x0AU) //!< End UART Command, '\n'. Not related to ASCII ETX.
 #   define RE_CA_UART_RSSI_MAXLEN (RE_CA_UART_RSSI_BYTES) //!< i8.
 #   define CMD_IN_LEN (0U) //!< Command is not included in data length.
 #endif
