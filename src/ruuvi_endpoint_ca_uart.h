@@ -65,10 +65,11 @@
 #define RE_CA_UART_CMD_PHY_LEN      (1U) //!< Length of phy command payload. 
 
 #define RE_CA_UART_BOOL_BYTE        (0U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_BOOL_BIT         (1U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_BOOL_BIT         (0U) //!< Bit of bool params, starting from 0.
 
-#define RE_CA_UART_ASK_BYTE         (1U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ASK_BIT          (1U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ACK_CMD_BYTE     (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ACK_BYTE         (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ACK_BIT          (0U) //!< Bit of bool params, starting from 0.
 
 #define RE_CA_UART_FLTR_ID_BYTE         (2U) //!< Byte of bool params, starting from 0.
 #define RE_CA_UART_ALL_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
@@ -85,7 +86,7 @@
 #define RE_CA_UART_CMD_FLTR_ID_LEN  (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ACK_LEN      (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ALL_BOOL_LEN (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ALL_LEN      (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN) 
+#define RE_CA_UART_CMD_ALL_LEN      (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN)
 //!< Length of all command payload
 
 #define RE_CA_UART_BOOL_FIELDS      (1U)
@@ -159,25 +160,25 @@ typedef struct
 typedef struct
 {
     re_ca_uart_cmd_t cmd;
-    re_ca_uart_ble_bool_t ack_state; 
+    re_ca_uart_ble_bool_t ack_state;
 } re_ca_uart_ble_ack_t;
 
 typedef struct
 {
-  re_ca_uart_ble_bool_t fltr_tags;
-  re_ca_uart_ble_bool_t coded_phy;
-  re_ca_uart_ble_bool_t scan_phy;
-  re_ca_uart_ble_bool_t ext_payload;
-  re_ca_uart_ble_bool_t ch_37;
-  re_ca_uart_ble_bool_t ch_38;
-  re_ca_uart_ble_bool_t ch_39;
+    re_ca_uart_ble_bool_t fltr_tags;
+    re_ca_uart_ble_bool_t coded_phy;
+    re_ca_uart_ble_bool_t scan_phy;
+    re_ca_uart_ble_bool_t ext_payload;
+    re_ca_uart_ble_bool_t ch_37;
+    re_ca_uart_ble_bool_t ch_38;
+    re_ca_uart_ble_bool_t ch_39;
 } re_ca_uart_ble_all_bools_t;
 
 /** @brief BLE config struct. */
 typedef struct
 {
-  re_ca_uart_ble_fltr_id_t fltr_id;
-  re_ca_uart_ble_all_bools_t bools;
+    re_ca_uart_ble_fltr_id_t fltr_id;
+    re_ca_uart_ble_all_bools_t bools;
 } re_ca_uart_ble_all_t;
 
 /** @brief Advertisement payload. */
