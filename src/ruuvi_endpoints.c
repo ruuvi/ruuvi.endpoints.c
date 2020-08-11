@@ -53,6 +53,10 @@ re_status_t re_log_write_header (uint8_t * const buffer, const uint8_t source)
         buffer[RE_STANDARD_SOURCE_INDEX] = source;
         buffer[RE_STANDARD_OPERATION_INDEX] = RE_STANDARD_LOG_VALUE_WRITE;
     }
+    else
+    {
+        err_code |= RE_ERROR_NULL;
+    }
 
     return err_code;
 }
@@ -86,6 +90,29 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
         buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t) ( (timestamp_s >> 8) & 0xFFU);
         buffer[RE_LOG_WRITE_TS_LSB_IDX] = (uint8_t) (timestamp_s & 0xFFU);
     }
+
+    return err_code;
+}
+
+static int32_t f2i (float value)
+{
+    int32_t rvalue = 0xFFFFFFFF;
+    value = (value) >= 0 ? (value) + 0.5 : (value) - 0.5;
+
+    if (value > INT32_MAX)
+    {
+        rvalue = INT32_MAX;
+    }
+    else if (value < (INT32_MIN + 1))
+    {
+        rvalue = INT32_MIN + 1;
+    }
+    else
+    {
+        rvalue = (int32_t) value;
+    }
+
+    return rvalue;
 }
 
 /**
@@ -106,7 +133,8 @@ re_status_t re_log_write_data (uint8_t * const buffer, const float data,
                                const uint8_t source)
 {
     re_status_t err_code = RE_SUCCESS;
-    int32_t scaled_value = 0xFFFFFFFF;
+    int32_t discrete_value = 0xFFFFFFFF;
+    float scaled_value = 0;
 
     if (NULL == buffer)
     {
@@ -123,33 +151,41 @@ re_status_t re_log_write_data (uint8_t * const buffer, const float data,
             case RE_STANDARD_DESTINATION_ACCELERATION_X:
             case RE_STANDARD_DESTINATION_ACCELERATION_Y:
             case RE_STANDARD_DESTINATION_ACCELERATION_Z:
-                scaled_value = (int32_t) (data * RE_STANDARD_ACCELERATION_SF);
+                scaled_value = (data * RE_STANDARD_ACCELERATION_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_GYRATION_X:
             case RE_STANDARD_DESTINATION_GYRATION_Y:
             case RE_STANDARD_DESTINATION_GYRATION_Z:
-                scaled_value = (int32_t) (data * RE_STANDARD_GYRATION_SF);
+                scaled_value = (data * RE_STANDARD_GYRATION_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_HUMIDITY:
-                scaled_value = (int32_t) (data * RE_STANDARD_HUMIDITY_SF);
+                scaled_value = (data * RE_STANDARD_HUMIDITY_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_PRESSURE:
-                scaled_value = (int32_t) (data * RE_STANDARD_PRESSURE_SF);
+                scaled_value = (data * RE_STANDARD_PRESSURE_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_TEMPERATURE:
-                scaled_value = (int32_t) (data * RE_STANDARD_TEMPERATURE_SF);
+                scaled_value = (data * RE_STANDARD_TEMPERATURE_SF);
                 break;
 
             default:
                 err_code |= RE_ERROR_NOT_IMPLEMENTED;
                 break;
         }
+
+        scaled_value = roundf (scaled_value);
+        discrete_value = f2i (scaled_value);
     }
 
     // These shifts do not rely on the value of leftmost bit if original
     // value is negative, so this is safe way to encode bytes.
+    buffer[RE_LOG_WRITE_VALUE_MSB_IDX] = (uint8_t) ( (discrete_value >> 24U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_B2_IDX] = (uint8_t) ( (discrete_value >> 16U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_B3_IDX] = (uint8_t) ( (discrete_value >> 8U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_LSB_IDX] = (uint8_t) (discrete_value & 0xFFU);
+    return err_code;
 }
