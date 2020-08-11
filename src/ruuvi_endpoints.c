@@ -94,7 +94,7 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
     return err_code;
 }
 
-static int32_t f2i (float value)
+static int32_t f2i (re_float value)
 {
     int32_t rvalue = 0x80000000;
     value = (value) >= 0 ? (value) + 0.5 : (value) - 0.5;
@@ -129,12 +129,12 @@ static int32_t f2i (float value)
  *
  * @warning if data is outside representable range resulting encoding is undefined.
  */
-re_status_t re_log_write_data (uint8_t * const buffer, const float data,
+re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
                                const uint8_t source)
 {
     re_status_t err_code = RE_SUCCESS;
     int32_t discrete_value = 0xFFFFFFFF;
-    float scaled_value = 0;
+    re_float scaled_value = 0;
 
     if (NULL == buffer)
     {

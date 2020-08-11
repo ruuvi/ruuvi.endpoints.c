@@ -168,7 +168,7 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
  * @retval RE_ERROR_INVALID_PARAMETER if data is NAN or inf.
  * @retval RE_NOT_IMPLEMENTED if there's no encoding for given data source.
  */
-re_status_t re_log_write_data (uint8_t * const buffer, const float data,
+re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
                                const uint8_t source);
 
 #endif
