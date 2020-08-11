@@ -90,25 +90,28 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
         buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t) ( (timestamp_s >> 8) & 0xFFU);
         buffer[RE_LOG_WRITE_TS_LSB_IDX] = (uint8_t) (timestamp_s & 0xFFU);
     }
+
     return err_code;
 }
 
-static int32_t f2i(float value)
+static int32_t f2i (float value)
 {
     int32_t rvalue = 0x80000000;
-    value = (value) >=0 ? (value) + 0.5: (value) - 0.5;
-    if(value > INT32_MAX)
+    value = (value) >= 0 ? (value) + 0.5 : (value) - 0.5;
+
+    if (value > INT32_MAX)
     {
         rvalue = INT32_MAX;
     }
-    else if(value < (INT32_MIN+1))
+    else if (value < (INT32_MIN + 1))
     {
-        rvalue = INT32_MIN+1;
+        rvalue = INT32_MIN + 1;
     }
     else
     {
-        rvalue = (int32_t)value;
+        rvalue = (int32_t) value;
     }
+
     return rvalue;
 }
 
@@ -132,6 +135,7 @@ re_status_t re_log_write_data (uint8_t * const buffer, const float data,
     re_status_t err_code = RE_SUCCESS;
     int32_t discrete_value = 0xFFFFFFFF;
     float scaled_value = 0;
+
     if (NULL == buffer)
     {
         err_code |= RE_ERROR_NULL;
@@ -172,15 +176,16 @@ re_status_t re_log_write_data (uint8_t * const buffer, const float data,
                 err_code |= RE_ERROR_NOT_IMPLEMENTED;
                 break;
         }
-        scaled_value = roundf(scaled_value);
-        discrete_value = f2i(scaled_value);
+
+        scaled_value = roundf (scaled_value);
+        discrete_value = f2i (scaled_value);
     }
 
     // These shifts do not rely on the value of leftmost bit if original
     // value is negative, so this is safe way to encode bytes.
-    buffer[RE_LOG_WRITE_VALUE_MSB_IDX] = (uint8_t)((discrete_value>>24U)&0xFFU);
-    buffer[RE_LOG_WRITE_VALUE_B2_IDX] = (uint8_t)((discrete_value>>16U)&0xFFU);
-    buffer[RE_LOG_WRITE_VALUE_B3_IDX] = (uint8_t)((discrete_value>>8U)&0xFFU);
-    buffer[RE_LOG_WRITE_VALUE_LSB_IDX] = (uint8_t)(discrete_value&0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_MSB_IDX] = (uint8_t) ( (discrete_value >> 24U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_B2_IDX] = (uint8_t) ( (discrete_value >> 16U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_B3_IDX] = (uint8_t) ( (discrete_value >> 8U) & 0xFFU);
+    buffer[RE_LOG_WRITE_VALUE_LSB_IDX] = (uint8_t) (discrete_value & 0xFFU);
     return err_code;
 }
