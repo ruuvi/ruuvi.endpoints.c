@@ -8,5 +8,6 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "ruuvi_endpoint_ca_uart.h", "ruuvi__endpoint__ca__uart_8h_source.html", null ],
     [ "ruuvi_endpoint_ibeacon.c", "ruuvi__endpoint__ibeacon_8c_source.html", null ],
     [ "ruuvi_endpoint_ibeacon.h", "ruuvi__endpoint__ibeacon_8h_source.html", null ],
+    [ "ruuvi_endpoints.c", "ruuvi__endpoints_8c_source.html", null ],
     [ "ruuvi_endpoints.h", "ruuvi__endpoints_8h_source.html", null ]
 ];
