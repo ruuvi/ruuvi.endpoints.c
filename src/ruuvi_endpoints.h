@@ -32,7 +32,7 @@ typedef float    re_float;    //!< Ruuvi endpoint float type
 
 /**
  * @brief If endpoint is even, type of a message is considered a write.
- *  
+ *
  * If it is odd, type is considered a read.
  */
 #define RE_STANDARD_OP_READ_BIT                (1U << 0U)
@@ -88,19 +88,19 @@ typedef float    re_float;    //!< Ruuvi endpoint float type
 
 typedef enum
 {
-  RE_ACC_XYZ = RE_STANDARD_DESTINATION_ACCELERATION,
-  RE_ACC_X = RE_STANDARD_DESTINATION_ACCELERATION_X,
-  RE_ACC_Y = RE_STANDARD_DESTINATION_ACCELERATION_Y,
-  RE_ACC_Z = RE_STANDARD_DESTINATION_ACCELERATION_Z,
-  RE_GYR_XYZ = RE_STANDARD_DESTINATION_GYRATION,
-  RE_GYR_X = RE_STANDARD_DESTINATION_GYRATION_X,
-  RE_GYR_Y = RE_STANDARD_DESTINATION_GYRATION_Y,
-  RE_GYR_Z = RE_STANDARD_DESTINATION_GYRATION_Z,
-  RE_ENV_ALL = RE_STANDARD_DESTINATION_ENVIRONMENTAL,
-  RE_ENV_TEMP = RE_STANDARD_DESTINATION_TEMPERATURE,
-  RE_ENV_HUMI = RE_STANDARD_DESTINATION_HUMIDITY,
-  RE_ENV_PRES = RE_STANDARD_DESTINATION_PRESSURE
-}re_type_t;
+    RE_ACC_XYZ = RE_STANDARD_DESTINATION_ACCELERATION,
+    RE_ACC_X = RE_STANDARD_DESTINATION_ACCELERATION_X,
+    RE_ACC_Y = RE_STANDARD_DESTINATION_ACCELERATION_Y,
+    RE_ACC_Z = RE_STANDARD_DESTINATION_ACCELERATION_Z,
+    RE_GYR_XYZ = RE_STANDARD_DESTINATION_GYRATION,
+    RE_GYR_X = RE_STANDARD_DESTINATION_GYRATION_X,
+    RE_GYR_Y = RE_STANDARD_DESTINATION_GYRATION_Y,
+    RE_GYR_Z = RE_STANDARD_DESTINATION_GYRATION_Z,
+    RE_ENV_ALL = RE_STANDARD_DESTINATION_ENVIRONMENTAL,
+    RE_ENV_TEMP = RE_STANDARD_DESTINATION_TEMPERATURE,
+    RE_ENV_HUMI = RE_STANDARD_DESTINATION_HUMIDITY,
+    RE_ENV_PRES = RE_STANDARD_DESTINATION_PRESSURE
+} re_type_t;
 
 // Scaling factors float -> i32.
 #define RE_STANDARD_ACCELERATION_SF            (1000.0F) //!< milli-mg.
@@ -113,11 +113,11 @@ typedef enum
 
 typedef enum
 {
-  RE_SENSOR_CONFIG_W = RE_STANDARD_SENSOR_CONFIGURATION_WRITE,
-  RE_SENSOR_CONFIG_R = RE_STANDARD_SENSOR_CONFIGURATION_READ,
-  RE_LOG_W = RE_STANDARD_LOG_VALUE_WRITE,
-  RE_LOG_R = RE_STANDARD_LOG_VALUE_READ
-}re_op_t;
+    RE_SENSOR_CONFIG_W = RE_STANDARD_SENSOR_CONFIGURATION_WRITE,
+    RE_SENSOR_CONFIG_R = RE_STANDARD_SENSOR_CONFIGURATION_READ,
+    RE_LOG_W = RE_STANDARD_LOG_VALUE_WRITE,
+    RE_LOG_R = RE_STANDARD_LOG_VALUE_READ
+} re_op_t;
 
 /**
  * @brief Get current time for log read command to compensate timestamps.
@@ -125,7 +125,7 @@ typedef enum
  * @param[in] raw_message 11-byte payload from central.
  * @return u32 timestamp, 0 if raw_message was NULL.
  */
-uint32_t re_std_log_current_time(const uint8_t * const raw_message);
+uint32_t re_std_log_current_time (const uint8_t * const raw_message);
 
 /**
  * @brief Get start time for log read command.
@@ -133,17 +133,17 @@ uint32_t re_std_log_current_time(const uint8_t * const raw_message);
  * @param[in] raw_message 11-byte payload from central.
  * @return u32 timestamp, 0 if raw_message was NULL.
  */
-uint32_t re_std_log_start_time(const uint8_t * const raw_message);
+uint32_t re_std_log_start_time (const uint8_t * const raw_message);
 
 /**
  * @brief Write a log write header to given buffer.
  *
  * @param[out] buffer 11-byte buffer to which header will be written.
- * @param[in]  source Source endpoint of data. 
+ * @param[in]  source Source endpoint of data.
  * @retval RE_SUCCESS Header was written successfully.
- * @retval RE_ERROR_NULL Buffer was NULL. 
+ * @retval RE_ERROR_NULL Buffer was NULL.
  */
-re_status_t re_log_write_header(uint8_t* const buffer, const uint8_t source);
+re_status_t re_log_write_header (uint8_t * const buffer, const uint8_t source);
 
 /**
  * @brief write a log element timestamp to the given buffer.
@@ -154,7 +154,7 @@ re_status_t re_log_write_header(uint8_t* const buffer, const uint8_t source);
  * @retval RE_ERROR_NULL buffer was NULL
  * @retval RE_ERROR_INVALID_PARAM timestamp cannot be encoded as 32-bit second value.
  */
-re_status_t re_log_write_timestamp(uint8_t* const buffer, const uint64_t timestamp_ms);
+re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t timestamp_ms);
 
 /**
  * @brief Encode given float to the given buffer.
@@ -166,8 +166,9 @@ re_status_t re_log_write_timestamp(uint8_t* const buffer, const uint64_t timesta
  * @retval RE_SUCCESS Data was encoded successfully.
  * @retval RE_ERROR_NULL Buffer was NULL.
  * @retval RE_ERROR_INVALID_PARAMETER if data is NAN or inf.
- * @retval RE_NOT_IMPLEMENTED if there's no encoding for given data source. 
+ * @retval RE_NOT_IMPLEMENTED if there's no encoding for given data source.
  */
-re_status_t re_log_write_data(uint8_t* const buffer, const float data, const uint8_t source);
+re_status_t re_log_write_data (uint8_t * const buffer, const float data,
+                               const uint8_t source);
 
 #endif

@@ -8,16 +8,18 @@
  * @param[in] raw_message 11-byte payload from central.
  * @return u32 timestamp, 0 if raw_message was NULL.
  */
-uint32_t re_std_log_current_time(const uint8_t * const raw_message)
+uint32_t re_std_log_current_time (const uint8_t * const raw_message)
 {
     uint32_t time = 0;
-    if(NULL != raw_message)
+
+    if (NULL != raw_message)
     {
         time += (raw_message[RE_LOG_READ_CURRENT_MSB_IDX] << 24U)
-             +  (raw_message[RE_LOG_READ_CURRENT_B2_IDX] << 16U)
-             +  (raw_message[RE_LOG_READ_CURRENT_B3_IDX] << 8U)
-             +  (raw_message[RE_LOG_READ_CURRENT_LSB_IDX]);
+                + (raw_message[RE_LOG_READ_CURRENT_B2_IDX] << 16U)
+                + (raw_message[RE_LOG_READ_CURRENT_B3_IDX] << 8U)
+                + (raw_message[RE_LOG_READ_CURRENT_LSB_IDX]);
     }
+
     return time;
 }
 
@@ -27,27 +29,31 @@ uint32_t re_std_log_current_time(const uint8_t * const raw_message)
  * @param[in] raw_message 11-byte payload from central.
  * @return u32 timestamp, 0 if raw_message was NULL.
  */
-uint32_t re_std_log_start_time(const uint8_t * const raw_message)
+uint32_t re_std_log_start_time (const uint8_t * const raw_message)
 {
     uint32_t time = 0;
-    if(NULL != raw_message)
+
+    if (NULL != raw_message)
     {
         time += (raw_message[RE_LOG_READ_START_MSB_IDX] << 24U)
-             +  (raw_message[RE_LOG_READ_START_B2_IDX] << 16U)
-             +  (raw_message[RE_LOG_READ_START_B3_IDX] << 8U)
-             +  (raw_message[RE_LOG_READ_START_LSB_IDX]);
+                + (raw_message[RE_LOG_READ_START_B2_IDX] << 16U)
+                + (raw_message[RE_LOG_READ_START_B3_IDX] << 8U)
+                + (raw_message[RE_LOG_READ_START_LSB_IDX]);
     }
+
     return time;
 }
 
-re_status_t re_log_write_header(uint8_t* const buffer, const uint8_t source)
+re_status_t re_log_write_header (uint8_t * const buffer, const uint8_t source)
 {
     re_status_t err_code = RE_SUCCESS;
-    if(NULL != buffer)
+
+    if (NULL != buffer)
     {
         buffer[RE_STANDARD_SOURCE_INDEX] = source;
         buffer[RE_STANDARD_OPERATION_INDEX] = RE_STANDARD_LOG_VALUE_WRITE;
     }
+
     return err_code;
 }
 
@@ -60,24 +66,25 @@ re_status_t re_log_write_header(uint8_t* const buffer, const uint8_t source)
  * @retval RE_ERROR_NULL buffer was NULL
  * @retval RE_ERROR_INVALID_PARAM timestamp cannot be encoded as 32-bit second value.
  */
-re_status_t re_log_write_timestamp(uint8_t* const buffer, const uint64_t timestamp_ms)
+re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t timestamp_ms)
 {
     re_status_t err_code = RE_SUCCESS;
     const uint64_t timestamp_s = timestamp_ms / 1000U;
-    if(NULL == buffer)
+
+    if (NULL == buffer)
     {
         err_code |= RE_ERROR_NULL;
     }
-    else if (timestamp_s > ((uint32_t)0xFFFFFFFFU))
+    else if (timestamp_s > ( (uint32_t) 0xFFFFFFFFU))
     {
         err_code |= RE_ERROR_INVALID_PARAM;
     }
     else
     {
-        buffer[RE_LOG_WRITE_TS_MSB_IDX] = (uint8_t)((timestamp_s >> 24) & 0xFFU);
-        buffer[RE_LOG_WRITE_TS_B2_IDX] = (uint8_t)((timestamp_s >> 16) & 0xFFU);
-        buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t)((timestamp_s >> 8) & 0xFFU);
-        buffer[RE_LOG_WRITE_TS_LSB_IDX] = (uint8_t)(timestamp_s & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_MSB_IDX] = (uint8_t) ( (timestamp_s >> 24) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_B2_IDX] = (uint8_t) ( (timestamp_s >> 16) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t) ( (timestamp_s >> 8) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_LSB_IDX] = (uint8_t) (timestamp_s & 0xFFU);
     }
 }
 
@@ -91,48 +98,50 @@ re_status_t re_log_write_timestamp(uint8_t* const buffer, const uint64_t timesta
  * @retval RE_SUCCESS Data was encoded successfully.
  * @retval RE_ERROR_NULL Buffer was NULL.
  * @retval RE_ERROR_INVALID_PARAM if data is NAN or inf.
- * @retval RE_NOT_IMPLEMENTED if there's no encoding for given data source. 
+ * @retval RE_NOT_IMPLEMENTED if there's no encoding for given data source.
  *
- * @warning if data is outside representable range resulting encoding is undefined. 
+ * @warning if data is outside representable range resulting encoding is undefined.
  */
-re_status_t re_log_write_data(uint8_t* const buffer, const float data, const uint8_t source)
+re_status_t re_log_write_data (uint8_t * const buffer, const float data,
+                               const uint8_t source)
 {
     re_status_t err_code = RE_SUCCESS;
     int32_t scaled_value = 0xFFFFFFFF;
-    if(NULL == buffer)
+
+    if (NULL == buffer)
     {
         err_code |= RE_ERROR_NULL;
     }
-    else if(isnan(data) || isinf(data))
+    else if (isnan (data) || isinf (data))
     {
         err_code |= RE_ERROR_INVALID_PARAM;
     }
     else
     {
-        switch(source)
+        switch (source)
         {
             case RE_STANDARD_DESTINATION_ACCELERATION_X:
             case RE_STANDARD_DESTINATION_ACCELERATION_Y:
             case RE_STANDARD_DESTINATION_ACCELERATION_Z:
-                scaled_value = (int32_t)(data * RE_STANDARD_ACCELERATION_SF);
+                scaled_value = (int32_t) (data * RE_STANDARD_ACCELERATION_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_GYRATION_X:
             case RE_STANDARD_DESTINATION_GYRATION_Y:
             case RE_STANDARD_DESTINATION_GYRATION_Z:
-                scaled_value = (int32_t)(data * RE_STANDARD_GYRATION_SF);
+                scaled_value = (int32_t) (data * RE_STANDARD_GYRATION_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_HUMIDITY:
-                scaled_value = (int32_t)(data * RE_STANDARD_HUMIDITY_SF);
+                scaled_value = (int32_t) (data * RE_STANDARD_HUMIDITY_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_PRESSURE:
-                scaled_value = (int32_t)(data * RE_STANDARD_PRESSURE_SF);
+                scaled_value = (int32_t) (data * RE_STANDARD_PRESSURE_SF);
                 break;
 
             case RE_STANDARD_DESTINATION_TEMPERATURE:
-                scaled_value = (int32_t)(data * RE_STANDARD_TEMPERATURE_SF);
+                scaled_value = (int32_t) (data * RE_STANDARD_TEMPERATURE_SF);
                 break;
 
             default:
@@ -140,7 +149,7 @@ re_status_t re_log_write_data(uint8_t* const buffer, const float data, const uin
                 break;
         }
     }
+
     // These shifts do not rely on the value of leftmost bit if original
     // value is negative, so this is safe way to encode bytes.
-
 }
