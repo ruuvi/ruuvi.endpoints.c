@@ -96,14 +96,14 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
 
 static int32_t f2i (float value)
 {
-    int32_t rvalue = 0xFFFFFFFF;
+    int32_t rvalue = 0x80000000;
     value = (value) >= 0 ? (value) + 0.5 : (value) - 0.5;
 
-    if (value > INT32_MAX)
+    if (value >= INT32_MAX)
     {
         rvalue = INT32_MAX;
     }
-    else if (value < (INT32_MIN + 1))
+    else if (value <= (INT32_MIN + 1))
     {
         rvalue = INT32_MIN + 1;
     }

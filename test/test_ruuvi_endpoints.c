@@ -171,3 +171,135 @@ void test_log_write_data_temperature_negative_round_up (void)
     TEST_ASSERT (0xF7U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
     TEST_ASSERT (0x31U == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
 }
+
+void test_log_write_data_temperature_positive_max (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 21474836.47F, RE_ENV_TEMP);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0x7FU == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_temperature_negative_min (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, -21474836.47F, RE_ENV_TEMP);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0x80U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x01U == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_temperature_positive_overflow (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 21474837.0F, RE_ENV_TEMP);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0x7FU == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0xFFU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_temperature_negative_undeflow (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, -21474847.0F, RE_ENV_TEMP);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0x80U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x01U == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_humidity_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 22.546F, RE_ENV_HUMI);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x8U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0xCFU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_pressure_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 100101.546F, RE_ENV_PRES);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x01U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x87U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_accx_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_ACC_X);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_accy_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_ACC_Y);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_accz_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_ACC_Z);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_gyrx_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_GYR_X);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_gyry_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_GYR_Y);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
+
+void test_log_write_data_gyrz_positive_round_up (void)
+{
+    uint8_t buffer[11U] = {0};
+    re_status_t err_code = re_log_write_data (buffer, 1.5466F, RE_GYR_Z);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (0U == buffer[RE_LOG_WRITE_VALUE_MSB_IDX]);
+    TEST_ASSERT (0x00U == buffer[RE_LOG_WRITE_VALUE_B2_IDX]);
+    TEST_ASSERT (0x06U == buffer[RE_LOG_WRITE_VALUE_B3_IDX]);
+    TEST_ASSERT (0x0BU == buffer[RE_LOG_WRITE_VALUE_LSB_IDX]);
+}
