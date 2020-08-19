@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['stx',['stx',['../structre__ca__uart__tx__t.html#a0016500d356f9144ad98cf2db5243a70',1,'re_ca_uart_tx_t']]]
+  ['scan_5fphy',['scan_phy',['../structre__ca__uart__ble__all__bools__t.html#a4638b9a7edc6bb4e71185734d703a39a',1,'re_ca_uart_ble_all_bools_t']]],
+  ['state',['state',['../structre__ca__uart__ble__bool__t.html#a0b57aa10271a66f3dc936bba1d2f3830',1,'re_ca_uart_ble_bool_t']]]
 ];
