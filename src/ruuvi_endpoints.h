@@ -5,13 +5,19 @@
 
 #define RUUVI_ENDPOINTS_SEMVER "0.2.1"     //!< SEMVER of endpoints.
 
-#define RE_SUCCESS               (0U)
-#define RE_ERROR_DATA_SIZE       (1U << 3U)  //!< Data size too large/small.
-#define RE_ERROR_INVALID_PARAM   (1U << 4U)  //!< Invalid Parameter.
-#define RE_ERROR_NULL            (1U << 11U) //!< Null Pointer.
-#define RE_ERROR_ENCODING        (1U << 12U) //!< Data encoding failed.
-#define RE_ERROR_DECODING        (1U << 13U) //!< Data decoding failed.
-#define RE_ERROR_NOT_IMPLEMENTED (1U << 16U)   //!< Not implemented yet.
+#define RE_SUCCESS                  (0U)
+#define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.
+#define RE_ERROR_INVALID_PARAM      (1U << 4U)  //!< Invalid Parameter.
+#define RE_ERROR_NULL               (1U << 11U) //!< Null Pointer.
+#define RE_ERROR_ENCODING           (1U << 12U) //!< Data encoding failed.
+#define RE_ERROR_DECODING           (1U << 13U) //!< Data decoding failed.
+#define RE_ERROR_DECODING_LEN       (1U << 14U) //!< Data decoding len failed.
+#define RE_ERROR_DECODING_DELIMITER (1U << 15U) //!< Data decoding delimiter failed.
+#define RE_ERROR_DECODING_STX       (1U << 16U) //!< Data decoding stx failed.
+#define RE_ERROR_DECODING_ETX       (1U << 17U) //!< Data decoding etx failed.
+#define RE_ERROR_DECODING_CRC       (1U << 18U) //!< Data decoding crc failed.
+#define RE_ERROR_DECODING_CMD       (1U << 19U) //!< Data decoding cmd failed.
+#define RE_ERROR_NOT_IMPLEMENTED    (1U << 24U)   //!< Not implemented yet.
 
 typedef uint32_t re_status_t; //!< Status code
 typedef float    re_float;    //!< Ruuvi endpoint float type
