@@ -9,8 +9,8 @@
 #define RE_CA_ACK_OK            0
 #define RE_CA_ACK_ERROR         1
 
-#define RE_CA_BOOL_ENABLE       0
-#define RE_CA_BOOL_DISABLE      1
+#define RE_CA_BOOL_ENABLE       1
+#define RE_CA_BOOL_DISABLE      0
 
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
 #define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
