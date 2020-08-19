@@ -156,29 +156,30 @@ typedef struct
     uint16_t id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
 } re_ca_uart_ble_fltr_id_t;
 
-/** @brief Manufacturer filter payload. */
+/** @brief Ack filter payload. */
 typedef struct
 {
-    re_ca_uart_cmd_t cmd;
-    re_ca_uart_ble_bool_t ack_state;
+    re_ca_uart_cmd_t cmd; //!< Type of command discriminating the union.
+    re_ca_uart_ble_bool_t ack_state; //!< Ack state.
 } re_ca_uart_ble_ack_t;
 
+/** @brief All bool state filter payload. */
 typedef struct
 {
-    re_ca_uart_ble_bool_t fltr_tags;
-    re_ca_uart_ble_bool_t coded_phy;
-    re_ca_uart_ble_bool_t scan_phy;
-    re_ca_uart_ble_bool_t ext_payload;
-    re_ca_uart_ble_bool_t ch_37;
-    re_ca_uart_ble_bool_t ch_38;
-    re_ca_uart_ble_bool_t ch_39;
+    re_ca_uart_ble_bool_t fltr_tags;    //!< Filter tag bool state.
+    re_ca_uart_ble_bool_t coded_phy;    //!< Coded phy bool state.
+    re_ca_uart_ble_bool_t scan_phy;     //!< Scanned phy bool state.
+    re_ca_uart_ble_bool_t ext_payload;  //!< Pyload extension bool state.
+    re_ca_uart_ble_bool_t ch_37;        //!< Channel 37 bool state.
+    re_ca_uart_ble_bool_t ch_38;        //!< Channel 38 bool state.
+    re_ca_uart_ble_bool_t ch_39;        //!< Channel 39 bool state.
 } re_ca_uart_ble_all_bools_t;
 
 /** @brief BLE config struct. */
 typedef struct
 {
-    re_ca_uart_ble_fltr_id_t fltr_id;
-    re_ca_uart_ble_all_bools_t bools;
+    re_ca_uart_ble_fltr_id_t fltr_id;   //!< Filter id.
+    re_ca_uart_ble_all_bools_t bools;   //!< All bool state in payload.
 } re_ca_uart_ble_all_t;
 
 /** @brief Advertisement payload. */
@@ -223,11 +224,11 @@ typedef struct
         re_ca_uart_ble_ch_t       channels; //!< Channel param.
         re_ca_uart_ble_phy_t      phys;     //!< Phy param.
 #endif
-        re_ca_uart_ble_adv_t      adv;      //!< Advertisement report param.
-        re_ca_uart_ble_ack_t      ack;
-        re_ca_uart_ble_bool_t     bool_param;
-        re_ca_uart_ble_fltr_id_t  fltr_id_param;
-        re_ca_uart_ble_all_t      all_params;
+        re_ca_uart_ble_adv_t      adv;          //!< Advertisement report param.
+        re_ca_uart_ble_ack_t      ack;          //!< Ack param.
+        re_ca_uart_ble_bool_t     bool_param;   //!< Bool param.
+        re_ca_uart_ble_fltr_id_t  fltr_id_param;//!< Filter id param.
+        re_ca_uart_ble_all_t      all_params;   //!< All param.
     } params; //!< Command payload.
 } re_ca_uart_payload_t; //!< Structured payload.
 #pragma pack(pop)
