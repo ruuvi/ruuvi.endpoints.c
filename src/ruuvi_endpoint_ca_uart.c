@@ -267,6 +267,46 @@ static re_status_t re_ca_uart_decode_ack (const uint8_t * const buffer,
     return err_code;
 }
 
+static re_status_t re_ca_uart_decode_device_id (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_DEVICE_ID_LEN + RE_CA_UART_DEVICE_ADDR_LEN
+                                         + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    {
+        err_code |= RE_ERROR_DECODING_LEN;
+    }
+    else
+    {
+        payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
+        payload->params.device_id.id = * ( (uint64_t *) &buffer[RE_CA_UART_PAYLOAD_INDEX]);
+        payload->params.device_id.addr = * ( (uint64_t *) &buffer[RE_CA_UART_PAYLOAD_INDEX
+                                             + RE_CA_UART_DELIMITER_LEN
+                                             + RE_CA_UART_DEVICE_ID_LEN]);
+    }
+
+    return err_code;
+}
+
+static re_status_t re_ca_uart_decode_get_device_id (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_GET_DEVICE_ID_LEN
+                                         + (RE_CA_UART_GET_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    {
+        err_code |= RE_ERROR_DECODING_LEN;
+    }
+    else
+    {
+        payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
+    }
+
+    return err_code;
+}
+
 static re_status_t re_ca_uart_decode_all (const uint8_t * const buffer,
         re_ca_uart_payload_t * const payload)
 {
@@ -452,6 +492,14 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                 err_code |= re_ca_uart_decode_adv_rprt (buffer, payload);
                 break;
 
+            case RE_CA_UART_DEVICE_ID:
+                err_code |=  re_ca_uart_decode_device_id (buffer, payload);
+                break;
+
+            case RE_CA_UART_GET_DEVICE_ID:
+                err_code |=  re_ca_uart_decode_get_device_id (buffer, payload);
+                break;
+
             default:
                 err_code |= RE_ERROR_DECODING_CMD;
                 break;
@@ -595,6 +643,70 @@ static re_status_t re_ca_uart_encode_ack (uint8_t * const buffer,
     return err_code;
 }
 
+static re_status_t re_ca_uart_encode_device_id (uint8_t * const buffer,
+        uint8_t * const buf_len,
+        const re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint32_t written = 0;
+
+    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    {
+        err_code |= RE_ERROR_DATA_SIZE;
+    }
+    else
+    {
+        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_DEVICE_ID_LEN + RE_CA_UART_DEVICE_ADDR_LEN
+                                       + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
+        written += RE_CA_UART_HEADER_SIZE;
+        memcpy (buffer + written,
+                (void *) &payload->params.device_id.id,
+                RE_CA_UART_DEVICE_ID_LEN);
+        written += RE_CA_UART_DEVICE_ID_LEN;
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        memcpy (buffer + written,
+                (void *) &payload->params.device_id.id,
+                RE_CA_UART_DEVICE_ADDR_LEN);
+        written += RE_CA_UART_DEVICE_ADDR_LEN;
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        add_crc16 (buffer, &written);
+        buffer[written++] = RE_CA_UART_ETX;
+        *buf_len = written;
+    }
+
+    return err_code;
+}
+
+static re_status_t re_ca_uart_encode_get_device_id (uint8_t * const buffer,
+        uint8_t * const buf_len,
+        const re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint32_t written = 0;
+
+    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    {
+        err_code |= RE_ERROR_DATA_SIZE;
+    }
+    else
+    {
+        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_DEVICE_ID_LEN
+                                       + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_GET_DEVICE_ID_FIELDS);
+        buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
+        written += RE_CA_UART_HEADER_SIZE;
+        add_crc16 (buffer, &written);
+        buffer[written++] = RE_CA_UART_ETX;
+        *buf_len = written;
+    }
+
+    return err_code;
+}
+
 static re_status_t re_ca_uart_encode_all (uint8_t * const buffer,
         uint8_t * const buf_len,
         const re_ca_uart_payload_t * const payload)
@@ -689,6 +801,14 @@ re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
 
             case RE_CA_UART_ADV_RPRT:
                 err_code |=  re_ca_uart_encode_adv_rprt (buffer, buf_len, payload);
+                break;
+
+            case RE_CA_UART_DEVICE_ID:
+                err_code |=  re_ca_uart_encode_device_id (buffer, buf_len, payload);
+                break;
+
+            case RE_CA_UART_GET_DEVICE_ID:
+                err_code |=  re_ca_uart_encode_get_device_id (buffer, buf_len, payload);
                 break;
 
             default:
