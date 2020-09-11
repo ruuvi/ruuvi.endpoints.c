@@ -12,6 +12,8 @@
 #define RE_CA_BOOL_ENABLE       1
 #define RE_CA_BOOL_DISABLE      0
 
+#define RE_CA_UART_DEVICE_ID_BYTES (8U) //!< Number of bytes in DEVICE_ID
+#define RE_CA_UART_DEVICE_ADDR_BYTES (8U) //!< Number of bytes in DEVICE_ADDR
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
 #define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
 #define RE_CA_UART_RSSI_BYTES (1U) //!< Number of bytes in RSSI report.
@@ -81,18 +83,23 @@
 #define RE_CA_UART_ALL_CH_38_BIT        (5U) //!< Byte of bool params, starting from 0.
 #define RE_CA_UART_ALL_CH_39_BIT        (6U) //!< Byte of bool params, starting from 0.
 
-#define RE_CA_UART_STX_ETX_LEN      (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_BOOL_LEN     (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_FLTR_ID_LEN  (2U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ACK_LEN      (2U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ALL_BOOL_LEN (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ALL_LEN      (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN)
+#define RE_CA_UART_STX_ETX_LEN          (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_GET_DEVICE_ID_LEN    (0U) //!< Length of get device id payload
+#define RE_CA_UART_DEVICE_ID_LEN        (8U) //!< Length of device id payload
+#define RE_CA_UART_DEVICE_ADDR_LEN      (8U) //!< Length of device addr payload
+#define RE_CA_UART_CMD_BOOL_LEN         (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_FLTR_ID_LEN      (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ACK_LEN          (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ALL_BOOL_LEN     (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ALL_LEN          (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN)
 //!< Length of all command payload
 
-#define RE_CA_UART_BOOL_FIELDS      (1U)
-#define RE_CA_UART_ACK_FIELDS       (2U)
-#define RE_CA_UART_FLTR_ID_FIELDS   (1U)
-#define RE_CA_UART_ALL_FIELDS       (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
+#define RE_CA_UART_BOOL_FIELDS          (1U)
+#define RE_CA_UART_ACK_FIELDS           (2U)
+#define RE_CA_UART_DEVICE_ID_FIELDS     (2U)
+#define RE_CA_UART_GET_DEVICE_ID_FIELDS (0U)
+#define RE_CA_UART_FLTR_ID_FIELDS       (1U)
+#define RE_CA_UART_ALL_FIELDS           (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
 /** @breif Command types. */
 typedef enum
@@ -115,6 +122,8 @@ typedef enum
     RE_CA_UART_SET_CH_39        = 12, //!< Set channel 39.
     RE_CA_UART_SET_ALL          = 15,//!< Set all config.
     RE_CA_UART_ADV_RPRT         = 16,//!< Advertisement report. ACK no need.
+    RE_CA_UART_DEVICE_ID        = 17,//!< Send device id. ACK no need.
+    RE_CA_UART_GET_DEVICE_ID    = 24,//!< Get device id. Expect RE_CA_UART_DEVICE_ID.
     RE_CA_UART_ACK              = 32,//!< ACK
 } re_ca_uart_cmd_t;
 
@@ -182,6 +191,13 @@ typedef struct
     re_ca_uart_ble_all_bools_t bools;   //!< All bool state in payload.
 } re_ca_uart_ble_all_t;
 
+/** @brief BLE device id struct. */
+typedef struct
+{
+    uint64_t id;                        //!< DEVICE_ID, 64bits
+    uint64_t addr;                      //!< DEVICE_ADDR, 64bits
+} re_ca_uart_ble_id_t;
+
 /** @brief Advertisement payload. */
 typedef struct
 {
@@ -229,6 +245,7 @@ typedef struct
         re_ca_uart_ble_bool_t     bool_param;   //!< Bool param.
         re_ca_uart_ble_fltr_id_t  fltr_id_param;//!< Filter id param.
         re_ca_uart_ble_all_t      all_params;   //!< All param.
+        re_ca_uart_ble_id_t       device_id;    //!< Device id report.
     } params; //!< Command payload.
 } re_ca_uart_payload_t; //!< Structured payload.
 #pragma pack(pop)
