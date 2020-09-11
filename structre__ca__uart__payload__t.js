@@ -5,6 +5,7 @@ var structre__ca__uart__payload__t =
     [ "all_params", "structre__ca__uart__payload__t.html#aafe649522e04f9a58cdf7c1bf5319369", null ],
     [ "bool_param", "structre__ca__uart__payload__t.html#a588d1292466104fa1dcfa372bece2013", null ],
     [ "cmd", "structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9", null ],
+    [ "device_id", "structre__ca__uart__payload__t.html#aa1e767cd205ed9fe38c7abe90be9fc08", null ],
     [ "fltr_id_param", "structre__ca__uart__payload__t.html#a47f3b1d94b113532790c150051aa5ee9", null ],
     [ "params", "structre__ca__uart__payload__t.html#ae82f6459e45f452422df85d9118c6c29", null ]
 ];

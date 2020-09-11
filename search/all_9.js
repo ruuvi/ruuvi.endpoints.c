@@ -1,15 +1,6 @@
 var searchData=
 [
-  ['ruuvi_2eendpoints_2ec',['ruuvi.endpoints.c',['../index.html',1,'']]],
-  ['re_5f3_5fdata_5ft',['re_3_data_t',['../structre__3__data__t.html',1,'']]],
-  ['re_5f5_5fdata_5ft',['re_5_data_t',['../structre__5__data__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5fack_5ft',['re_ca_uart_ble_ack_t',['../structre__ca__uart__ble__ack__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5fadv_5ft',['re_ca_uart_ble_adv_t',['../structre__ca__uart__ble__adv__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5fall_5fbools_5ft',['re_ca_uart_ble_all_bools_t',['../structre__ca__uart__ble__all__bools__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5fall_5ft',['re_ca_uart_ble_all_t',['../structre__ca__uart__ble__all__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5fbool_5ft',['re_ca_uart_ble_bool_t',['../structre__ca__uart__ble__bool__t.html',1,'']]],
-  ['re_5fca_5fuart_5fble_5ffltr_5fid_5ft',['re_ca_uart_ble_fltr_id_t',['../structre__ca__uart__ble__fltr__id__t.html',1,'']]],
-  ['re_5fca_5fuart_5fpayload_5ft',['re_ca_uart_payload_t',['../structre__ca__uart__payload__t.html',1,'']]],
-  ['re_5fibeacon_5fdata_5ft',['re_ibeacon_data_t',['../structre__ibeacon__data__t.html',1,'']]],
-  ['rssi_5fdb',['rssi_db',['../structre__ca__uart__ble__adv__t.html#a3e9e9f0a0be7f6956f3c28789d8e66ad',1,'re_ca_uart_ble_adv_t']]]
+  ['params',['params',['../structre__ca__uart__payload__t.html#ae82f6459e45f452422df85d9118c6c29',1,'re_ca_uart_payload_t']]],
+  ['pressure_5fpa',['pressure_pa',['../structre__3__data__t.html#a6b53561bef0bcf81442f6ee13f077a17',1,'re_3_data_t::pressure_pa()'],['../structre__5__data__t.html#a6b53561bef0bcf81442f6ee13f077a17',1,'re_5_data_t::pressure_pa()']]],
+  ['proximity_5fuuid',['proximity_uuid',['../structre__ibeacon__data__t.html#a563fdda8fd1d9bdb2922f92860dfae74',1,'re_ibeacon_data_t']]]
 ];
