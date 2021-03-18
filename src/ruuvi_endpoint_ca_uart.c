@@ -756,6 +756,32 @@ static re_status_t re_ca_uart_encode_all (uint8_t * const buffer,
     return err_code;
 }
 
+static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer, uint8_t * const buf_len,
+                                       const re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint32_t written;
+
+    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    {
+        err_code |= RE_ERROR_DATA_SIZE;
+    }
+    else
+    {
+        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_ALL_LEN + (RE_CA_UART_ALL_FIELDS *
+                                       RE_CA_UART_GET_ALL_FIELDS);
+        buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
+        written += RE_CA_UART_HEADER_SIZE;
+        add_crc16 (buffer, &written);
+        buffer[written++] = RE_CA_UART_ETX;
+        *buf_len = written;
+    }
+
+    return err_code;
+}
+
 re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
                                const re_ca_uart_payload_t * const payload)
 {
@@ -809,6 +835,10 @@ re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
 
             case RE_CA_UART_GET_DEVICE_ID:
                 err_code |=  re_ca_uart_encode_get_device_id (buffer, buf_len, payload);
+                break;
+
+            case RE_CA_UART_GET_ALL:
+                err_code |= re_ca_uart_encode_get_all (buffer, buf_len, payload);
                 break;
 
             default:

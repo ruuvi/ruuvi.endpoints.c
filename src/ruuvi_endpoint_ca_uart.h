@@ -85,6 +85,7 @@
 
 #define RE_CA_UART_STX_ETX_LEN          (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_GET_DEVICE_ID_LEN    (0U) //!< Length of get device id payload
+#define RE_CA_UART_GET_ALL_LEN          (0U) //!< Length of get configuration payload
 #define RE_CA_UART_DEVICE_ID_LEN        (8U) //!< Length of device id payload
 #define RE_CA_UART_DEVICE_ADDR_LEN      (8U) //!< Length of device addr payload
 #define RE_CA_UART_CMD_BOOL_LEN         (1U) //!< Length of cmd with bool payload
@@ -98,6 +99,7 @@
 #define RE_CA_UART_ACK_FIELDS           (2U)
 #define RE_CA_UART_DEVICE_ID_FIELDS     (2U)
 #define RE_CA_UART_GET_DEVICE_ID_FIELDS (0U)
+#define RE_CA_UART_GET_ALL_FIELDS       (0U)
 #define RE_CA_UART_FLTR_ID_FIELDS       (1U)
 #define RE_CA_UART_ALL_FIELDS           (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
@@ -124,6 +126,7 @@ typedef enum
     RE_CA_UART_ADV_RPRT         = 16,//!< Advertisement report. ACK no need.
     RE_CA_UART_DEVICE_ID        = 17,//!< Send device id. ACK no need.
     RE_CA_UART_GET_DEVICE_ID    = 24,//!< Get device id. Expect RE_CA_UART_DEVICE_ID.
+    RE_CA_UART_GET_ALL          = 25,//!< Get all config.
     RE_CA_UART_ACK              = 32,//!< ACK
 } re_ca_uart_cmd_t;
 
