@@ -841,99 +841,100 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__ca__uart_8c_source.ht
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    <span class="keywordflow">return</span> err_code;</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;}</div>
 <div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="keyword">static</span> re_status_t re_ca_uart_encode_get_all (uint8_t * <span class="keyword">const</span> buffer, uint8_t * <span class="keyword">const</span> buf_len,</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="structre__ca__uart__payload__t.html">re_ca_uart_payload_t</a> * <span class="keyword">const</span> payload)</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;{</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    re_status_t err_code = RE_SUCCESS;</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    uint32_t written;</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160; </div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    <span class="keywordflow">if</span> (RE_CA_UART_TX_MAX_LEN &gt; *buf_len)</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    {</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;        err_code |= RE_ERROR_DATA_SIZE;</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    }</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    {</div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        <span class="comment">// Payload length is different from total message length.</span></div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_ALL_LEN + (RE_CA_UART_ALL_FIELDS *</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;                                       RE_CA_UART_GET_ALL_FIELDS);</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;        buffer[RE_CA_UART_CMD_INDEX] = payload-&gt;<a class="code" href="structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a>;</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        written += RE_CA_UART_HEADER_SIZE;</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;        add_crc16 (buffer, &amp;written);</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;        buffer[written++] = RE_CA_UART_ETX;</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;        *buf_len = written;</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;    }</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160; </div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    <span class="keywordflow">return</span> err_code;</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;}</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160; </div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;re_status_t re_ca_uart_encode (uint8_t * <span class="keyword">const</span> buffer, uint8_t * <span class="keyword">const</span> buf_len,</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;                               <span class="keyword">const</span> <a class="code" href="structre__ca__uart__payload__t.html">re_ca_uart_payload_t</a> * <span class="keyword">const</span> payload)</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;{</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;    re_status_t err_code = RE_SUCCESS;</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160; </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;    <span class="keywordflow">if</span> (NULL == buffer)</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    {</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;        err_code |= RE_ERROR_NULL;</div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    }</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL == buf_len)</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    {</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        err_code |= RE_ERROR_NULL;</div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;    }</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL == payload)</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;    {</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;        err_code |= RE_ERROR_NULL;</div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;    }</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    {</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;        <span class="keywordflow">switch</span> (payload-&gt;<a class="code" href="structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a>)</div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;        {</div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_FLTR_TAGS:</div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CODED_PHY:</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_SCAN_1MB_PHY:</div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_EXT_PAYLOAD:</div>
-<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_37:</div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_38:</div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_39:</div>
-<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;                err_code |= re_ca_uart_encode_bool_payload (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160; </div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_ACK:</div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;                err_code |= re_ca_uart_encode_ack (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
-<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_FLTR_ID:</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;                err_code |= re_ca_uart_encode_fltr_id (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160; </div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_ALL:</div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                err_code |= re_ca_uart_encode_all (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160; </div>
-<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_ADV_RPRT:</div>
-<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;                err_code |=  re_ca_uart_encode_adv_rprt (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160; </div>
-<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_DEVICE_ID:</div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;                err_code |=  re_ca_uart_encode_device_id (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160; </div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_GET_DEVICE_ID:</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;                err_code |=  re_ca_uart_encode_get_device_id (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160; </div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_GET_ALL:</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;                err_code |= re_ca_uart_encode_get_all (buffer, buf_len, payload);</div>
-<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160; </div>
-<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;            <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;                err_code |= RE_ERROR_INVALID_PARAM;</div>
-<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;        }</div>
-<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;    }</div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160; </div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;    <span class="keywordflow">return</span> err_code;</div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;}</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="keyword">static</span> re_status_t re_ca_uart_encode_get_all (uint8_t * <span class="keyword">const</span> buffer,</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;        uint8_t * <span class="keyword">const</span> buf_len,</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        <span class="keyword">const</span> <a class="code" href="structre__ca__uart__payload__t.html">re_ca_uart_payload_t</a> * <span class="keyword">const</span> payload)</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;{</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    re_status_t err_code = RE_SUCCESS;</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    uint32_t written;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160; </div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    <span class="keywordflow">if</span> (RE_CA_UART_TX_MAX_LEN &gt; *buf_len)</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    {</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;        err_code |= RE_ERROR_DATA_SIZE;</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    }</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    {</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;        <span class="comment">// Payload length is different from total message length.</span></div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_ALL_LEN + (RE_CA_UART_ALL_FIELDS *</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;                                       RE_CA_UART_GET_ALL_FIELDS);</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        buffer[RE_CA_UART_CMD_INDEX] = payload-&gt;<a class="code" href="structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a>;</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;        written += RE_CA_UART_HEADER_SIZE;</div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;        add_crc16 (buffer, &amp;written);</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;        buffer[written++] = RE_CA_UART_ETX;</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;        *buf_len = written;</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    }</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160; </div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;    <span class="keywordflow">return</span> err_code;</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;}</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160; </div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;re_status_t re_ca_uart_encode (uint8_t * <span class="keyword">const</span> buffer, uint8_t * <span class="keyword">const</span> buf_len,</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;                               <span class="keyword">const</span> <a class="code" href="structre__ca__uart__payload__t.html">re_ca_uart_payload_t</a> * <span class="keyword">const</span> payload)</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;{</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;    re_status_t err_code = RE_SUCCESS;</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160; </div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    <span class="keywordflow">if</span> (NULL == buffer)</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    {</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;        err_code |= RE_ERROR_NULL;</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    }</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL == buf_len)</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;    {</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;        err_code |= RE_ERROR_NULL;</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;    }</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (NULL == payload)</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;    {</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;        err_code |= RE_ERROR_NULL;</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    }</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;    {</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;        <span class="keywordflow">switch</span> (payload-&gt;<a class="code" href="structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">cmd</a>)</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;        {</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_FLTR_TAGS:</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CODED_PHY:</div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_SCAN_1MB_PHY:</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_EXT_PAYLOAD:</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_37:</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_38:</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_CH_39:</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;                err_code |= re_ca_uart_encode_bool_payload (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160; </div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_ACK:</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;                err_code |= re_ca_uart_encode_ack (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160; </div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_FLTR_ID:</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;                err_code |= re_ca_uart_encode_fltr_id (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_SET_ALL:</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;                err_code |= re_ca_uart_encode_all (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160; </div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_ADV_RPRT:</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;                err_code |=  re_ca_uart_encode_adv_rprt (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160; </div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_DEVICE_ID:</div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;                err_code |=  re_ca_uart_encode_device_id (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160; </div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_GET_DEVICE_ID:</div>
+<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;                err_code |=  re_ca_uart_encode_get_device_id (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160; </div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;            <span class="keywordflow">case</span> RE_CA_UART_GET_ALL:</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;                err_code |= re_ca_uart_encode_get_all (buffer, buf_len, payload);</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160; </div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;            <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;                err_code |= RE_ERROR_INVALID_PARAM;</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        }</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;    }</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160; </div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;    <span class="keywordflow">return</span> err_code;</div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="astructre__ca__uart__payload__t_html_aa0c189d39b519ae4f2bc1287a4be1fd9"><div class="ttname"><a href="structre__ca__uart__payload__t.html#aa0c189d39b519ae4f2bc1287a4be1fd9">re_ca_uart_payload_t::cmd</a></div><div class="ttdeci">re_ca_uart_cmd_t cmd</div><div class="ttdoc">Type of command discriminating the union.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__ca__uart_8h_source.html#l00238">ruuvi_endpoint_ca_uart.h:238</a></div></div>
