@@ -756,8 +756,9 @@ static re_status_t re_ca_uart_encode_all (uint8_t * const buffer,
     return err_code;
 }
 
-static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer, uint8_t * const buf_len,
-                                       const re_ca_uart_payload_t * const payload)
+static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer,
+        uint8_t * const buf_len,
+        const re_ca_uart_payload_t * const payload)
 {
     re_status_t err_code = RE_SUCCESS;
     uint32_t written;
