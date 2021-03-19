@@ -761,7 +761,7 @@ static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer,
         const re_ca_uart_payload_t * const payload)
 {
     re_status_t err_code = RE_SUCCESS;
-    uint32_t written;
+    uint32_t written = 0;
 
     if (RE_CA_UART_TX_MAX_LEN > *buf_len)
     {
