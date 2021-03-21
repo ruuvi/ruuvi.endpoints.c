@@ -1097,6 +1097,43 @@ void test_ruuvi_endpoint_ca_uart_get_device_id_decode_invalid (void)
     TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
+void test_ruuvi_endpoint_ca_uart_get_all_decode (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t data[] =
+        {
+            RE_CA_UART_STX,
+            0 + CMD_IN_LEN,
+            RE_CA_UART_GET_ALL,
+            0x17U, 0x9EU, //crc
+            RE_CA_UART_ETX
+        };
+    re_ca_uart_cmd_t expect_cmd = RE_CA_UART_GET_ALL;
+    re_ca_uart_payload_t payload = {0};
+    err_code = re_ca_uart_decode (data, &payload);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
+}
+
+void test_ruuvi_endpoint_ca_uart_get_all_decode_invalid (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t data[] =
+        {
+            RE_CA_UART_STX,
+            1 + CMD_IN_LEN,
+            RE_CA_UART_GET_ALL,
+            0x01U,
+            0x66U, 0x52U, //crc
+            RE_CA_UART_ETX
+        };
+    re_ca_uart_cmd_t expect_cmd = RE_CA_UART_GET_ALL;
+    re_ca_uart_payload_t payload = {0};
+    err_code = re_ca_uart_decode (data, &payload);
+    TEST_ASSERT (RE_ERROR_DECODING_LEN == err_code);
+    TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
+}
+
 void test_ruuvi_endpoint_ca_uart_bool_decode (void)
 {
     re_status_t err_code = RE_SUCCESS;

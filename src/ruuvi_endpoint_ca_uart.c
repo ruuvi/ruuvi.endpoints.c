@@ -307,6 +307,24 @@ static re_status_t re_ca_uart_decode_get_device_id (const uint8_t * const buffer
     return err_code;
 }
 
+static re_status_t re_ca_uart_decode_get_all (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_GET_ALL_LEN
+                                         + (RE_CA_UART_GET_ALL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    {
+        err_code |= RE_ERROR_DECODING_LEN;
+    }
+    else
+    {
+        payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
+    }
+
+    return err_code;
+}
+
 static re_status_t re_ca_uart_decode_all (const uint8_t * const buffer,
         re_ca_uart_payload_t * const payload)
 {
@@ -498,6 +516,10 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
 
             case RE_CA_UART_GET_DEVICE_ID:
                 err_code |=  re_ca_uart_decode_get_device_id (buffer, payload);
+                break;
+
+            case RE_CA_UART_GET_ALL:
+                err_code |=  re_ca_uart_decode_get_all (buffer, payload);
                 break;
 
             default:
