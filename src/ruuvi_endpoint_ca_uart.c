@@ -68,22 +68,18 @@ static void add_crc16 (uint8_t * const buffer,
 static bool check_crc (const uint8_t * const buffer,
                        const uint32_t written)
 {
-    bool state = false;
     uint16_t crc16 = RE_CA_CRC_INVALID;
     uint16_t p_crc = RE_CA_CRC_DEFAULT;
     uint16_t in_crc = * ( (uint16_t *) &buffer[written]);
     crc16 = calculate_crc16 (buffer + RE_CA_UART_STX_ETX_LEN,
                              written - RE_CA_UART_STX_ETX_LEN, &p_crc);
 
-    if (crc16 != RE_CA_CRC_INVALID)
+    if (in_crc != crc16)
     {
-        if (in_crc == crc16)
-        {
-            state = true;
-        }
+        return false;
     }
 
-    return state;
+    return true;
 }
 
 static inline int8_t u8toi8 (const uint8_t byte)
