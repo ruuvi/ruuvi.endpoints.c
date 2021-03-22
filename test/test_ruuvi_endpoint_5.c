@@ -1,6 +1,7 @@
 ﻿#include "unity.h"
 
 #include "ruuvi_endpoint_5.h"
+#include <string.h>
 
 static const re_5_data_t m_re_5_data_ok =
 {
