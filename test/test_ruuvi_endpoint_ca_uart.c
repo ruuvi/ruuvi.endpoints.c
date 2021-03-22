@@ -1101,13 +1101,13 @@ void test_ruuvi_endpoint_ca_uart_get_all_decode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
-        {
-            RE_CA_UART_STX,
-            0 + CMD_IN_LEN,
-            RE_CA_UART_GET_ALL,
-            0x17U, 0x9EU, //crc
-            RE_CA_UART_ETX
-        };
+    {
+        RE_CA_UART_STX,
+        0 + CMD_IN_LEN,
+        RE_CA_UART_GET_ALL,
+        0x17U, 0x9EU, //crc
+        RE_CA_UART_ETX
+    };
     re_ca_uart_cmd_t expect_cmd = RE_CA_UART_GET_ALL;
     re_ca_uart_payload_t payload = {0};
     err_code = re_ca_uart_decode (data, &payload);
@@ -1119,14 +1119,14 @@ void test_ruuvi_endpoint_ca_uart_get_all_decode_invalid (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
-        {
-            RE_CA_UART_STX,
-            1 + CMD_IN_LEN,
-            RE_CA_UART_GET_ALL,
-            0x01U,
-            0x66U, 0x52U, //crc
-            RE_CA_UART_ETX
-        };
+    {
+        RE_CA_UART_STX,
+        1 + CMD_IN_LEN,
+        RE_CA_UART_GET_ALL,
+        0x01U,
+        0x66U, 0x52U, //crc
+        RE_CA_UART_ETX
+    };
     re_ca_uart_cmd_t expect_cmd = RE_CA_UART_GET_ALL;
     re_ca_uart_payload_t payload = {0};
     err_code = re_ca_uart_decode (data, &payload);
