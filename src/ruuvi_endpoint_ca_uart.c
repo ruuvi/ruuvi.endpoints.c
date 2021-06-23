@@ -36,7 +36,7 @@ static inline uint64_t array_to_u64 (const uint8_t * const array, uint8_t bytes)
 
     while (bytes--)
     {
-        rvalue += (uint64_t)array[bytes] << ((offset - bytes) * 8U);
+        rvalue += (uint64_t) array[bytes] << ( (offset - bytes) * 8U);
     }
 
     return rvalue;
