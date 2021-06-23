@@ -686,7 +686,7 @@ static re_status_t re_ca_uart_encode_device_id (uint8_t * const buffer,
         written += RE_CA_UART_DEVICE_ID_LEN;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         memcpy (buffer + written,
-                (void *) &payload->params.device_id.id,
+                (void *) &payload->params.device_id.mac,
                 RE_CA_UART_DEVICE_ADDR_LEN);
         written += RE_CA_UART_DEVICE_ADDR_LEN;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;

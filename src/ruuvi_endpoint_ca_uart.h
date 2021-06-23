@@ -87,7 +87,7 @@
 #define RE_CA_UART_GET_DEVICE_ID_LEN    (0U) //!< Length of get device id payload
 #define RE_CA_UART_GET_ALL_LEN          (0U) //!< Length of get configuration payload
 #define RE_CA_UART_DEVICE_ID_LEN        (8U) //!< Length of device id payload
-#define RE_CA_UART_DEVICE_ADDR_LEN      (8U) //!< Length of device addr payload
+#define RE_CA_UART_DEVICE_ADDR_LEN      (6U) //!< Length of device addr payload
 #define RE_CA_UART_CMD_BOOL_LEN         (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_FLTR_ID_LEN      (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ACK_LEN          (2U) //!< Length of cmd with bool payload
