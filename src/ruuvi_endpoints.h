@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "3.0.0"     //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "3.0.1"     //!< SEMVER of endpoints.
 
 #define RE_SUCCESS                  (0U)
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.
