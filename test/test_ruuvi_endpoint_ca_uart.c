@@ -147,24 +147,24 @@ void test_ruuvi_endpoint_ca_uart_encode_null (void)
 void test_ruuvi_endpoint_ca_uart_device_id_encode (void)
 {
     re_status_t err_code = RE_SUCCESS;
-    const uint8_t expected_size = 18 + CMD_IN_LEN;
+    const uint8_t expected_size = 16 + CMD_IN_LEN;
     uint8_t expected[] =
     {
         RE_CA_UART_STX,
         expected_size,
         RE_CA_UART_DEVICE_ID,
-        0xE8U, 0x7DU, 0x21U, 0x51U, 0XE1U, 0xCCU, 0x0CU, 0x2CU,
+        0x2CU, 0x0CU, 0xCCU, 0xE1U, 0X51U, 0x21U, 0x7DU, 0xE8U,
         RE_CA_UART_FIELD_DELIMITER,
-        0xE8U, 0x7DU, 0x21U, 0x51U, 0XE1U, 0xCCU, 0x0CU, 0x2CU,
+        0xCCU, 0xE1U, 0xDEU, 0xADU, 0XBEU, 0xEFU,
         RE_CA_UART_FIELD_DELIMITER,
-        0xF5U, 0x95U, //crc
+        0xECU, 0x36U, //crc
         RE_CA_UART_ETX
     };
     re_ca_uart_cmd_t cmd = RE_CA_UART_DEVICE_ID;
     re_ca_uart_ble_id_t params =
     {
         .id = 0x2C0CCCE151217DE8,
-        .addr = 0x2C0CCCE151217DE8
+        .addr = 0x2C0CCCE1DEADBEEF
     };
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
@@ -1013,18 +1013,18 @@ void test_ruuvi_endpoint_ca_uart_device_id_decode (void)
     uint8_t data[] =
     {
         RE_CA_UART_STX,
-        18 + CMD_IN_LEN,
+        16 + CMD_IN_LEN,
         RE_CA_UART_DEVICE_ID,
         0xE8U, 0x7DU, 0x21U, 0x51U, 0XE1U, 0xCCU, 0x0CU, 0x2CU,
         RE_CA_UART_FIELD_DELIMITER,
-        0xE8U, 0x7DU, 0x21U, 0x51U, 0XE1U, 0xCCU, 0x0CU, 0x2CU,
+        0xCCU, 0xE1U, 0xDEU, 0xADU, 0XBEU, 0xEFU,
         RE_CA_UART_FIELD_DELIMITER,
-        0xF5U, 0x95U, //crc
+        0x45U, 0x14U, //crc
         RE_CA_UART_ETX
     };
     re_ca_uart_ble_id_t expect_params = {0};
-    expect_params.id = 0x2C0CCCE151217DE8;
-    expect_params.addr = 0x2C0CCCE151217DE8;
+    expect_params.id   = 0xE87D2151E1CC0C2C;
+    expect_params.addr = 0x0000CCE1DEADBEEF;
     re_ca_uart_cmd_t expect_cmd = RE_CA_UART_DEVICE_ID;
     re_ca_uart_payload_t payload = {0};
     err_code = re_ca_uart_decode (data, &payload);
