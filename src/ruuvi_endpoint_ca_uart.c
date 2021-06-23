@@ -15,6 +15,33 @@
 #define I8_MIN (-128)
 #define U8_OVERFLOW (256)
 
+/** @brief serialise up to U64 into given buffer, MSB first. */
+static inline void u64_to_array (const uint64_t u64,
+                                 uint8_t * const array,
+                                 uint8_t bytes)
+{
+    const uint8_t offset = bytes - 1;
+
+    while (bytes--)
+    {
+        array[offset - bytes] = (u64 >> (8U * bytes)) & 0xFFU;
+    }
+}
+
+/** @brief serialise given buffer to u64, MSB first. */
+static inline uint64_t array_to_u64 (const uint8_t * const array, uint8_t bytes)
+{
+    const uint8_t offset = bytes - 1;
+    uint64_t rvalue = 0;
+
+    while (bytes--)
+    {
+        rvalue += (uint64_t)array[bytes] << ((offset - bytes) * 8U);
+    }
+
+    return rvalue;
+}
+
 /** @brief Function for calculating CRC-16 in blocks. Conforms to CRC-CCITT (0xFFFF)*/
 static uint16_t calculate_crc16 (const uint8_t * p_data,
                                  const uint32_t size,
@@ -276,10 +303,12 @@ static re_status_t re_ca_uart_decode_device_id (const uint8_t * const buffer,
     else
     {
         payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
-        payload->params.device_id.id = * ( (uint64_t *) &buffer[RE_CA_UART_PAYLOAD_INDEX]);
-        payload->params.device_id.addr = * ( (uint64_t *) &buffer[RE_CA_UART_PAYLOAD_INDEX
-                                             + RE_CA_UART_DELIMITER_LEN
-                                             + RE_CA_UART_DEVICE_ID_LEN]);
+        payload->params.device_id.id = array_to_u64 (buffer + RE_CA_UART_PAYLOAD_INDEX,
+                                       RE_CA_UART_DEVICE_ID_LEN);
+        payload->params.device_id.addr = array_to_u64 (buffer + RE_CA_UART_PAYLOAD_INDEX
+                                         + RE_CA_UART_DELIMITER_LEN
+                                         + RE_CA_UART_DEVICE_ID_LEN,
+                                         RE_CA_UART_DEVICE_ADDR_LEN);
     }
 
     return err_code;
@@ -680,14 +709,11 @@ static re_status_t re_ca_uart_encode_device_id (uint8_t * const buffer,
                                        + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN);
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
-        memcpy (buffer + written,
-                (void *) &payload->params.device_id.id,
-                RE_CA_UART_DEVICE_ID_LEN);
+        u64_to_array (payload->params.device_id.id, buffer + written, RE_CA_UART_DEVICE_ID_LEN);
         written += RE_CA_UART_DEVICE_ID_LEN;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
-        memcpy (buffer + written,
-                (void *) &payload->params.device_id.addr,
-                RE_CA_UART_DEVICE_ADDR_LEN);
+        u64_to_array (payload->params.device_id.addr, buffer + written,
+                      RE_CA_UART_DEVICE_ADDR_LEN);
         written += RE_CA_UART_DEVICE_ADDR_LEN;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         add_crc16 (buffer, &written);
