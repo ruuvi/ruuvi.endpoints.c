@@ -35,14 +35,6 @@ static void re_fa_encode_set_address (uint8_t * const buffer,
     }
 }
 
-/**
- * @brief Encode data to Ruuvi Format FA.
- *
- * @param[out] buffer 23-byte buffer into which data is encoded.
- * @param[in]  data Data to encode.
- * @param[in] invalid re_float value treated as not available. NAN recommended.
- * @retval RE_SUCCESS if data was encoded successfully.
- */
 re_status_t re_fa_encode (uint8_t * const buffer,
                           const re_fa_data_t * const data,
                           const re_float invalid,
