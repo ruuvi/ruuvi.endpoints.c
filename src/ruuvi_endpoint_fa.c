@@ -60,15 +60,15 @@ re_status_t re_fa_encode (uint8_t * const buffer,
     buffer[RE_FA_OFFSET_COUNTER] = data->message_counter;
     buffer[RE_FA_OFFSET_TRAILING_NULL_1] = 0;
     buffer[RE_FA_OFFSET_TRAILING_NULL_2] = 0;
-    cipher_status = cipher (buffer + 1, ciphertext, RE_FA_CIPHERTEXT_LENGTH, key, 
+    cipher_status = cipher (buffer + 1, ciphertext, RE_FA_CIPHERTEXT_LENGTH, key,
                             key_size);
 
-    if(0 != cipher_status)
+    if (0 != cipher_status)
     {
         encoding_status |= RE_ERROR_ENCODING;
     }
 
     memcpy (buffer + 1, ciphertext, RE_FA_CIPHERTEXT_LENGTH);
-    re_fa_encode_set_address(buffer, data);
+    re_fa_encode_set_address (buffer, data);
     return encoding_status;
 }

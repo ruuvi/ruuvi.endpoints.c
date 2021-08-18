@@ -15,30 +15,30 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define RE_FA_DESTINATION       (0xFAU)
-#define RE_FA_INVALID_DATA      (0U)
-#define RE_FA_DATA_LENGTH       (23U)
-#define RE_FA_CIPHERTEXT_LENGTH (16U)
+#define RE_FA_DESTINATION       (0xFAU)         //!< Header identification
+#define RE_FA_INVALID_DATA      (0U)            //!< Unencrypted N/A value
+#define RE_FA_DATA_LENGTH       (23U)           //!< Length of data, in bytes
+#define RE_FA_CIPHERTEXT_LENGTH (16U)           //!< Length of encrypted data
 
-#define RE_FA_OFFSET_HEADER               (0U)
-#define RE_FA_OFFSET_HUMIDITY             (1U)
-#define RE_FA_OFFSET_TEMPERATURE_DECIMAL  (2U)
-#define RE_FA_OFFSET_TEMPERATURE_FRACTION (3U)
-#define RE_FA_OFFSET_PRESSURE_MSB         (4U)
-#define RE_FA_OFFSET_PRESSURE_LSB         (5U)
-#define RE_FA_OFFSET_ACCELERATIONX_MSB    (6U)
-#define RE_FA_OFFSET_ACCELERATIONX_LSB    (7U)
-#define RE_FA_OFFSET_ACCELERATIONY_MSB    (8U)
-#define RE_FA_OFFSET_ACCELERATIONY_LSB    (9U)
-#define RE_FA_OFFSET_ACCELERATIONZ_MSB    (10U)
-#define RE_FA_OFFSET_ACCELERATIONZ_LSB    (11U)
-#define RE_FA_OFFSET_VOLTAGE_MSB          (12U)
-#define RE_FA_OFFSET_VOLTAGE_LSB          (13U)
-#define RE_FA_OFFSET_COUNTER              (14U)
-#define RE_FA_OFFSET_TRAILING_NULL_1      (15U)
-#define RE_FA_OFFSET_TRAILING_NULL_2      (16U)
-#define RE_FA_OFFSET_ADDRESS_MSB          (17U)
-#define RE_FA_OFFSET_ADDRESS_LSB          (RE_FA_OFFSET_ADDRESS_MSB + 5U)
+#define RE_FA_OFFSET_HEADER               (0U)  //!< Index of header
+#define RE_FA_OFFSET_HUMIDITY             (1U)  //!< Index of humidity
+#define RE_FA_OFFSET_TEMPERATURE_DECIMAL  (2U)  //!< Index of MSB temperature
+#define RE_FA_OFFSET_TEMPERATURE_FRACTION (3U)  //!< Index of LSB temperature
+#define RE_FA_OFFSET_PRESSURE_MSB         (4U)  //!< Index of MSB pressure
+#define RE_FA_OFFSET_PRESSURE_LSB         (5U)  //!< Index of LSB pressure
+#define RE_FA_OFFSET_ACCELERATIONX_MSB    (6U)  //!< Index of X-axis accelration MSB
+#define RE_FA_OFFSET_ACCELERATIONX_LSB    (7U)  //!< Index of X-axis accelration LSB
+#define RE_FA_OFFSET_ACCELERATIONY_MSB    (8U)  //!< Index of Y-axis accelration MSB
+#define RE_FA_OFFSET_ACCELERATIONY_LSB    (9U)  //!< Index of Y-axis accelration LSB
+#define RE_FA_OFFSET_ACCELERATIONZ_MSB    (10U) //!< Index of Z-axis accelration MSB
+#define RE_FA_OFFSET_ACCELERATIONZ_LSB    (11U) //!< Index of Z-axis accelration LSB
+#define RE_FA_OFFSET_VOLTAGE_MSB          (12U) //!< Index of voltage MSB
+#define RE_FA_OFFSET_VOLTAGE_LSB          (13U) //!< Index of voltage LSB
+#define RE_FA_OFFSET_COUNTER              (14U) //!< Index og counter byte
+#define RE_FA_OFFSET_TRAILING_NULL_1      (15U) //!< Trailing NULL 1
+#define RE_FA_OFFSET_TRAILING_NULL_2      (16U) //!< Trailing NULL 2
+#define RE_FA_OFFSET_ADDRESS_MSB          (17U) //!< Plaintext Address offset
+#define RE_FA_OFFSET_ADDRESS_LSB          (RE_FA_OFFSET_ADDRESS_MSB + 5U) //!< Addr end.
 
 /** @brief All data required for Ruuvi dataformat fa package. */
 typedef struct
@@ -84,14 +84,15 @@ typedef uint32_t (*re_fa_encrypt_fp) (const uint8_t * const cleartext,
  *
  * @param[out] buffer 23-byte buffer into which data is encoded.
  * @param[in]  data Data to encode.
- * @param[in]  invalid re_float value treated as not available. NAN recommended.
- * @param[in]  Encryption key for data format.
- * @param[in]
+ * @param[in]  invalid float value treated as not available. Must be NAN.
+ * @param[in]  Function pointer to encryption function.
+ * @param[in]  key Encryption key for data format.
+ * @param[in]  key_size Encryption key length in bytes.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_fa_encode (uint8_t * const buffer,
                           const re_fa_data_t * const data,
-                          const re_float invalid,
+                          const float invalid,
                           re_fa_encrypt_fp cipher,
                           const uint8_t * const key,
                           const size_t key_size);

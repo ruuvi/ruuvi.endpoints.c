@@ -66,6 +66,7 @@ uint32_t mock_encrypt (const uint8_t * const cleartext,
     {
         memcpy (ciphertext, TEST_VECT_OUT, RE_FA_CIPHERTEXT_LENGTH);
     }
+
     return ret_code;
 }
 
@@ -84,7 +85,7 @@ void test_re_fa_encode_ok (void)
     re_status_t err_code = RE_SUCCESS;
     uint8_t buffer[23] = {0};
     static uint8_t re_3_value[RE_3_DATA_LENGTH] = {0};
-    memcpy(re_3_value + 1, TEST_VECT_IN, RE_3_DATA_LENGTH - 1);
+    memcpy (re_3_value + 1, TEST_VECT_IN, RE_3_DATA_LENGTH - 1);
     re_fa_data_t data =
     {
         .address = 0xC000DEADBEEF,
