@@ -1,3 +1,6 @@
+# 3.1.0
+ - Add encrypted data formats 0x08, 0xFA
+
 # 3.0.0
  - Stable release
 
