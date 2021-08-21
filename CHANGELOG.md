@@ -1,3 +1,7 @@
+# 3.1.0
+ - Add encrypted data formats 0x08, 0xFA
+ - Fix Dataformat 5 overflow bugs.
+
 # 3.0.0
  - Stable release
 

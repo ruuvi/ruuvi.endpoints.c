@@ -22,6 +22,11 @@
 #define RE_5_INVALID_MAC          0xFFFFFFFFFFFF
 #define RE_5_DATA_LENGTH          24
 
+#define RE_5_TEMPERATURE_MAX      
+#define RE_5_TEMPERATURE_MIN
+#define RE_5_HUMIDITY_MAX      
+#define RE_5_HUMIDITY_MIN      
+
 #define RE_5_OFFSET_HEADER               0
 #define RE_5_OFFSET_TEMPERATURE_MSB      1
 #define RE_5_OFFSET_TEMPERATURE_LSB      2
