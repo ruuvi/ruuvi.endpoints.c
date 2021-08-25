@@ -155,7 +155,7 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
                                              / RE_5_TXPWR_RATIO);
     }
 
-    uint16_t power_info = (coded_voltage << RE_5_BYTE_VOLTAGE_OFFSET)
+    uint16_t power_info = ((uint16_t) (coded_voltage << RE_5_BYTE_VOLTAGE_OFFSET))
                           + coded_tx_power;
     buffer[RE_5_OFFSET_POWER_MSB] = (power_info >> RE_5_BYTE_1_SHIFT);
     buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
