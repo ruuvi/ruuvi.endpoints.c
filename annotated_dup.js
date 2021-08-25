@@ -10,5 +10,6 @@ var annotated_dup =
     [ "re_ca_uart_ble_fltr_id_t", "structre__ca__uart__ble__fltr__id__t.html", "structre__ca__uart__ble__fltr__id__t" ],
     [ "re_ca_uart_ble_id_t", "structre__ca__uart__ble__id__t.html", "structre__ca__uart__ble__id__t" ],
     [ "re_ca_uart_payload_t", "structre__ca__uart__payload__t.html", "structre__ca__uart__payload__t" ],
+    [ "re_fa_data_t", "structre__fa__data__t.html", "structre__fa__data__t" ],
     [ "re_ibeacon_data_t", "structre__ibeacon__data__t.html", "structre__ibeacon__data__t" ]
 ];
