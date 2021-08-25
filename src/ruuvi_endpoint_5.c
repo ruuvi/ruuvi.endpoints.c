@@ -7,7 +7,7 @@
 
 #define RE_5_ACC_RATIO   (1000.0f)
 #define RE_5_HUMI_RATIO  (400.0f)
-#define RE_5_TEMP_RATIO  (8200.0f)
+#define RE_5_TEMP_RATIO  (200.0f)
 #define RE_5_PRES_RATIO  (1.0f)
 #define RE_5_PRES_OFFSET (-50000.0f)
 #define RE_5_BATT_RATIO  (1000.0f)
@@ -15,7 +15,7 @@
 #define RE_5_BATT_MIN    (1.6f)
 
 #define RE_5_TXPWR_RATIO  (2)
-#define RE_5_TXPWR_OFFSET (-40)
+#define RE_5_TXPWR_OFFSET (40)
 
 #define RE_5_MVTCTR_MAX   (254)
 #define RE_5_MVTCTR_MIN   (0)
@@ -109,7 +109,7 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
     if (!isnan (temperature))
     {
         clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
-        coded_temperature = (uint16_t) round (temperature * RE_5_TEMP_RATIO);
+        coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);
     }
 
     buffer[RE_5_OFFSET_TEMP_MSB] = coded_temperature >> RE_5_BYTE_1_SHIFT;
@@ -136,34 +136,32 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_voltage = RE_5_INVALID_VOLTAGE;
     float voltage = data->battery_v;
-    int8_t coded_tx_power = RE_5_INVALID_POWER;
+    uint16_t coded_tx_power = RE_5_INVALID_POWER;
     float tx_power = (float) data->tx_power;
 
     if (!isnan (voltage))
     {
         clip (&voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);
-        coded_voltage = (uint16_t) roundf ( (voltage
-                                             * RE_5_BATT_RATIO)
-                                            - RE_5_BATT_OFFSET);
+        coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)
+                                             - RE_5_BATT_OFFSET);
     }
 
     // Check against original int value
     if (RE_5_INVALID_POWER != data->tx_power)
     {
         clip (&tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);
-        coded_tx_power = (int8_t) roundf ( (tx_power
+        coded_tx_power = (uint16_t) roundf ( (tx_power
                                             + RE_5_TXPWR_OFFSET)
                                            / RE_5_TXPWR_RATIO);
     }
 
-    uint16_t power_info = ( (uint16_t) (coded_voltage << RE_5_BYTE_VOLTAGE_OFFSET)) +
-                          tx_power;
+    uint16_t power_info = (coded_voltage << RE_5_BYTE_VOLTAGE_OFFSET)
+                            + coded_tx_power;
     buffer[RE_5_OFFSET_POWER_MSB] = (power_info >> RE_5_BYTE_1_SHIFT);
     buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
 }
 
-static void re_5_encode_data (uint8_t * const buffer,
-                              const re_5_data_t * data)
+static void re_5_encode_data (uint8_t * const buffer, const re_5_data_t * data)
 {
     buffer[RE_5_OFFSET_HEADER] = RE_5_DESTINATION;
     re_5_encode_humidity (buffer, data);
@@ -198,8 +196,7 @@ static void re_5_encode_data (uint8_t * const buffer,
     re_5_encode_set_address (buffer, data);
 }
 
-re_status_t re_5_encode (uint8_t * const buffer,
-                         const re_5_data_t * data)
+re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
 {
     re_status_t result = RE_SUCCESS;
 

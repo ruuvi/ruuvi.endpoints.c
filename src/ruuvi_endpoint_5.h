@@ -26,7 +26,7 @@
 #define RE_5_TEMP_MIN          (-163.835f)
 #define RE_5_HUMI_MAX          (163.835f)
 #define RE_5_HUMI_MIN          (0.0f)
-#define RE_5_PRES_MAX          (115536.0f)
+#define RE_5_PRES_MAX          (115534.0f)
 #define RE_5_PRES_MIN          (50000.0f)
 #define RE_5_ACC_MAX           (32.767f)
 #define RE_5_ACC_MIN           (-32.767f)
