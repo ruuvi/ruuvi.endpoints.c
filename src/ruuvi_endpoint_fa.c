@@ -1,5 +1,6 @@
 #include "ruuvi_endpoint_fa.h"
 #include "ruuvi_endpoint_3.h"
+#include <math.h>
 #include <string.h>
 
 #define RE_FA_INVALID_MAC (0xFFFFFFFFFFFFU)
@@ -37,7 +38,6 @@ static void re_fa_encode_set_address (uint8_t * const buffer,
 
 re_status_t re_fa_encode (uint8_t * const buffer,
                           const re_fa_data_t * const data,
-                          const re_float invalid,
                           re_fa_encrypt_fp cipher,
                           const uint8_t * const key,
                           const size_t key_size)
@@ -47,7 +47,7 @@ re_status_t re_fa_encode (uint8_t * const buffer,
     re_3_data_t re_3_data = {0};
     uint8_t ciphertext[RE_FA_CIPHERTEXT_LENGTH];
     fill_re_3 (&re_3_data, data);
-    encoding_status |= re_3_encode (buffer, &re_3_data, invalid);
+    encoding_status |= re_3_encode (buffer, &re_3_data, NAN);
     buffer[0] = RE_FA_DESTINATION;
     buffer[RE_FA_OFFSET_COUNTER] = data->message_counter;
     buffer[RE_FA_OFFSET_TRAILING_NULL_1] = 0;

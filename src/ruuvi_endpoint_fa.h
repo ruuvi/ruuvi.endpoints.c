@@ -83,16 +83,14 @@ typedef uint32_t (*re_fa_encrypt_fp) (const uint8_t * const cleartext,
  * @brief Encode data to Ruuvi Format FA.
  *
  * @param[out] buffer 23-byte buffer into which data is encoded.
- * @param[in]  data Data to encode.
- * @param[in]  invalid float value treated as not available. Must be NAN.
- * @param[in]  Function pointer to encryption function.
+ * @param[in]  data Data to encode. Use NAN for values not available.
+ * @param[in]  cipher Pointer to encryption function.
  * @param[in]  key Encryption key for data format.
  * @param[in]  key_size Encryption key length in bytes.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_fa_encode (uint8_t * const buffer,
                           const re_fa_data_t * const data,
-                          const float invalid,
                           re_fa_encrypt_fp cipher,
                           const uint8_t * const key,
                           const size_t key_size);

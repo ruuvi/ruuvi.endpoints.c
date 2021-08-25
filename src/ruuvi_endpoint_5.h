@@ -92,8 +92,7 @@ typedef struct
  *            for encoding the data into buffer.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
-re_status_t re_5_encode (uint8_t * const buffer,
-                         const re_5_data_t * data);
+re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data);
 
 
 #endif
