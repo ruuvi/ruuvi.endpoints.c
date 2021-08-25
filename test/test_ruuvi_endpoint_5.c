@@ -69,47 +69,33 @@ static const uint8_t min_data[] =
     0x00, 0x00, 0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F
 };
 
-static const re_5_data_t m_re_5_data_invalid_min_1 =
+static const re_5_data_t m_re_5_data_underflow =
 {
-    .humidity_rh = 53.49,
+    .humidity_rh = -1,
     .pressure_pa = 49999,
-    .temperature_c = 24.3,
-    .accelerationx_g = 0.004,
-    .accelerationy_g = -0.004,
-    .accelerationz_g = 1.036,
+    .temperature_c = -170,
+    .accelerationx_g = -40,
+    .accelerationy_g = -40,
+    .accelerationz_g = -40,
     .battery_v = 1.500,
-    .measurement_count = 205,
-    .movement_count = 66,
-    .address = 0xCBB8334C884F,
-    .tx_power = 4
-};
-
-static const re_5_data_t m_re_5_data_invalid_min_2 =
-{
-    .humidity_rh = 53.49,
-    .pressure_pa = 49999,
-    .temperature_c = 24.3,
-    .accelerationx_g = 0.004,
-    .accelerationy_g = -0.004,
-    .accelerationz_g = 1.036,
-    .battery_v = 2.977,
-    .measurement_count = 205,
-    .movement_count = 66,
+    .measurement_count = 0,
+    .movement_count = 0,
     .address = 0xCBB8334C884F,
     .tx_power = -41
 };
 
-static const re_5_data_t m_re_5_data_invalid_max =
+
+static const re_5_data_t m_re_5_data_overflow =
 {
-    .humidity_rh = 53.49,
-    .pressure_pa = 100044,
-    .temperature_c = 24.3,
-    .accelerationx_g = 0.004,
-    .accelerationy_g = -0.004,
-    .accelerationz_g = 1.036,
-    .battery_v = 2.977,
-    .measurement_count = 205,
-    .movement_count = 66,
+    .humidity_rh = 200,
+    .pressure_pa = 200044,
+    .temperature_c = 170,
+    .accelerationx_g = 40,
+    .accelerationy_g = 40,
+    .accelerationz_g = 40,
+    .battery_v = 3.700,
+    .measurement_count = 65534,
+    .movement_count = 254,
     .address = 0xCBB8334C884F,
     .tx_power = 25
 };
@@ -126,7 +112,7 @@ static const re_5_data_t m_re_5_data_invalid =
     .measurement_count = 65535,
     .movement_count = 255,
     .address = 0xFFFFFFFFFFFF,
-    .tx_power = 26
+    .tx_power = RE_5_INVALID_POWER
 };
 
 static const uint8_t invalid_data[] =
@@ -153,8 +139,7 @@ void test_ruuvi_endpoint_5_get_ok (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t test_buffer[24] = {0};
-    err_code = re_5_encode ( (uint8_t * const) &test_buffer,
-                             (const re_5_data_t *) &m_re_5_data_ok);
+    err_code = re_5_encode (test_buffer, &m_re_5_data_ok);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, valid_data, sizeof (valid_data))));
 }
@@ -188,8 +173,7 @@ void test_ruuvi_endpoint_5_get_error_null_buffer (void)
 {
     re_status_t err_code = RE_ERROR_NULL;
     uint8_t * const p_test_buffer = NULL;
-    err_code = re_5_encode (p_test_buffer,
-                            (const re_5_data_t *) &m_re_5_data_ok);
+    err_code = re_5_encode (p_test_buffer, &m_re_5_data_ok);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
 }
 
@@ -223,42 +207,20 @@ void test_ruuvi_endpoint_5_get_invalid_data (void)
     TEST_ASSERT (! (memcmp (test_buffer, invalid_data, sizeof (invalid_data))));
 }
 
-void test_ruuvi_endpoint_5_get_min_1_invalid_data (void)
+void test_ruuvi_endpoint_5_underflow (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t test_buffer[24] = {0};
-    err_code = re_5_encode ( (uint8_t * const) &test_buffer,
-                             (const re_5_data_t * const) &m_re_5_data_invalid_min_1);
-    TEST_ASSERT (RE_SUCCESS == err_code &&
-                 (RE_5_INVALID_PRESSURE >> 8) == test_buffer[RE_5_OFFSET_PRESSURE_MSB] &&
-                 (RE_5_INVALID_PRESSURE & 0xFF) == test_buffer[RE_5_OFFSET_PRESSURE_LSB] &&
-                 0xFF == test_buffer[RE_5_OFFSET_POWER_MSB] &&
-                 0x70 == (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x70) &&
-                 RE_5_INVALID_POWER != (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x1F));
+    err_code = re_5_encode (test_buffer, &m_re_5_data_underflow);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, min_data, sizeof (min_data))));
 }
 
-void test_ruuvi_endpoint_5_get_min_2_invalid_data (void)
+void test_ruuvi_endpoint_5_overflow (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t test_buffer[24] = {0};
-    err_code = re_5_encode ( (uint8_t * const) &test_buffer,
-                             (const re_5_data_t * const) &m_re_5_data_invalid_min_2);
-    TEST_ASSERT (RE_SUCCESS == err_code &&
-                 (RE_5_INVALID_PRESSURE >> 8) == test_buffer[RE_5_OFFSET_PRESSURE_MSB] &&
-                 (RE_5_INVALID_PRESSURE & 0xFF) == test_buffer[RE_5_OFFSET_PRESSURE_LSB] &&
-                 0xFF != test_buffer[RE_5_OFFSET_POWER_MSB] &&
-                 0x70 != (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x70) &&
-                 RE_5_INVALID_POWER == (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x1F));
-}
-
-void test_ruuvi_endpoint_5_get_max_invalid_data (void)
-{
-    re_status_t err_code = RE_SUCCESS;
-    uint8_t test_buffer[24] = {0};
-    err_code = re_5_encode ( (uint8_t * const) &test_buffer,
-                             (const re_5_data_t * const) &m_re_5_data_invalid_max);
-    TEST_ASSERT (RE_SUCCESS == err_code &&
-                 0xFF != test_buffer[RE_5_OFFSET_POWER_MSB] &&
-                 0x70 != (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x70) &&
-                 RE_5_INVALID_POWER == (test_buffer[RE_5_OFFSET_POWER_LSB] & 0x1F));
+    err_code = re_5_encode (test_buffer, &m_re_5_data_overflow);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (max_data))));
 }

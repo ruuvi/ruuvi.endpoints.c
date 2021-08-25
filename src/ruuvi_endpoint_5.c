@@ -5,200 +5,208 @@
 #include <string.h>
 #include <math.h>
 
-#define RE_5_ENCODE_ACC_CONVERT_RATIO       1000
-#define RE_5_ENCODE_HUMIDITY_CONVERT_RATIO  400
-#define RE_5_ENCODE_TEMP_CONVERT_RATIO      200
-#define RE_5_ENCODE_PRESSURE_INIT_OFFSET    50000
-#define RE_5_ENCODE_BATTERY_CONVERT_RATIO   1000
-#define RE_5_ENCODE_BATTERY_CONVERT_OFFSET  1600
-#define RE_5_ENCODE_BATTERY_MIN             1.6
+#define RE_5_ACC_RATIO   (1000.0f)
+#define RE_5_HUMI_RATIO  (400.0f)
+#define RE_5_TEMP_RATIO  (200.0f)
+#define RE_5_PRES_RATIO  (1.0f)
+#define RE_5_PRES_OFFSET (-50000.0f)
+#define RE_5_BATT_RATIO  (1000.0f)
+#define RE_5_BATT_OFFSET (1600)
+#define RE_5_BATT_MIN    (1.6f)
 
-#define RE_5_ENCODE_TX_POWER_MAX            24
-#define RE_5_ENCODE_TX_POWER_MIN            -40
-#define RE_5_ENCODE_TX_POWER_STEP           2
-#define RE_5_ENCODE_TX_POWER_OFFSET         40
+#define RE_5_TXPWR_RATIO  (2)
+#define RE_5_TXPWR_OFFSET (40)
 
-#define RE_5_ENCODE_MOVEMENT_COUNT_MAX      254
-#define RE_5_ENCODE_MOVEMENT_COUNT_MIN      0
+#define RE_5_MVTCTR_MAX   (254)
+#define RE_5_MVTCTR_MIN   (0)
 
-#define RE_5_ENCODE_MEASUREMENT_SEQ_MAX     65534
-#define RE_5_ENCODE_MEASUREMENT_SEQ_MIN     0
+#define RE_5_SEQCTR_MAX   (65534)
+#define RE_5_SEQCTR_MIN   (0)
 
-#define RE_5_ENCODE_MAC_MAX                 281474976710655
-#define RE_5_ENCODE_MAC_MIN                 0
+#define RE_5_MAC_MAX      (281474976710655)
+#define RE_5_MAC_MIN      (0)
 
-#define RE_5_BYTE_OFFSET                    8
-#define RE_5_BYTE_2_OFFSET                  16
-#define RE_5_BYTE_3_OFFSET                  24
-#define RE_5_BYTE_4_OFFSET                  32
-#define RE_5_BYTE_5_OFFSET                  40
-#define RE_5_BYTE_MASK                      0xFF
-#define RE_5_BYTE_VOLTAGE_OFFSET            5
+#define RE_5_BYTE_1_SHIFT                  (8U)
+#define RE_5_BYTE_2_SHIFT                  (16U)
+#define RE_5_BYTE_3_SHIFT                  (24U)
+#define RE_5_BYTE_4_SHIFT                  (32U)
+#define RE_5_BYTE_5_SHIFT                  (40U)
+#define RE_5_BYTE_MASK                     (0xFFU)
+#define RE_5_BYTE_VOLTAGE_OFFSET           (5U)
 
-static void re_5_encode_acceleration (uint8_t * const buffer,
-                                      const re_float acceleration)
+static void clip (float * const value, const float min, const float max)
 {
-    uint16_t decimal = RE_5_INVALID_ACCELERATION;
+    if (*value > max)
+    {
+        *value = max;
+    }
+
+    if (*value < min)
+    {
+        *value = min;
+    }
+}
+
+static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
+                                      float acceleration)
+{
+    uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;
 
     if (!isnan (acceleration))
     {
-        // convert to mG
-        decimal = (uint16_t) ( (int16_t) ( (re_float) round (acceleration *
-                                           RE_5_ENCODE_ACC_CONVERT_RATIO)));
+        clip (&acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);
+        coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);
     }
 
-    buffer[0] = (decimal >> RE_5_BYTE_OFFSET);
-    buffer[1] = (decimal & RE_5_BYTE_MASK);
+    acceleration_slot[0] = (coded_acceleration >> RE_5_BYTE_1_SHIFT);
+    acceleration_slot[1] = (coded_acceleration & RE_5_BYTE_MASK);
 }
 
-static void re_5_encode_set_address (uint8_t * const buffer,
-                                     const re_5_data_t * data)
+static void re_5_encode_set_address (uint8_t * const buffer, const re_5_data_t * data)
 {
     // Address is 64 bits, skip 2 first bytes
-    uint8_t address_offset = 0;
+    uint8_t addr_offset = RE_5_OFFSET_ADDR_MSB;
     uint64_t mac = data->address;
 
-    if ( (RE_5_ENCODE_MAC_MAX < data->address) ||
-            (RE_5_ENCODE_MAC_MIN > data->address))
+    if ( (RE_5_MAC_MAX < data->address) || (RE_5_MAC_MIN > data->address))
     {
         mac = RE_5_INVALID_MAC;
     }
 
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (mac >> RE_5_BYTE_5_OFFSET) & RE_5_BYTE_MASK;
-    address_offset++;
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (data->address >> RE_5_BYTE_4_OFFSET) & RE_5_BYTE_MASK;
-    address_offset++;
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (mac >> RE_5_BYTE_3_OFFSET) & RE_5_BYTE_MASK;
-    address_offset++;
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (mac >> RE_5_BYTE_2_OFFSET) & RE_5_BYTE_MASK;
-    address_offset++;
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (mac >> RE_5_BYTE_OFFSET) & RE_5_BYTE_MASK;
-    address_offset++;
-    buffer[RE_5_OFFSET_ADDRESS_MSB + address_offset] =
-        (mac >> 0) & RE_5_BYTE_MASK;
+    buffer[addr_offset] = (mac >> RE_5_BYTE_5_SHIFT) & RE_5_BYTE_MASK;
+    addr_offset++;
+    buffer[addr_offset] = (mac >> RE_5_BYTE_4_SHIFT) & RE_5_BYTE_MASK;
+    addr_offset++;
+    buffer[addr_offset] = (mac >> RE_5_BYTE_3_SHIFT) & RE_5_BYTE_MASK;
+    addr_offset++;
+    buffer[addr_offset] = (mac >> RE_5_BYTE_2_SHIFT) & RE_5_BYTE_MASK;
+    addr_offset++;
+    buffer[addr_offset] = (mac >> RE_5_BYTE_1_SHIFT) & RE_5_BYTE_MASK;
+    addr_offset++;
+    buffer[addr_offset] = (mac >> 0) & RE_5_BYTE_MASK;
 }
 
-static void re_5_encode_data (uint8_t * const buffer,
-                              const re_5_data_t * data)
+static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * data)
 {
-    buffer[RE_5_OFFSET_HEADER] = RE_5_DESTINATION;
-    uint16_t humidity = RE_5_INVALID_HUMIDITY;
+    uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;
+    float humidity = data->humidity_rh;
 
-    if ( (!isnan (data->humidity_rh)) &&
-            (0 <= data->humidity_rh))
+    if (!isnan (humidity))
     {
-        // Humidity (16bit unsigned) in 0.0025% (0-163.83% range,
-        // though realistically 0-100%)
-        humidity = (uint16_t) ( (re_float) round (data->humidity_rh *
-                                RE_5_ENCODE_HUMIDITY_CONVERT_RATIO));
+        clip (&humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);
+        coded_humidity = (uint16_t) roundf (humidity * RE_5_HUMI_RATIO);
     }
 
-    buffer[RE_5_OFFSET_HUMIDITY_MSB] = (humidity >> RE_5_BYTE_OFFSET);
-    buffer[RE_5_OFFSET_HUMIDITY_LSB] = humidity & RE_5_BYTE_MASK;
-    // Temperature is in 0.005 degrees
-    uint16_t temperature = RE_5_INVALID_TEMPERATURE;
-
-    if (!isnan (data->temperature_c))
-    {
-        temperature = (uint16_t) ( (int16_t) ( (re_float) round (data->temperature_c *
-                                               RE_5_ENCODE_TEMP_CONVERT_RATIO)));
-    }
-
-    buffer[RE_5_OFFSET_TEMPERATURE_MSB] = (temperature >>
-                                           RE_5_BYTE_OFFSET);
-    buffer[RE_5_OFFSET_TEMPERATURE_LSB] = (temperature &
-                                           RE_5_BYTE_MASK);
-    // Pressure
-    uint32_t pressure = RE_5_INVALID_PRESSURE;
-
-    if ( (!isnan (data->pressure_pa)) &&
-            (RE_5_ENCODE_PRESSURE_INIT_OFFSET <= data->pressure_pa))
-    {
-        pressure = (uint32_t) data->pressure_pa;
-        pressure -= RE_5_ENCODE_PRESSURE_INIT_OFFSET;
-    }
-
-    buffer[RE_5_OFFSET_PRESSURE_MSB] = (pressure >> RE_5_BYTE_OFFSET) &
-                                       RE_5_BYTE_MASK;
-    buffer[RE_5_OFFSET_PRESSURE_LSB] = (pressure  & RE_5_BYTE_MASK);
-    // acceleration
-    re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONX_MSB],
-                              data->accelerationx_g);
-    re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONY_MSB],
-                              data->accelerationy_g);
-    re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCELERATIONZ_MSB],
-                              data->accelerationz_g);
-    // voltage, tx power
-    uint16_t voltage = RE_5_INVALID_VOLTAGE;
-    int8_t tx_power = RE_5_INVALID_POWER;
-
-    if ( (!isnan (data->battery_v)) &&
-            (RE_5_ENCODE_BATTERY_MIN <= data->battery_v))
-    {
-        // first 11 bits unsigned is the battery voltage above 1.6V,
-        // in millivolts (1.6V to 3.647V range)
-        voltage = (uint16_t) ( (re_float) round ( (data->battery_v *
-                               RE_5_ENCODE_BATTERY_CONVERT_RATIO) -
-                               RE_5_ENCODE_BATTERY_CONVERT_OFFSET));
-    }
-
-    if ( (RE_5_INVALID_POWER != data->tx_power) &&
-            (data->tx_power >= RE_5_ENCODE_TX_POWER_MIN) &&
-            (data->tx_power <= RE_5_ENCODE_TX_POWER_MAX))
-    {
-        // Last 5 bits unsigned is the TX power above -40dBm,
-        // in 2dBm steps. (-40dBm to +24dBm range)
-        tx_power = (int8_t) ( (data->tx_power +
-                               RE_5_ENCODE_TX_POWER_OFFSET) /
-                              RE_5_ENCODE_TX_POWER_STEP);
-    }
-
-    uint16_t power_info = ( (uint16_t) (voltage << RE_5_BYTE_VOLTAGE_OFFSET)) +
-                          tx_power;
-    buffer[RE_5_OFFSET_POWER_MSB] = (power_info >> RE_5_BYTE_OFFSET);
-    buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
-    uint8_t movement_count = data->movement_count;
-
-    if ( (RE_5_ENCODE_MOVEMENT_COUNT_MAX < data->movement_count) ||
-            (RE_5_ENCODE_MOVEMENT_COUNT_MIN > data->movement_count))
-    {
-        movement_count = RE_5_INVALID_MOVEMENT;
-    }
-
-    buffer[RE_5_OFFSET_MOVEMENT_COUNTER] = movement_count;
-    uint16_t measurement_seq = data->measurement_count;
-
-    if ( (RE_5_ENCODE_MEASUREMENT_SEQ_MAX < data->measurement_count) ||
-            (RE_5_ENCODE_MEASUREMENT_SEQ_MIN > data->measurement_count))
-    {
-        measurement_seq = RE_5_INVALID_SEQUENCE;
-    }
-
-    buffer[RE_5_OFFSET_SEQUENCE_COUNTER_MSB] = (measurement_seq >>
-            RE_5_BYTE_OFFSET);
-    buffer[RE_5_OFFSET_SEQUENCE_COUNTER_LSB] = (measurement_seq &
-            RE_5_BYTE_MASK);
-    re_5_encode_set_address (buffer, data);
+    buffer[RE_5_OFFSET_HUMI_MSB] = coded_humidity >> RE_5_BYTE_1_SHIFT;
+    buffer[RE_5_OFFSET_HUMI_LSB] = coded_humidity & RE_5_BYTE_MASK;
 }
 
-re_status_t re_5_encode (uint8_t * const buffer,
-                         const re_5_data_t * data)
+static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t * data)
+{
+    uint16_t coded_temperature = RE_5_INVALID_TEMPERATURE;
+    float temperature = data->temperature_c;
+
+    if (!isnan (temperature))
+    {
+        clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
+        coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);
+    }
+
+    buffer[RE_5_OFFSET_TEMP_MSB] = coded_temperature >> RE_5_BYTE_1_SHIFT;
+    buffer[RE_5_OFFSET_TEMP_LSB] = coded_temperature & RE_5_BYTE_MASK;
+}
+
+static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * data)
+{
+    uint16_t coded_pressure = RE_5_INVALID_PRESSURE;
+    float pressure = data->pressure_pa;
+
+    if (!isnan (pressure))
+    {
+        clip (&pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);
+        pressure += RE_5_PRES_OFFSET;
+        coded_pressure = (uint16_t) roundf (pressure * RE_5_PRES_RATIO);
+    }
+
+    buffer[RE_5_OFFSET_PRES_MSB] = coded_pressure >> RE_5_BYTE_1_SHIFT;
+    buffer[RE_5_OFFSET_PRES_LSB] = coded_pressure & RE_5_BYTE_MASK;
+}
+
+static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
+{
+    uint16_t coded_voltage = RE_5_INVALID_VOLTAGE;
+    float voltage = data->battery_v;
+    uint16_t coded_tx_power = RE_5_INVALID_POWER;
+    float tx_power = (float) data->tx_power;
+
+    if (!isnan (voltage))
+    {
+        clip (&voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);
+        coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)
+                                            - RE_5_BATT_OFFSET);
+    }
+
+    // Check against original int value
+    if (RE_5_INVALID_POWER != data->tx_power)
+    {
+        clip (&tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);
+        coded_tx_power = (uint16_t) roundf ( (tx_power
+                                              + RE_5_TXPWR_OFFSET)
+                                             / RE_5_TXPWR_RATIO);
+    }
+
+    uint16_t power_info = ( (uint16_t) (coded_voltage << RE_5_BYTE_VOLTAGE_OFFSET))
+                          + coded_tx_power;
+    buffer[RE_5_OFFSET_POWER_MSB] = (power_info >> RE_5_BYTE_1_SHIFT);
+    buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
+}
+
+static void re_5_encode_movement (uint8_t * const buffer, const re_5_data_t * data)
+{
+    uint8_t movement_count = RE_5_INVALID_MOVEMENT;
+
+    if (RE_5_MVTCTR_MAX >= data->movement_count)
+    {
+        movement_count = data->movement_count;
+    }
+
+    buffer[RE_5_OFFSET_MVTCTR] = movement_count;
+}
+
+static void re_5_encode_sequence (uint8_t * const buffer, const re_5_data_t * data)
+{
+    uint16_t measurement_seq = RE_5_INVALID_SEQUENCE;
+
+    if (RE_5_SEQCTR_MAX >= data->measurement_count)
+    {
+        measurement_seq = data->measurement_count;
+    }
+
+    buffer[RE_5_OFFSET_SEQCTR_MSB] = (measurement_seq >> RE_5_BYTE_1_SHIFT);
+    buffer[RE_5_OFFSET_SEQCTR_LSB] = (measurement_seq & RE_5_BYTE_MASK);
+}
+
+re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
 {
     re_status_t result = RE_SUCCESS;
 
-    if ( (NULL == buffer) ||
-            (NULL == data))
+    if ( (NULL == buffer) || (NULL == data))
     {
-        result = RE_ERROR_NULL;
+        result |= RE_ERROR_NULL;
     }
     else
     {
-        re_5_encode_data (buffer, data);
+        buffer[RE_5_OFFSET_HEADER] = RE_5_DESTINATION;
+        re_5_encode_humidity (buffer, data);
+        re_5_encode_temperature (buffer, data);
+        re_5_encode_pressure (buffer, data);
+        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCX_MSB], data->accelerationx_g);
+        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCY_MSB], data->accelerationy_g);
+        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCZ_MSB], data->accelerationz_g);
+        re_5_encode_movement (buffer, data);
+        re_5_encode_sequence (buffer, data);
+        re_5_encode_pwr (buffer, data);
+        re_5_encode_set_address (buffer, data);
     }
 
     return result;
