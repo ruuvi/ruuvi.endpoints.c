@@ -94,7 +94,7 @@ void test_re_fa_encode_ok (void)
     re_3_encode_ExpectAndReturn (buffer, NULL, NAN, RE_SUCCESS);
     re_3_encode_IgnoreArg_data();
     re_3_encode_ReturnArrayThruPtr_buffer (re_3_value, RE_3_DATA_LENGTH);
-    err_code = re_fa_encode (buffer, &data, NAN, &mock_encrypt, TEST_KEY,
+    err_code = re_fa_encode (buffer, &data, &mock_encrypt, TEST_KEY,
                              RE_FA_CIPHERTEXT_LENGTH);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (!memcmp (buffer, TEST_DATA_OK, RE_FA_DATA_LENGTH));
