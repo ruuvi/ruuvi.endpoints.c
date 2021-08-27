@@ -7,7 +7,7 @@
  *
  * @file ruuvi_endpoint_fa.h
  * @author Otso Jousimaa <otso@ojousima.net>
- * @date 2002-08-25
+ * @date 2021-08-25
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
