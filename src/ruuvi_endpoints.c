@@ -231,3 +231,16 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
     buffer[RE_LOG_WRITE_VALUE_LSB_IDX] = (uint8_t) (discrete_value & 0xFFU);
     return err_code;
 }
+
+void re_clip (float * const value, const float min, const float max)
+{
+    if (*value > max)
+    {
+        *value = max;
+    }
+
+    if (*value < min)
+    {
+        *value = min;
+    }
+}

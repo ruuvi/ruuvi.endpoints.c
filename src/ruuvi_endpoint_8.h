@@ -11,6 +11,10 @@
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
  */
 
+#include "ruuvi_endpoints.h"
+#include <stddef.h>
+#include <stdint.h>
+
 #define RE_8_DESTINATION          (0x05U)
 #define RE_8_INVALID_TEMPERATURE  (0x8000U)
 #define RE_8_INVALID_HUMIDITY     (0xFFFFU)
@@ -50,6 +54,7 @@
 #define RE_8_OFFSET_SEQCTR_LSB (12U)
 #define RE_8_OFFSET_CRC8       (17U)
 #define RE_8_OFFSET_ADDR_MSB   (18U)
+#define RE_8_OFFSET_ADDR_LSB   (RE_8_OFFSET_ADDR_MSB + 5U)
 
 /** @brief All data required for Ruuvi dataformat 08 package. */
 typedef struct
@@ -62,7 +67,7 @@ typedef struct
     //!< Temperature in celcius.
     float battery_v;
     //!< Battery voltage, preferably under load such as radio TX.
-    uint8_t movement_count;
+    uint16_t movement_count;
     //!< Number of detected movements.
     uint16_t message_counter;
     //!< Counter for message, used for preventing replay.
@@ -99,8 +104,8 @@ typedef uint32_t (*re_8_encrypt_fp) (const uint8_t * const cleartext,
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_8_encode (uint8_t * const buffer,
-                          const re_fa_data_t * const data,
-                          re_fa_encrypt_fp cipher,
+                          const re_8_data_t * const data,
+                          re_8_encrypt_fp cipher,
                           const uint8_t * const key,
                           const size_t key_size);
 

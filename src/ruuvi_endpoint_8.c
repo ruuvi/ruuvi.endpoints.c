@@ -1,20 +1,37 @@
 #include "ruuvi_endpoint_8.h"
+#include <math.h>
 
+#define RE_8_INVALID_MAC    (0xFFFFFFFFFFFFU)
+#define RE_8_ENCODE_MAC_MAX (0xFFFFFFFFFFFEU)
+
+#define RE_8_ACC_RATIO           (1000.0f)
+#define RE_8_HUMI_RATIO          (400.0f)
+#define RE_8_TEMP_RATIO          (200.0f)
+#define RE_8_PRES_RATIO          (1.0f)
+#define RE_8_PRES_OFFSET         (-50000.0f)
+#define RE_8_BATT_RATIO          (1000.0f)
+#define RE_8_BATT_OFFSET         (1600)
+#define RE_8_BATT_MIN            (1.6f)
+#define RE_8_TXPWR_RATIO         (2)
+#define RE_8_TXPWR_OFFSET        (40)
+#define RE_8_BYTE_VOLTAGE_OFFSET (5U)
+#define RE_8_MVTCTR_MAX          (0xFFFEU)
+#define RE_8_MVTCTR_MIN          (0)
+#define RE_8_SEQCTR_MAX          (0xFFFEU)
 
 static void re_8_encode_set_address (uint8_t * const buffer,
-                                      const re_fa_data_t * data)
+                                      const re_8_data_t * data)
 {
     uint64_t mac = data->address;
 
-    if ( (RE_8_ENCODE_MAC_MAX < data->address) ||
-            (RE_8_ENCODE_MAC_MIN > data->address))
+    if (RE_8_ENCODE_MAC_MAX < data->address)
     {
         mac = RE_8_INVALID_MAC;
     }
 
     for (int8_t offset = 5; offset >= 0; offset--)
     {
-        buffer[RE_8_OFFSET_ADDRESS_LSB - offset] = (mac >> (offset * 8)) & (0xFFU);
+        buffer[RE_8_OFFSET_ADDR_LSB - offset] = (mac >> (offset * 8)) & (0xFFU);
     }
 }
 
@@ -25,12 +42,12 @@ static void re_8_encode_humidity (uint8_t * const buffer, const re_8_data_t * da
 
     if (!isnan (humidity))
     {
-        clip (&humidity, RE_8_HUMI_MIN, RE_8_HUMI_MAX);
+        re_clip (&humidity, RE_8_HUMI_MIN, RE_8_HUMI_MAX);
         coded_humidity = (uint16_t) roundf (humidity * RE_8_HUMI_RATIO);
     }
 
-    buffer[RE_8_OFFSET_HUMI_MSB] = coded_humidity >> RE_8_BYTE_1_SHIFT;
-    buffer[RE_8_OFFSET_HUMI_LSB] = coded_humidity & RE_8_BYTE_MASK;
+    buffer[RE_8_OFFSET_HUMI_MSB] = coded_humidity >> 8U;
+    buffer[RE_8_OFFSET_HUMI_LSB] = coded_humidity & 0xFFU;
 }
 
 static void re_8_encode_temperature (uint8_t * const buffer, const re_8_data_t * data)
@@ -40,12 +57,12 @@ static void re_8_encode_temperature (uint8_t * const buffer, const re_8_data_t *
 
     if (!isnan (temperature))
     {
-        clip (&temperature, RE_8_TEMP_MIN, RE_8_TEMP_MAX);
+        re_clip (&temperature, RE_8_TEMP_MIN, RE_8_TEMP_MAX);
         coded_temperature = (uint16_t) roundf (temperature * RE_8_TEMP_RATIO);
     }
 
-    buffer[RE_8_OFFSET_TEMP_MSB] = coded_temperature >> RE_8_BYTE_1_SHIFT;
-    buffer[RE_8_OFFSET_TEMP_LSB] = coded_temperature & RE_8_BYTE_MASK;
+    buffer[RE_8_OFFSET_TEMP_MSB] = coded_temperature >> 8U;
+    buffer[RE_8_OFFSET_TEMP_LSB] = coded_temperature & 0xFFU;
 }
 
 static void re_8_encode_pressure (uint8_t * const buffer, const re_8_data_t * data)
@@ -55,13 +72,13 @@ static void re_8_encode_pressure (uint8_t * const buffer, const re_8_data_t * da
 
     if (!isnan (pressure))
     {
-        clip (&pressure, RE_8_PRES_MIN, RE_8_PRES_MAX);
+        re_clip (&pressure, RE_8_PRES_MIN, RE_8_PRES_MAX);
         pressure += RE_8_PRES_OFFSET;
         coded_pressure = (uint16_t) roundf (pressure * RE_8_PRES_RATIO);
     }
 
-    buffer[RE_8_OFFSET_PRES_MSB] = coded_pressure >> RE_8_BYTE_1_SHIFT;
-    buffer[RE_8_OFFSET_PRES_LSB] = coded_pressure & RE_8_BYTE_MASK;
+    buffer[RE_8_OFFSET_PRES_MSB] = coded_pressure >> 8U;
+    buffer[RE_8_OFFSET_PRES_LSB] = coded_pressure & 0xFFU;
 }
 
 static void re_8_encode_pwr (uint8_t * const buffer, const re_8_data_t * data)
@@ -73,7 +90,7 @@ static void re_8_encode_pwr (uint8_t * const buffer, const re_8_data_t * data)
 
     if (!isnan (voltage))
     {
-        clip (&voltage, RE_8_VOLTAGE_MIN, RE_8_VOLTAGE_MAX);
+        re_clip (&voltage, RE_8_VOLTAGE_MIN, RE_8_VOLTAGE_MAX);
         coded_voltage = (uint16_t) roundf ( (voltage * RE_8_BATT_RATIO)
                                             - RE_8_BATT_OFFSET);
     }
@@ -81,7 +98,7 @@ static void re_8_encode_pwr (uint8_t * const buffer, const re_8_data_t * data)
     // Check against original int value
     if (RE_8_INVALID_POWER != data->tx_power)
     {
-        clip (&tx_power, RE_8_TXPWR_MIN, RE_8_TXPWR_MAX);
+        re_clip (&tx_power, RE_8_TXPWR_MIN, RE_8_TXPWR_MAX);
         coded_tx_power = (uint16_t) roundf ( (tx_power
                                               + RE_8_TXPWR_OFFSET)
                                              / RE_8_TXPWR_RATIO);
@@ -89,8 +106,8 @@ static void re_8_encode_pwr (uint8_t * const buffer, const re_8_data_t * data)
 
     uint16_t power_info = ( (uint16_t) (coded_voltage << RE_8_BYTE_VOLTAGE_OFFSET))
                           + coded_tx_power;
-    buffer[RE_8_OFFSET_POWER_MSB] = (power_info >> RE_8_BYTE_1_SHIFT);
-    buffer[RE_8_OFFSET_POWER_LSB] = (power_info & RE_8_BYTE_MASK);
+    buffer[RE_8_OFFSET_POWER_MSB] = (power_info >> 8U);
+    buffer[RE_8_OFFSET_POWER_LSB] = (power_info & 0xFFU);
 }
 
 static void re_8_encode_movement (uint8_t * const buffer, const re_8_data_t * data)
@@ -102,21 +119,21 @@ static void re_8_encode_movement (uint8_t * const buffer, const re_8_data_t * da
         movement_count = data->movement_count;
     }
 
-    buffer[RE_8_OFFSET_MVTCTR_MSB] = (movement_count >> RE_8_BYTE_1_SHIFT);
-    buffer[RE_8_OFFSET_MVTCTR_LSB] = (movement_count & RE_8_BYTE_MASK);
+    buffer[RE_8_OFFSET_MVTCTR_MSB] = (movement_count >> 8U);
+    buffer[RE_8_OFFSET_MVTCTR_LSB] = (movement_count & 0xFFU);
 }
 
 static void re_8_encode_sequence (uint8_t * const buffer, const re_8_data_t * data)
 {
     uint16_t measurement_seq = RE_8_INVALID_SEQUENCE;
 
-    if (RE_8_SEQCTR_MAX >= data->measurement_count)
+    if (RE_8_SEQCTR_MAX >= data->message_counter)
     {
-        measurement_seq = data->measurement_count;
+        measurement_seq = data->message_counter;
     }
 
-    buffer[RE_8_OFFSET_SEQCTR_MSB] = (measurement_seq >> RE_8_BYTE_1_SHIFT);
-    buffer[RE_8_OFFSET_SEQCTR_LSB] = (measurement_seq & RE_8_BYTE_MASK);
+    buffer[RE_8_OFFSET_SEQCTR_MSB] = (measurement_seq >> 8U);
+    buffer[RE_8_OFFSET_SEQCTR_LSB] = (measurement_seq & 0xFFU);
 }
 
 /**
@@ -130,8 +147,8 @@ static void re_8_encode_sequence (uint8_t * const buffer, const re_8_data_t * da
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_8_encode (uint8_t * const buffer,
-                          const re_fa_data_t * const data,
-                          re_fa_encrypt_fp cipher,
+                          const re_8_data_t * const data,
+                          re_8_encrypt_fp cipher,
                           const uint8_t * const key,
                           const size_t key_size)
 {

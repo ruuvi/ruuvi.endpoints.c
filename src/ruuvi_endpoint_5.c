@@ -34,19 +34,6 @@
 #define RE_5_BYTE_MASK                     (0xFFU)
 #define RE_5_BYTE_VOLTAGE_OFFSET           (5U)
 
-static void clip (float * const value, const float min, const float max)
-{
-    if (*value > max)
-    {
-        *value = max;
-    }
-
-    if (*value < min)
-    {
-        *value = min;
-    }
-}
-
 static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
                                       float acceleration)
 {
@@ -54,7 +41,7 @@ static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
 
     if (!isnan (acceleration))
     {
-        clip (&acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);
+        re_clip (&acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);
         coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);
     }
 
@@ -93,7 +80,7 @@ static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * da
 
     if (!isnan (humidity))
     {
-        clip (&humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);
+        re_clip (&humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);
         coded_humidity = (uint16_t) roundf (humidity * RE_5_HUMI_RATIO);
     }
 
@@ -108,7 +95,7 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
 
     if (!isnan (temperature))
     {
-        clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
+        re_clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
         coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);
     }
 
@@ -123,7 +110,7 @@ static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * da
 
     if (!isnan (pressure))
     {
-        clip (&pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);
+        re_clip (&pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);
         pressure += RE_5_PRES_OFFSET;
         coded_pressure = (uint16_t) roundf (pressure * RE_5_PRES_RATIO);
     }
@@ -141,7 +128,7 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
 
     if (!isnan (voltage))
     {
-        clip (&voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);
+        re_clip (&voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);
         coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)
                                             - RE_5_BATT_OFFSET);
     }
@@ -149,7 +136,7 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
     // Check against original int value
     if (RE_5_INVALID_POWER != data->tx_power)
     {
-        clip (&tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);
+        re_clip (&tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);
         coded_tx_power = (uint16_t) roundf ( (tx_power
                                               + RE_5_TXPWR_OFFSET)
                                              / RE_5_TXPWR_RATIO);
