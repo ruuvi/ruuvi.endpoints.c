@@ -93,7 +93,7 @@ void test_re_8_encode_ok (void)
     uint8_t buffer[24] = {0};
     static uint8_t re_8_value[RE_8_DATA_LENGTH] = {0};
     err_code = re_8_encode (buffer, &m_re_8_data, &mock_encrypt, TEST_KEY,
-                             RE_8_CIPHERTEXT_LENGTH);
+                            RE_8_CIPHERTEXT_LENGTH);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (!memcmp (buffer, TEST_DATA_OK, RE_8_DATA_LENGTH));
 }

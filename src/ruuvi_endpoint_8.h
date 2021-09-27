@@ -88,10 +88,10 @@ typedef struct
  * @return 0 on success, non-zero error code otherwise.
  */
 typedef uint32_t (*re_8_encrypt_fp) (const uint8_t * const cleartext,
-                                      uint8_t * const ciphertext,
-                                      const size_t data_size,
-                                      const uint8_t * const key,
-                                      const size_t key_size);
+                                     uint8_t * const ciphertext,
+                                     const size_t data_size,
+                                     const uint8_t * const key,
+                                     const size_t key_size);
 
 /**
  * @brief Encode data to Ruuvi Format 8.
@@ -104,9 +104,9 @@ typedef uint32_t (*re_8_encrypt_fp) (const uint8_t * const cleartext,
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_8_encode (uint8_t * const buffer,
-                          const re_8_data_t * const data,
-                          re_8_encrypt_fp cipher,
-                          const uint8_t * const key,
-                          const size_t key_size);
+                         const re_8_data_t * const data,
+                         re_8_encrypt_fp cipher,
+                         const uint8_t * const key,
+                         const size_t key_size);
 
 #endif // RUUVI_ENDPOINT_8_H

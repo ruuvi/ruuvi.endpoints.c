@@ -20,7 +20,7 @@
 #define RE_8_SEQCTR_MAX          (0xFFFEU)
 
 static void re_8_encode_set_address (uint8_t * const buffer,
-                                      const re_8_data_t * data)
+                                     const re_8_data_t * data)
 {
     uint64_t mac = data->address;
 
@@ -147,10 +147,9 @@ static void re_8_encode_sequence (uint8_t * const buffer, const re_8_data_t * da
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_8_encode (uint8_t * const buffer,
-                          const re_8_data_t * const data,
-                          re_8_encrypt_fp cipher,
-                          const uint8_t * const key,
-                          const size_t key_size)
+                         const re_8_data_t * const data,
+                         re_8_encrypt_fp cipher,
+                         const uint8_t * const key,
+                         const size_t key_size)
 {
-  
 }
