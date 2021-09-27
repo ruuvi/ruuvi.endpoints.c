@@ -25,6 +25,7 @@
 #define RE_8_INVALID_POWER        (0x1FU)
 #define RE_8_INVALID_MAC          (0xFFFFFFFFFFFFU)
 #define RE_8_DATA_LENGTH          (24U)
+#define RE_8_CIPHERTEXT_LENGTH    (16U)
 
 #define RE_8_TEMP_MAX          (163.835f)
 #define RE_8_TEMP_MIN          (-163.835f)
@@ -40,6 +41,7 @@
 #define RE_8_TXPWR_MIN         (-40)
 
 #define RE_8_OFFSET_HEADER     (0U)
+#define RE_8_OFFSET_CIPHER     (1U)
 #define RE_8_OFFSET_TEMP_MSB   (1U)
 #define RE_8_OFFSET_TEMP_LSB   (2U)
 #define RE_8_OFFSET_HUMI_MSB   (3U)
@@ -52,6 +54,8 @@
 #define RE_8_OFFSET_MVTCTR_LSB (10U)
 #define RE_8_OFFSET_SEQCTR_MSB (11U)
 #define RE_8_OFFSET_SEQCTR_LSB (12U)
+#define RE_8_RESERVED_BYTES    (4U)
+#define RE_8_OFFSET_RESERVED   (13U)
 #define RE_8_OFFSET_CRC8       (17U)
 #define RE_8_OFFSET_ADDR_MSB   (18U)
 #define RE_8_OFFSET_ADDR_LSB   (RE_8_OFFSET_ADDR_MSB + 5U)

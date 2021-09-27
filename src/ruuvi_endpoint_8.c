@@ -1,5 +1,7 @@
+#include "ruuvi_endpoints.h"
 #include "ruuvi_endpoint_8.h"
 #include <math.h>
+#include <string.h>
 
 #define RE_8_INVALID_MAC    (0xFFFFFFFFFFFFU)
 #define RE_8_ENCODE_MAC_MAX (0xFFFFFFFFFFFEU)
@@ -136,6 +138,20 @@ static void re_8_encode_sequence (uint8_t * const buffer, const re_8_data_t * da
     buffer[RE_8_OFFSET_SEQCTR_LSB] = (measurement_seq & 0xFFU);
 }
 
+static void re_8_encode_reserved (uint8_t * const buffer)
+{
+    for (size_t ii = 0; ii < RE_8_RESERVED_BYTES; ii++)
+    {
+        buffer[RE_8_OFFSET_RESERVED + ii] = 0;
+    }
+}
+
+static void re_8_encode_crc (uint8_t * const buffer)
+{
+    buffer[RE_8_OFFSET_CRC8] = re_calc_crc8 (buffer + RE_8_OFFSET_CIPHER,
+                               RE_8_CIPHERTEXT_LENGTH);
+}
+
 /**
  * @brief Encode data to Ruuvi Format 8.
  *
@@ -152,4 +168,35 @@ re_status_t re_8_encode (uint8_t * const buffer,
                          const uint8_t * const key,
                          const size_t key_size)
 {
+    re_status_t result = RE_SUCCESS;
+
+    if ( (NULL == buffer) || (NULL == data) || (NULL == cipher) || (NULL == key))
+    {
+        result |= RE_ERROR_NULL;
+    }
+    else
+    {
+        uint32_t cipher_status = 0;
+        uint8_t cleartext[RE_8_CIPHERTEXT_LENGTH] = {0};
+        buffer[RE_8_OFFSET_HEADER] = RE_8_DESTINATION;
+        re_8_encode_humidity (buffer, data);
+        re_8_encode_temperature (buffer, data);
+        re_8_encode_pressure (buffer, data);
+        re_8_encode_movement (buffer, data);
+        re_8_encode_sequence (buffer, data);
+        re_8_encode_pwr (buffer, data);
+        re_8_encode_reserved (buffer);
+        re_8_encode_crc (buffer);
+        memcpy (cleartext, buffer + RE_8_OFFSET_CIPHER, RE_8_CIPHERTEXT_LENGTH);
+        cipher_status = cipher (cleartext, buffer + RE_8_OFFSET_CIPHER,
+                                RE_8_CIPHERTEXT_LENGTH, key, key_size);
+        re_8_encode_set_address (buffer, data);
+
+        if (0 != cipher_status)
+        {
+            result |= RE_ERROR_ENCODING;
+        }
+    }
+
+    return result;
 }

@@ -24,13 +24,6 @@ static const uint8_t CRC_8_TABLE[256] =
     116, 42, 200, 150, 21, 75, 169, 247, 182, 232, 10, 84, 215, 137, 107, 53
 };//!< CRC 8 lookup table - OSH Garage
 
-/**
- * @brief Calculate CRC8 checksum of a data array
- *
- * @param[in] DataArray Array to checksum
- * @param[in] Length Length of data to checksum
- * @return CRC8 Checksum
- */
 uint8_t re_calc_crc8 (const uint8_t * DataArray, const uint16_t Length)
 {
     uint16_t i;

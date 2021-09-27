@@ -188,4 +188,13 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
  */
 void re_clip (float * const value, const float min, const float max);
 
+/**
+ * @brief Calculate CRC8 checksum of a data array
+ *
+ * @param[in] DataArray Array to checksum
+ * @param[in] Length Length of data to checksum
+ * @return CRC8 Checksum
+ */
+uint8_t re_calc_crc8 (const uint8_t * DataArray, const uint16_t Length);
+
 #endif

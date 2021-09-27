@@ -3,8 +3,7 @@
 #include "unity.h"
 #include <string.h>
 #include "ruuvi_endpoints.h"
-#include "ruuvi_endpoint_fa.h"
-#include "mock_ruuvi_endpoint_8.h"
+#include "ruuvi_endpoint_8.h"
 
 void setUp (void)
 {
@@ -27,7 +26,7 @@ static const re_8_data_t m_re_8_data =
     .pressure_pa = 100044,
     .temperature_c = 24.3,
     .battery_v = 2.977,
-    .measurement_count = 205,
+    .message_counter = 205,
     .movement_count = 6607,
     .address = 0xCBB8334C884F,
     .tx_power = 4
@@ -91,7 +90,6 @@ void test_re_8_encode_ok (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t buffer[24] = {0};
-    static uint8_t re_8_value[RE_8_DATA_LENGTH] = {0};
     err_code = re_8_encode (buffer, &m_re_8_data, &mock_encrypt, TEST_KEY,
                             RE_8_CIPHERTEXT_LENGTH);
     TEST_ASSERT (RE_SUCCESS == err_code);

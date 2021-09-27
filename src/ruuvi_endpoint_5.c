@@ -5,34 +5,50 @@
 #include <string.h>
 #include <math.h>
 
-#define RE_5_ACC_RATIO   (1000.0f)
-#define RE_5_HUMI_RATIO  (400.0f)
-#define RE_5_TEMP_RATIO  (200.0f)
-#define RE_5_PRES_RATIO  (1.0f)
-#define RE_5_PRES_OFFSET (-50000.0f)
-#define RE_5_BATT_RATIO  (1000.0f)
-#define RE_5_BATT_OFFSET (1600)
-#define RE_5_BATT_MIN    (1.6f)
+#define RE_5_ACC_RATIO           (1000.0f)
+#define RE_5_HUMI_RATIO          (400.0f)
+#define RE_5_TEMP_RATIO          (200.0f)
+#define RE_5_PRES_RATIO          (1.0f)
+#define RE_5_PRES_OFFSET         (-50000.0f)
+#define RE_5_BATT_RATIO          (1000.0f)
+#define RE_5_BATT_OFFSET         (1600)
+#define RE_5_BATT_MIN            (1.6f)
 
-#define RE_5_TXPWR_RATIO  (2)
-#define RE_5_TXPWR_OFFSET (40)
+#define RE_5_TXPWR_RATIO         (2)
+#define RE_5_TXPWR_OFFSET        (40)
 
-#define RE_5_MVTCTR_MAX   (254)
-#define RE_5_MVTCTR_MIN   (0)
+#define RE_5_MVTCTR_MAX          (254)
+#define RE_5_MVTCTR_MIN          (0)
 
-#define RE_5_SEQCTR_MAX   (65534)
-#define RE_5_SEQCTR_MIN   (0)
+#define RE_5_SEQCTR_MAX          (65534)
+#define RE_5_SEQCTR_MIN          (0)
 
-#define RE_5_MAC_MAX      (281474976710655)
-#define RE_5_MAC_MIN      (0)
+#define RE_5_MAC_MAX             (281474976710655)
+#define RE_5_MAC_MIN             (0)
 
-#define RE_5_BYTE_1_SHIFT                  (8U)
-#define RE_5_BYTE_2_SHIFT                  (16U)
-#define RE_5_BYTE_3_SHIFT                  (24U)
-#define RE_5_BYTE_4_SHIFT                  (32U)
-#define RE_5_BYTE_5_SHIFT                  (40U)
-#define RE_5_BYTE_MASK                     (0xFFU)
-#define RE_5_BYTE_VOLTAGE_OFFSET           (5U)
+#define RE_5_BYTE_1_SHIFT        (8U)
+#define RE_5_BYTE_2_SHIFT        (16U)
+#define RE_5_BYTE_3_SHIFT        (24U)
+#define RE_5_BYTE_4_SHIFT        (32U)
+#define RE_5_BYTE_5_SHIFT        (40U)
+#define RE_5_BYTE_MASK           (0xFFU)
+#define RE_5_BYTE_VOLTAGE_OFFSET (5U)
+
+// Avoid mocking simple function
+#ifdef TEST
+void re_clip (float * const value, const float min, const float max)
+{
+    if (*value > max)
+    {
+        *value = max;
+    }
+
+    if (*value < min)
+    {
+        *value = min;
+    }
+}
+#endif
 
 static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
                                       float acceleration)
