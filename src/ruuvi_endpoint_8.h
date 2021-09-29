@@ -15,50 +15,50 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define RE_8_DESTINATION          (0x08U)
-#define RE_8_INVALID_TEMPERATURE  (0x8000U)
-#define RE_8_INVALID_HUMIDITY     (0xFFFFU)
-#define RE_8_INVALID_PRESSURE     (0xFFFFU)
-#define RE_8_INVALID_SEQUENCE     (0xFFFFU)
-#define RE_8_INVALID_MOVEMENT     (0xFFFFU)
-#define RE_8_INVALID_VOLTAGE      (0x07FFU)
-#define RE_8_INVALID_POWER        (0x1FU)
-#define RE_8_INVALID_MAC          (0xFFFFFFFFFFFFU)
-#define RE_8_DATA_LENGTH          (24U)
-#define RE_8_CIPHERTEXT_LENGTH    (16U)
+#define RE_8_DESTINATION          (0x08U)           //!< Header byte
+#define RE_8_INVALID_TEMPERATURE  (0x8000U)         //!< Encoded N/A value
+#define RE_8_INVALID_HUMIDITY     (0xFFFFU)         //!< Encoded N/A value
+#define RE_8_INVALID_PRESSURE     (0xFFFFU)         //!< Encoded N/A value
+#define RE_8_INVALID_SEQUENCE     (0xFFFFU)         //!< Encoded N/A value
+#define RE_8_INVALID_MOVEMENT     (0xFFFFU)         //!< Encoded N/A value
+#define RE_8_INVALID_VOLTAGE      (0x07FFU)         //!< Encoded N/A value
+#define RE_8_INVALID_POWER        (0x1FU)           //!< Encoded N/A value
+#define RE_8_INVALID_MAC          (0xFFFFFFFFFFFFU) //!< Encoded N/A value
+#define RE_8_DATA_LENGTH          (24U)             //!< Encoded N/A value
+#define RE_8_CIPHERTEXT_LENGTH    (16U)             //!< Encoded N/A value
 
-#define RE_8_TEMP_MAX          (163.835f)
-#define RE_8_TEMP_MIN          (-163.835f)
-#define RE_8_HUMI_MAX          (163.835f)
-#define RE_8_HUMI_MIN          (0.0f)
-#define RE_8_PRES_MAX          (115534.0f)
-#define RE_8_PRES_MIN          (50000.0f)
-#define RE_8_ACC_MAX           (32.767f)
-#define RE_8_ACC_MIN           (-32.767f)
-#define RE_8_VOLTAGE_MAX       (3.646f)
-#define RE_8_VOLTAGE_MIN       (1.6f)
-#define RE_8_TXPWR_MAX         (20)
-#define RE_8_TXPWR_MIN         (-40)
+#define RE_8_TEMP_MAX          (163.835f)           //!< Maximum encoded value
+#define RE_8_TEMP_MIN          (-163.835f)          //!< Minimum encoded value
+#define RE_8_HUMI_MAX          (163.835f)           //!< Maximum encoded value
+#define RE_8_HUMI_MIN          (0.0f)               //!< Minimum encoded value
+#define RE_8_PRES_MAX          (115534.0f)          //!< Maximum encoded value
+#define RE_8_PRES_MIN          (50000.0f)           //!< Minimum encoded value
+#define RE_8_ACC_MAX           (32.767f)            //!< Maximum encoded value
+#define RE_8_ACC_MIN           (-32.767f)           //!< Minimum encoded value
+#define RE_8_VOLTAGE_MAX       (3.646f)             //!< Maximum encoded value
+#define RE_8_VOLTAGE_MIN       (1.6f)               //!< Minimum encoded value
+#define RE_8_TXPWR_MAX         (20)                 //!< Maximum encoded value
+#define RE_8_TXPWR_MIN         (-40)                //!< Minimum encoded value
 
-#define RE_8_OFFSET_HEADER     (0U)
-#define RE_8_OFFSET_CIPHER     (1U)
-#define RE_8_OFFSET_TEMP_MSB   (1U)
-#define RE_8_OFFSET_TEMP_LSB   (2U)
-#define RE_8_OFFSET_HUMI_MSB   (3U)
-#define RE_8_OFFSET_HUMI_LSB   (4U)
-#define RE_8_OFFSET_PRES_MSB   (5U)
-#define RE_8_OFFSET_PRES_LSB   (6U)
-#define RE_8_OFFSET_POWER_MSB  (7U)
-#define RE_8_OFFSET_POWER_LSB  (8U)
-#define RE_8_OFFSET_MVTCTR_MSB (9U)
-#define RE_8_OFFSET_MVTCTR_LSB (10U)
-#define RE_8_OFFSET_SEQCTR_MSB (11U)
-#define RE_8_OFFSET_SEQCTR_LSB (12U)
-#define RE_8_RESERVED_BYTES    (4U)
-#define RE_8_OFFSET_RESERVED   (13U)
-#define RE_8_OFFSET_CRC8       (17U)
-#define RE_8_OFFSET_ADDR_MSB   (18U)
-#define RE_8_OFFSET_ADDR_LSB   (RE_8_OFFSET_ADDR_MSB + 5U)
+#define RE_8_OFFSET_HEADER     (0U)                 //!< Index of header
+#define RE_8_OFFSET_CIPHER     (1U)                 //!< Index of first encrypted byte
+#define RE_8_OFFSET_TEMP_MSB   (1U)                 //!< Index of temperature MSB
+#define RE_8_OFFSET_TEMP_LSB   (2U)                 //!< Index of temperature LSB
+#define RE_8_OFFSET_HUMI_MSB   (3U)                 //!< Index of humidity MSB
+#define RE_8_OFFSET_HUMI_LSB   (4U)                 //!< Index of humidity LSB
+#define RE_8_OFFSET_PRES_MSB   (5U)                 //!< Index of pressure MSB
+#define RE_8_OFFSET_PRES_LSB   (6U)                 //!< Index of pressure LSB
+#define RE_8_OFFSET_POWER_MSB  (7U)                 //!< Index of power info MSB
+#define RE_8_OFFSET_POWER_LSB  (8U)                 //!< Index of power info LSB
+#define RE_8_OFFSET_MVTCTR_MSB (9U)                 //!< Index of movement counter MSB
+#define RE_8_OFFSET_MVTCTR_LSB (10U)                //!< Index of movement counter LSB
+#define RE_8_OFFSET_SEQCTR_MSB (11U)                //!< Index of sequence counter MSB
+#define RE_8_OFFSET_SEQCTR_LSB (12U)                //!< Index of sequence counter LSB
+#define RE_8_RESERVED_BYTES    (4U)                 //!< Reserved encrypted space
+#define RE_8_OFFSET_RESERVED   (13U)                //!< Index of start of reserved space
+#define RE_8_OFFSET_CRC8       (17U)                //!< Index of CRC8 byte
+#define RE_8_OFFSET_ADDR_MSB   (18U)                //!< Start of address
+#define RE_8_OFFSET_ADDR_LSB   (RE_8_OFFSET_ADDR_MSB + 5U) //!< End of address
 
 /** @brief All data required for Ruuvi dataformat 08 package. */
 typedef struct
