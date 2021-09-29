@@ -5,7 +5,7 @@
  * Ruuvi Endpoint 0x08 helper.
  * Encrypted data format for RuuviTags.
  *
- * @file ruuvi_endpoint_08.h
+ * @file ruuvi_endpoint_8.h
  * @author Otso Jousimaa <otso@ojousima.net>
  * @date 2021-08-25
  * @copyright Ruuvi Innovations Ltd, license BSD-3-Clause.
