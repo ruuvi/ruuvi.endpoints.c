@@ -1,4 +1,4 @@
-# 3.1.0 (in progress)
+# 3.1.0
  - Add encrypted data formats 0x08, 0xFA
  - Fix Dataformat 5 overflow bugs.
 
