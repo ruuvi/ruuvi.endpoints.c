@@ -189,7 +189,7 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
 void re_clip (float * const value, const float min, const float max);
 
 /**
- * @brief Calculate CRC8 checksum of a data array
+ * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07
  *
  * @param[in] DataArray Array to checksum
  * @param[in] Length Length of data to checksum

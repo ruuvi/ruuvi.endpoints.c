@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define RE_8_DESTINATION          (0x05U)
+#define RE_8_DESTINATION          (0x08U)
 #define RE_8_INVALID_TEMPERATURE  (0x8000U)
 #define RE_8_INVALID_HUMIDITY     (0xFFFFU)
 #define RE_8_INVALID_PRESSURE     (0xFFFFU)
