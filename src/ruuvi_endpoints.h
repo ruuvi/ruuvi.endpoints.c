@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "3.0.1"     //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "3.1.0"     //!< SEMVER of endpoints.
 
-#define RE_SUCCESS                  (0U)
+#define RE_SUCCESS                  (0U)        //!< Encoded successfully.
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.
 #define RE_ERROR_INVALID_PARAM      (1U << 4U)  //!< Invalid Parameter.
 #define RE_ERROR_NULL               (1U << 11U) //!< Null Pointer.
@@ -17,7 +17,7 @@
 #define RE_ERROR_DECODING_ETX       (1U << 17U) //!< Data decoding etx failed.
 #define RE_ERROR_DECODING_CRC       (1U << 18U) //!< Data decoding crc failed.
 #define RE_ERROR_DECODING_CMD       (1U << 19U) //!< Data decoding cmd failed.
-#define RE_ERROR_NOT_IMPLEMENTED    (1U << 24U)   //!< Not implemented yet.
+#define RE_ERROR_NOT_IMPLEMENTED    (1U << 24U) //!< Not implemented yet.
 
 typedef uint32_t re_status_t; //!< Status code
 typedef float    re_float;    //!< Ruuvi endpoint float type
@@ -178,5 +178,23 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
  */
 re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
                                const uint8_t source);
+
+/**
+ * @brief Clip given float to the given range.
+ *
+ * @param[out] value Value to clip.
+ * @param[in]  min Minimum value. Value pointer will be >= min.
+ * @param[in]  max Maximum value. Value pointer will be <= max.
+ */
+void re_clip (float * const value, const float min, const float max);
+
+/**
+ * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07
+ *
+ * @param[in] DataArray Array to checksum
+ * @param[in] Length Length of data to checksum
+ * @return CRC8 Checksum
+ */
+uint8_t re_calc_crc8 (const uint8_t * DataArray, const uint16_t Length);
 
 #endif
