@@ -17,12 +17,6 @@
 #define RE_5_TXPWR_RATIO         (2)
 #define RE_5_TXPWR_OFFSET        (40)
 
-#define RE_5_MVTCTR_MAX          (254)
-#define RE_5_MVTCTR_MIN          (0)
-
-#define RE_5_SEQCTR_MAX          (65534)
-#define RE_5_SEQCTR_MIN          (0)
-
 #define RE_5_MAC_MAX             (281474976710655)
 #define RE_5_MAC_MIN             (0)
 
