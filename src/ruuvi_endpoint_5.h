@@ -34,6 +34,10 @@
 #define RE_5_VOLTAGE_MIN       (1.6f)
 #define RE_5_TXPWR_MAX         (20)
 #define RE_5_TXPWR_MIN         (-40)
+#define RE_5_MVTCTR_MAX        (254)
+#define RE_5_MVTCTR_MIN        (0)
+#define RE_5_SEQCTR_MAX        (65534)
+#define RE_5_SEQCTR_MIN        (0)
 
 #define RE_5_OFFSET_HEADER     (0U)
 #define RE_5_OFFSET_TEMP_MSB   (1U)
