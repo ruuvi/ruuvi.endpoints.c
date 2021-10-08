@@ -39,6 +39,10 @@
 #define RE_8_VOLTAGE_MIN       (1.6f)               //!< Minimum encoded value
 #define RE_8_TXPWR_MAX         (20)                 //!< Maximum encoded value
 #define RE_8_TXPWR_MIN         (-40)                //!< Minimum encoded value
+#define RE_8_MVTCTR_MAX        (0xFFFEU)            //!< Maximum encoded value
+#define RE_8_MVTCTR_MIN        (0U)                 //!< Minimum encoded value
+#define RE_8_SEQCTR_MAX        (0xFFFEU)            //!< Maximum encoded value
+#define RE_8_SEQCTR_MIN        (0xU)                //!< Minimum encoded value
 
 #define RE_8_OFFSET_HEADER     (0U)                 //!< Index of header
 #define RE_8_OFFSET_CIPHER     (1U)                 //!< Index of first encrypted byte

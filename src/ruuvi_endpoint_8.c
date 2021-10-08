@@ -17,9 +17,6 @@
 #define RE_8_TXPWR_RATIO         (2)
 #define RE_8_TXPWR_OFFSET        (40)
 #define RE_8_BYTE_VOLTAGE_OFFSET (5U)
-#define RE_8_MVTCTR_MAX          (0xFFFEU)
-#define RE_8_MVTCTR_MIN          (0)
-#define RE_8_SEQCTR_MAX          (0xFFFEU)
 
 static void re_8_encode_set_address (uint8_t * const buffer,
                                      const re_8_data_t * data)
