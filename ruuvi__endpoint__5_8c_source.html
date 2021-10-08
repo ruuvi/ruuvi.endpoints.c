@@ -105,217 +105,211 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__5_8c_source.html','')
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#define RE_5_TXPWR_RATIO         (2)</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define RE_5_TXPWR_OFFSET        (40)</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define RE_5_MVTCTR_MAX          (254)</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define RE_5_MVTCTR_MIN          (0)</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define RE_5_MAC_MAX             (281474976710655)</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define RE_5_MAC_MIN             (0)</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define RE_5_SEQCTR_MAX          (65534)</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#define RE_5_SEQCTR_MIN          (0)</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define RE_5_MAC_MAX             (281474976710655)</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define RE_5_MAC_MIN             (0)</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#define RE_5_BYTE_1_SHIFT        (8U)</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define RE_5_BYTE_2_SHIFT        (16U)</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#define RE_5_BYTE_3_SHIFT        (24U)</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#define RE_5_BYTE_4_SHIFT        (32U)</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#define RE_5_BYTE_5_SHIFT        (40U)</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#define RE_5_BYTE_MASK           (0xFFU)</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#define RE_5_BYTE_VOLTAGE_OFFSET (5U)</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">// Avoid mocking simple function</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#ifdef TEST</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">void</span> re_clip (<span class="keywordtype">float</span> * <span class="keyword">const</span> value, <span class="keyword">const</span> <span class="keywordtype">float</span> min, <span class="keyword">const</span> <span class="keywordtype">float</span> max)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordflow">if</span> (*value &gt; max)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        *value = max;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (*value &lt; min)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        *value = min;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_acceleration (uint8_t * <span class="keyword">const</span> acceleration_slot,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                                      <span class="keywordtype">float</span> acceleration)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;{</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define RE_5_BYTE_1_SHIFT        (8U)</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#define RE_5_BYTE_2_SHIFT        (16U)</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define RE_5_BYTE_3_SHIFT        (24U)</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define RE_5_BYTE_4_SHIFT        (32U)</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#define RE_5_BYTE_5_SHIFT        (40U)</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#define RE_5_BYTE_MASK           (0xFFU)</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#define RE_5_BYTE_VOLTAGE_OFFSET (5U)</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// Avoid mocking simple function</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#ifdef TEST</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> re_clip (<span class="keywordtype">float</span> * <span class="keyword">const</span> value, <span class="keyword">const</span> <span class="keywordtype">float</span> min, <span class="keyword">const</span> <span class="keywordtype">float</span> max)</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordflow">if</span> (*value &gt; max)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        *value = max;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">if</span> (*value &lt; min)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        *value = min;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_acceleration (uint8_t * <span class="keyword">const</span> acceleration_slot,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                      <span class="keywordtype">float</span> acceleration)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">if</span> (!isnan (acceleration))</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        re_clip (&amp;acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">if</span> (!isnan (acceleration))</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        re_clip (&amp;acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    acceleration_slot[0] = (coded_acceleration &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    acceleration_slot[1] = (coded_acceleration &amp; RE_5_BYTE_MASK);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    acceleration_slot[0] = (coded_acceleration &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    acceleration_slot[1] = (coded_acceleration &amp; RE_5_BYTE_MASK);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_set_address (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// Address is 64 bits, skip 2 first bytes</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    uint8_t addr_offset = RE_5_OFFSET_ADDR_MSB;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    uint64_t mac = data-&gt;<a class="code" href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_set_address (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;{</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// Address is 64 bits, skip 2 first bytes</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    uint8_t addr_offset = RE_5_OFFSET_ADDR_MSB;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    uint64_t mac = data-&gt;<a class="code" href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">if</span> ( (RE_5_MAC_MAX &lt; data-&gt;address) || (RE_5_MAC_MIN &gt; data-&gt;<a class="code" href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>))</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        mac = RE_5_INVALID_MAC;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_5_SHIFT) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> ( (RE_5_MAC_MAX &lt; data-&gt;address) || (RE_5_MAC_MIN &gt; data-&gt;<a class="code" href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>))</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        mac = RE_5_INVALID_MAC;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_5_SHIFT) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_4_SHIFT) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_3_SHIFT) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_2_SHIFT) &amp; RE_5_BYTE_MASK;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_4_SHIFT) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_1_SHIFT) &amp; RE_5_BYTE_MASK;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_3_SHIFT) &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_2_SHIFT) &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; RE_5_BYTE_1_SHIFT) &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; 0) &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_humidity (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;{</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">float</span> humidity = data-&gt;<a class="code" href="structre__5__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    buffer[addr_offset] = (mac &gt;&gt; 0) &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_humidity (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;{</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">float</span> humidity = data-&gt;<a class="code" href="structre__5__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">if</span> (!isnan (humidity))</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        re_clip (&amp;humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        coded_humidity = (uint16_t) roundf (humidity * RE_5_HUMI_RATIO);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">if</span> (!isnan (humidity))</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        re_clip (&amp;humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        coded_humidity = (uint16_t) roundf (humidity * RE_5_HUMI_RATIO);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    buffer[RE_5_OFFSET_HUMI_MSB] = coded_humidity &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    buffer[RE_5_OFFSET_HUMI_LSB] = coded_humidity &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_temperature (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;{</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    uint16_t coded_temperature = RE_5_INVALID_TEMPERATURE;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">float</span> temperature = data-&gt;<a class="code" href="structre__5__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    buffer[RE_5_OFFSET_HUMI_MSB] = coded_humidity &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    buffer[RE_5_OFFSET_HUMI_LSB] = coded_humidity &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;}</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_temperature (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;{</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    uint16_t coded_temperature = RE_5_INVALID_TEMPERATURE;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">float</span> temperature = data-&gt;<a class="code" href="structre__5__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordflow">if</span> (!isnan (temperature))</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        re_clip (&amp;temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    }</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordflow">if</span> (!isnan (temperature))</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        re_clip (&amp;temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    buffer[RE_5_OFFSET_TEMP_MSB] = coded_temperature &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    buffer[RE_5_OFFSET_TEMP_LSB] = coded_temperature &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;}</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_pressure (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;{</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    uint16_t coded_pressure = RE_5_INVALID_PRESSURE;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordtype">float</span> pressure = data-&gt;<a class="code" href="structre__5__data__t.html#a6b53561bef0bcf81442f6ee13f077a17">pressure_pa</a>;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordflow">if</span> (!isnan (pressure))</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    {</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        re_clip (&amp;pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        pressure += RE_5_PRES_OFFSET;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        coded_pressure = (uint16_t) roundf (pressure * RE_5_PRES_RATIO);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    }</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    buffer[RE_5_OFFSET_PRES_MSB] = coded_pressure &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    buffer[RE_5_OFFSET_PRES_LSB] = coded_pressure &amp; RE_5_BYTE_MASK;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;}</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_pwr (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;{</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    uint16_t coded_voltage = RE_5_INVALID_VOLTAGE;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keywordtype">float</span> voltage = data-&gt;<a class="code" href="structre__5__data__t.html#ad2554bcbf22c9ff86542cbf3669e53f2">battery_v</a>;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    uint16_t coded_tx_power = RE_5_INVALID_POWER;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">float</span> tx_power = (float) data-&gt;<a class="code" href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">tx_power</a>;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    if (!isnan (voltage))</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    {</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        re_clip (&amp;voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                                            - RE_5_BATT_OFFSET);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    }</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="comment">// Check against original int value</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">if</span> (RE_5_INVALID_POWER != data-&gt;<a class="code" href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">tx_power</a>)</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        re_clip (&amp;tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        coded_tx_power = (uint16_t) roundf ( (tx_power</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                                              + RE_5_TXPWR_OFFSET)</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                                             / RE_5_TXPWR_RATIO);</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    buffer[RE_5_OFFSET_TEMP_MSB] = coded_temperature &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    buffer[RE_5_OFFSET_TEMP_LSB] = coded_temperature &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;}</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_pressure (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;{</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    uint16_t coded_pressure = RE_5_INVALID_PRESSURE;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">float</span> pressure = data-&gt;<a class="code" href="structre__5__data__t.html#a6b53561bef0bcf81442f6ee13f077a17">pressure_pa</a>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordflow">if</span> (!isnan (pressure))</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    {</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        re_clip (&amp;pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        pressure += RE_5_PRES_OFFSET;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        coded_pressure = (uint16_t) roundf (pressure * RE_5_PRES_RATIO);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    buffer[RE_5_OFFSET_PRES_MSB] = coded_pressure &gt;&gt; RE_5_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    buffer[RE_5_OFFSET_PRES_LSB] = coded_pressure &amp; RE_5_BYTE_MASK;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_pwr (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;{</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    uint16_t coded_voltage = RE_5_INVALID_VOLTAGE;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">float</span> voltage = data-&gt;<a class="code" href="structre__5__data__t.html#ad2554bcbf22c9ff86542cbf3669e53f2">battery_v</a>;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    uint16_t coded_tx_power = RE_5_INVALID_POWER;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">float</span> tx_power = (float) data-&gt;<a class="code" href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">tx_power</a>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    if (!isnan (voltage))</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    {</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        re_clip (&amp;voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                                            - RE_5_BATT_OFFSET);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    }</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="comment">// Check against original int value</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keywordflow">if</span> (RE_5_INVALID_POWER != data-&gt;<a class="code" href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">tx_power</a>)</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    {</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        re_clip (&amp;tx_power, RE_5_TXPWR_MIN, RE_5_TXPWR_MAX);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        coded_tx_power = (uint16_t) roundf ( (tx_power</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                                              + RE_5_TXPWR_OFFSET)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                                             / RE_5_TXPWR_RATIO);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    }</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    uint16_t power_info = ( (uint16_t) (coded_voltage &lt;&lt; RE_5_BYTE_VOLTAGE_OFFSET))</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                          + coded_tx_power;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    buffer[RE_5_OFFSET_POWER_MSB] = (power_info &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    buffer[RE_5_OFFSET_POWER_LSB] = (power_info &amp; RE_5_BYTE_MASK);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;}</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    uint16_t power_info = ( (uint16_t) (coded_voltage &lt;&lt; RE_5_BYTE_VOLTAGE_OFFSET))</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                          + coded_tx_power;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    buffer[RE_5_OFFSET_POWER_MSB] = (power_info &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    buffer[RE_5_OFFSET_POWER_LSB] = (power_info &amp; RE_5_BYTE_MASK);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_movement (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;{</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    uint8_t movement_count = RE_5_INVALID_MOVEMENT;</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordflow">if</span> (RE_5_MVTCTR_MAX &gt;= data-&gt;<a class="code" href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">movement_count</a>)</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        movement_count = data-&gt;<a class="code" href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">movement_count</a>;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    buffer[RE_5_OFFSET_MVTCTR] = movement_count;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;}</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_sequence (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;{</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    uint16_t measurement_seq = RE_5_INVALID_SEQUENCE;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="keywordflow">if</span> (RE_5_SEQCTR_MAX &gt;= data-&gt;<a class="code" href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>)</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    {</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        measurement_seq = data-&gt;<a class="code" href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    }</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    buffer[RE_5_OFFSET_SEQCTR_MSB] = (measurement_seq &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    buffer[RE_5_OFFSET_SEQCTR_LSB] = (measurement_seq &amp; RE_5_BYTE_MASK);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;}</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;re_status_t re_5_encode (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;{</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    re_status_t result = RE_SUCCESS;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keywordflow">if</span> ( (NULL == buffer) || (NULL == data))</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    {</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        result |= RE_ERROR_NULL;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    }</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    {</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        buffer[RE_5_OFFSET_HEADER] = RE_5_DESTINATION;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        re_5_encode_humidity (buffer, data);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        re_5_encode_temperature (buffer, data);</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        re_5_encode_pressure (buffer, data);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCX_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#a61320cc418047fa40e6bc04ba8a7399e">accelerationx_g</a>);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCY_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#ac5e06dd29dde0bf8eac36f9ca4caa47f">accelerationy_g</a>);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCZ_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#a572df527b5dd1774d3eca8eac220037a">accelerationz_g</a>);</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        re_5_encode_movement (buffer, data);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        re_5_encode_sequence (buffer, data);</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        re_5_encode_pwr (buffer, data);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        re_5_encode_set_address (buffer, data);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    }</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;}</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_movement (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;{</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    uint8_t movement_count = RE_5_INVALID_MOVEMENT;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keywordflow">if</span> (RE_5_MVTCTR_MAX &gt;= data-&gt;<a class="code" href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">movement_count</a>)</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        movement_count = data-&gt;<a class="code" href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">movement_count</a>;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    buffer[RE_5_OFFSET_MVTCTR] = movement_count;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;}</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_sequence (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;{</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    uint16_t measurement_seq = RE_5_INVALID_SEQUENCE;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keywordflow">if</span> (RE_5_SEQCTR_MAX &gt;= data-&gt;<a class="code" href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>)</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        measurement_seq = data-&gt;<a class="code" href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    buffer[RE_5_OFFSET_SEQCTR_MSB] = (measurement_seq &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    buffer[RE_5_OFFSET_SEQCTR_LSB] = (measurement_seq &amp; RE_5_BYTE_MASK);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;}</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;re_status_t re_5_encode (uint8_t * <span class="keyword">const</span> buffer, <span class="keyword">const</span> <a class="code" href="structre__5__data__t.html">re_5_data_t</a> * data)</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;{</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    re_status_t result = RE_SUCCESS;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordflow">if</span> ( (NULL == buffer) || (NULL == data))</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        result |= RE_ERROR_NULL;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        buffer[RE_5_OFFSET_HEADER] = RE_5_DESTINATION;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        re_5_encode_humidity (buffer, data);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        re_5_encode_temperature (buffer, data);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        re_5_encode_pressure (buffer, data);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCX_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#a61320cc418047fa40e6bc04ba8a7399e">accelerationx_g</a>);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCY_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#ac5e06dd29dde0bf8eac36f9ca4caa47f">accelerationy_g</a>);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        re_5_encode_acceleration (&amp;buffer[RE_5_OFFSET_ACCZ_MSB], data-&gt;<a class="code" href="structre__5__data__t.html#a572df527b5dd1774d3eca8eac220037a">accelerationz_g</a>);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        re_5_encode_movement (buffer, data);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        re_5_encode_sequence (buffer, data);</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        re_5_encode_pwr (buffer, data);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        re_5_encode_set_address (buffer, data);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astructre__5__data__t_html_a8ddbd55435635e488691c0093c35dde9"><div class="ttname"><a href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">re_5_data_t::measurement_count</a></div><div class="ttdeci">uint16_t measurement_count</div><div class="ttdoc">Running counter of measurement.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00075">ruuvi_endpoint_5.h:75</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a3e8b1bce5679a8bbe095f0a7327358f4"><div class="ttname"><a href="structre__5__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">re_5_data_t::temperature_c</a></div><div class="ttdeci">re_float temperature_c</div><div class="ttdoc">Temperature in celcius.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00065">ruuvi_endpoint_5.h:65</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a62aa386606ead2e44bc56463b3f52a77"><div class="ttname"><a href="structre__5__data__t.html#a62aa386606ead2e44bc56463b3f52a77">re_5_data_t::humidity_rh</a></div><div class="ttdeci">re_float humidity_rh</div><div class="ttdoc">Humidity in relative humidity percentage.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00061">ruuvi_endpoint_5.h:61</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_ad2554bcbf22c9ff86542cbf3669e53f2"><div class="ttname"><a href="structre__5__data__t.html#ad2554bcbf22c9ff86542cbf3669e53f2">re_5_data_t::battery_v</a></div><div class="ttdeci">re_float battery_v</div><div class="ttdoc">Battery voltage, preferably under load such as radio TX.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00073">ruuvi_endpoint_5.h:73</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a72a96ade6a01c9bd107a0977b6a3059c"><div class="ttname"><a href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">re_5_data_t::tx_power</a></div><div class="ttdeci">int8_t tx_power</div><div class="ttdoc">Transmission power of radio, in dBm.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00081">ruuvi_endpoint_5.h:81</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a61320cc418047fa40e6bc04ba8a7399e"><div class="ttname"><a href="structre__5__data__t.html#a61320cc418047fa40e6bc04ba8a7399e">re_5_data_t::accelerationx_g</a></div><div class="ttdeci">re_float accelerationx_g</div><div class="ttdoc">Acceleration along X-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00067">ruuvi_endpoint_5.h:67</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a19bea34ca8235e325e4d3a225a702e01"><div class="ttname"><a href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">re_5_data_t::movement_count</a></div><div class="ttdeci">uint8_t movement_count</div><div class="ttdoc">Number of detected movements.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00077">ruuvi_endpoint_5.h:77</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a572df527b5dd1774d3eca8eac220037a"><div class="ttname"><a href="structre__5__data__t.html#a572df527b5dd1774d3eca8eac220037a">re_5_data_t::accelerationz_g</a></div><div class="ttdeci">re_float accelerationz_g</div><div class="ttdoc">Acceleration along Z-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00071">ruuvi_endpoint_5.h:71</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html"><div class="ttname"><a href="structre__5__data__t.html">re_5_data_t</a></div><div class="ttdoc">All data required for Ruuvi dataformat 5 package.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00059">ruuvi_endpoint_5.h:59</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_ac5e06dd29dde0bf8eac36f9ca4caa47f"><div class="ttname"><a href="structre__5__data__t.html#ac5e06dd29dde0bf8eac36f9ca4caa47f">re_5_data_t::accelerationy_g</a></div><div class="ttdeci">re_float accelerationy_g</div><div class="ttdoc">Acceleration along Y-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00069">ruuvi_endpoint_5.h:69</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_a6b53561bef0bcf81442f6ee13f077a17"><div class="ttname"><a href="structre__5__data__t.html#a6b53561bef0bcf81442f6ee13f077a17">re_5_data_t::pressure_pa</a></div><div class="ttdeci">re_float pressure_pa</div><div class="ttdoc">Pressure in pascals.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00063">ruuvi_endpoint_5.h:63</a></div></div>
-<div class="ttc" id="astructre__5__data__t_html_ab6b52376c1b9d81e6ea6f95a1225f832"><div class="ttname"><a href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">re_5_data_t::address</a></div><div class="ttdeci">uint64_t address</div><div class="ttdoc">BLE address of device, most significant byte first.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00079">ruuvi_endpoint_5.h:79</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a8ddbd55435635e488691c0093c35dde9"><div class="ttname"><a href="structre__5__data__t.html#a8ddbd55435635e488691c0093c35dde9">re_5_data_t::measurement_count</a></div><div class="ttdeci">uint16_t measurement_count</div><div class="ttdoc">Running counter of measurement.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00079">ruuvi_endpoint_5.h:79</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a3e8b1bce5679a8bbe095f0a7327358f4"><div class="ttname"><a href="structre__5__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">re_5_data_t::temperature_c</a></div><div class="ttdeci">re_float temperature_c</div><div class="ttdoc">Temperature in celcius.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00069">ruuvi_endpoint_5.h:69</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a62aa386606ead2e44bc56463b3f52a77"><div class="ttname"><a href="structre__5__data__t.html#a62aa386606ead2e44bc56463b3f52a77">re_5_data_t::humidity_rh</a></div><div class="ttdeci">re_float humidity_rh</div><div class="ttdoc">Humidity in relative humidity percentage.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00065">ruuvi_endpoint_5.h:65</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_ad2554bcbf22c9ff86542cbf3669e53f2"><div class="ttname"><a href="structre__5__data__t.html#ad2554bcbf22c9ff86542cbf3669e53f2">re_5_data_t::battery_v</a></div><div class="ttdeci">re_float battery_v</div><div class="ttdoc">Battery voltage, preferably under load such as radio TX.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00077">ruuvi_endpoint_5.h:77</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a72a96ade6a01c9bd107a0977b6a3059c"><div class="ttname"><a href="structre__5__data__t.html#a72a96ade6a01c9bd107a0977b6a3059c">re_5_data_t::tx_power</a></div><div class="ttdeci">int8_t tx_power</div><div class="ttdoc">Transmission power of radio, in dBm.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00085">ruuvi_endpoint_5.h:85</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a61320cc418047fa40e6bc04ba8a7399e"><div class="ttname"><a href="structre__5__data__t.html#a61320cc418047fa40e6bc04ba8a7399e">re_5_data_t::accelerationx_g</a></div><div class="ttdeci">re_float accelerationx_g</div><div class="ttdoc">Acceleration along X-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00071">ruuvi_endpoint_5.h:71</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a19bea34ca8235e325e4d3a225a702e01"><div class="ttname"><a href="structre__5__data__t.html#a19bea34ca8235e325e4d3a225a702e01">re_5_data_t::movement_count</a></div><div class="ttdeci">uint8_t movement_count</div><div class="ttdoc">Number of detected movements.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00081">ruuvi_endpoint_5.h:81</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a572df527b5dd1774d3eca8eac220037a"><div class="ttname"><a href="structre__5__data__t.html#a572df527b5dd1774d3eca8eac220037a">re_5_data_t::accelerationz_g</a></div><div class="ttdeci">re_float accelerationz_g</div><div class="ttdoc">Acceleration along Z-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00075">ruuvi_endpoint_5.h:75</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html"><div class="ttname"><a href="structre__5__data__t.html">re_5_data_t</a></div><div class="ttdoc">All data required for Ruuvi dataformat 5 package.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00063">ruuvi_endpoint_5.h:63</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_ac5e06dd29dde0bf8eac36f9ca4caa47f"><div class="ttname"><a href="structre__5__data__t.html#ac5e06dd29dde0bf8eac36f9ca4caa47f">re_5_data_t::accelerationy_g</a></div><div class="ttdeci">re_float accelerationy_g</div><div class="ttdoc">Acceleration along Y-axis, can be RMS over some period.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00073">ruuvi_endpoint_5.h:73</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_a6b53561bef0bcf81442f6ee13f077a17"><div class="ttname"><a href="structre__5__data__t.html#a6b53561bef0bcf81442f6ee13f077a17">re_5_data_t::pressure_pa</a></div><div class="ttdeci">re_float pressure_pa</div><div class="ttdoc">Pressure in pascals.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00067">ruuvi_endpoint_5.h:67</a></div></div>
+<div class="ttc" id="astructre__5__data__t_html_ab6b52376c1b9d81e6ea6f95a1225f832"><div class="ttname"><a href="structre__5__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">re_5_data_t::address</a></div><div class="ttdeci">uint64_t address</div><div class="ttdoc">BLE address of device, most significant byte first.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__5_8h_source.html#l00083">ruuvi_endpoint_5.h:83</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
