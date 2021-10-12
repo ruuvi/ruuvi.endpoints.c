@@ -1,4 +1,4 @@
-# 3.2.0
+# 3.1.1
  - Conditionally compile endpoints to save flash on constrained targets.
 
 # 3.1.0
