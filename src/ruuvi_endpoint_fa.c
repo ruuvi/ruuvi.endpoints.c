@@ -3,6 +3,8 @@
 #include <math.h>
 #include <string.h>
 
+#if RE_FA_ENABLED
+
 #define RE_FA_INVALID_MAC (0xFFFFFFFFFFFFU)
 #define RE_FA_ENCODE_MAC_MAX (0xFFFFFFFFFFFEU)
 #define RE_FA_ENCODE_MAC_MIN (0U)
@@ -64,3 +66,4 @@ re_status_t re_fa_encode (uint8_t * const buffer,
     re_fa_encode_set_address (buffer, data);
     return encoding_status;
 }
+#endif

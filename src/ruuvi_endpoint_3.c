@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <math.h>
 
+#if RE_3_ENABLED
+
 #define RE_3_ENCODE_INVALID_PRECISION       0.00001f
 #define RE_3_ENCODE_ACC_CONVERT_RATIO       1000
 #define RE_3_ENCODE_HUMIDITY_CONVERT_RATIO  2
@@ -186,3 +188,5 @@ re_status_t re_3_encode (uint8_t * const buffer,
 
     return result;
 }
+
+#endif

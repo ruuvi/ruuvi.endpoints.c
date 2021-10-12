@@ -1,9 +1,18 @@
 #ifndef RUUVI_ENDPOINTS_H
 #define RUUVI_ENDPOINTS_H
 
+#ifdef APPLICATION_ENDPOINTS_CONFIGURED
+#   include "app_config.h"
+#else
+#   define RE_3_ENABLED
+#   define RE_5_ENABLED
+#   define RE_8_ENABLED
+#   define RE_FA_ENABLED
+#endif
+
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "3.1.0"     //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "3.1.1"     //!< SEMVER of endpoints.
 
 #define RE_SUCCESS                  (0U)        //!< Encoded successfully.
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.

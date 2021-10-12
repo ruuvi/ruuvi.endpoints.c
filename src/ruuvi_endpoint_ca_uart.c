@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#if RE_CA_ENABLED
+
 #define U16_LSB_MASK    0x00FF
 #define U16_MSB_MASK    0xFF00
 #define U16_MSB_OFFSET  8
@@ -894,3 +896,5 @@ re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
 
     return err_code;
 }
+
+#endif

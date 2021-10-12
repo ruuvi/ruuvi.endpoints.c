@@ -9,7 +9,9 @@ Data endpoints for abstracting source (e.g. bme280) from data (e.g. temperature)
 ![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&metric=code_smells)
 
 # Embedding to your application
-Include a tagged release to your application as a git submodule. 
+Include a tagged release to your application as a git submodule.
+If you define `APPLICATION_ENDPOINTS_CONFIGURED` in preprocessor, you can select which endpoints to compile by adding
+definitions `RE_3_ENABLED` , `RE_5_ENABLED`  etc in "app_config.h" inside your application.
 
 # Developing
 ## Unit testing

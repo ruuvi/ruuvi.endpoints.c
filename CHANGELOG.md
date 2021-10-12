@@ -1,3 +1,6 @@
+# 3.2.0
+ - Conditionally compile endpoints to save flash on constrained targets.
+
 # 3.1.0
  - Add encrypted data formats 0x08, 0xFA
  - Fix Dataformat 5 overflow bugs.

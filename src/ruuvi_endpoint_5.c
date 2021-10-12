@@ -5,6 +5,8 @@
 #include <string.h>
 #include <math.h>
 
+#if RE_5_ENABLED
+
 #define RE_5_ACC_RATIO           (1000.0f)
 #define RE_5_HUMI_RATIO          (400.0f)
 #define RE_5_TEMP_RATIO          (200.0f)
@@ -208,3 +210,5 @@ re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
 
     return result;
 }
+
+#endif
