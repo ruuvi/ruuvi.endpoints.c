@@ -4,10 +4,12 @@
 #ifdef APPLICATION_ENDPOINTS_CONFIGURED
 #   include "app_config.h"
 #else
-#   define RE_3_ENABLED
-#   define RE_5_ENABLED
-#   define RE_8_ENABLED
-#   define RE_FA_ENABLED
+#   define RE_3_ENABLED  (1U)
+#   define RE_5_ENABLED  (1U)
+#   define RE_8_ENABLED  (1U)
+#   define RE_CA_ENABLED (1U)
+#   define RE_FA_ENABLED (1U)
+#   define RE_IBEACON_ENABLED (1U)
 #endif
 
 #include <stdint.h>
