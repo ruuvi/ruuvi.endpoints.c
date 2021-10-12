@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="textblock"><p>Data endpoints for abstracting source (e.g. bme280) from data (e.g. temperature).</p>
 <p><object type="image/svg+xml" data="https://github.com/ruuvi/ruuvi.endpoints.c/workflows/GH-Pages/badge.svg" style="pointer-events: none;">GH-Pages</object> <object type="image/svg+xml" data="https://github.com/ruuvi/ruuvi.endpoints.c/workflows/Ceedling/badge.svg" style="pointer-events: none;">Ceedling</object> <img src="https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&amp;metric=alert_status" alt="Quality Gate Status" class="inline"/> <img src="https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&amp;metric=coverage" alt="Coverage" class="inline"/> <img src="https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&amp;metric=bugs" alt="Bugs" class="inline"/> <img src="https://sonarcloud.io/api/project_badges/measure?project=ruuvi.endpoints.c&amp;metric=code_smells" alt="Code Smells" class="inline"/></p>
 <h1>Embedding to your application</h1>
-<p>Include a tagged release to your application as a git submodule.</p>
+<p>Include a tagged release to your application as a git submodule. If you define <code>APPLICATION_ENDPOINTS_CONFIGURED</code> in preprocessor, you can select which endpoints to compile by adding definitions <code>#define RE_3_ENABLED 1</code> , <code>#define RE_5_ENABLED 1</code> etc in "app_config.h" inside your application.</p>
 <h1>Developing</h1>
 <h2>Unit testing</h2>
 <p>Unit tests are run by Ceedling.</p>
