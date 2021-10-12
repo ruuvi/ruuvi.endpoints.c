@@ -1,5 +1,8 @@
 #include "ruuvi_endpoint_ibeacon.h"
+#include "ruuvi_endpoints.h"
 #include <string.h>
+
+#if RE_IBEACON_ENABLED
 
 #define RE_IBEACON_BYTE_MASK    0xFF
 #define RE_IBEACON_BYTE_SHIT    8
@@ -40,3 +43,4 @@ re_status_t re_ibeacon_encode (uint8_t * const buffer,
 
     return re_status;
 }
+#endif

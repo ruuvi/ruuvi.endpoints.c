@@ -3,6 +3,8 @@
 #include <math.h>
 #include <string.h>
 
+#if RE_8_ENABLED
+
 #define RE_8_INVALID_MAC    (0xFFFFFFFFFFFFU)
 #define RE_8_ENCODE_MAC_MAX (0xFFFFFFFFFFFEU)
 
@@ -197,3 +199,5 @@ re_status_t re_8_encode (uint8_t * const buffer,
 
     return result;
 }
+
+#endif

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#if RE_8_ENABLED
 // CRC8 calculation https://oshgarage.com/the-crc8-checksum/
 
 static const uint8_t CRC_8_TABLE[256] =
@@ -52,6 +53,7 @@ uint8_t re_calc_crc8 (const uint8_t * DataArray, const uint16_t Length)
     return CRC;
 }
 
+#endif
 
 /**
  * @brief Get current time for log read command to compensate timestamps.
