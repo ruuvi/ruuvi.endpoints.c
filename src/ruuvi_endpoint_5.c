@@ -49,12 +49,12 @@ void re_clip (float * const value, const float min, const float max)
 static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
                                       float acceleration)
 {
-    uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;
+    int16_t coded_acceleration = RE_5_INVALID_ACCELERATION;
 
     if (!isnan (acceleration))
     {
         re_clip (&acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);
-        coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);
+        coded_acceleration = (int16_t) roundf (acceleration * RE_5_ACC_RATIO);
     }
 
     acceleration_slot[0] = (coded_acceleration >> RE_5_BYTE_1_SHIFT);
