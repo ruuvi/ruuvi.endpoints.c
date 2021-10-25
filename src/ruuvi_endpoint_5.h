@@ -10,17 +10,17 @@
 #define RUUVI_ENDPOINT_5_H
 #include "ruuvi_endpoints.h"
 
-#define RE_5_DESTINATION          0x05
-#define RE_5_INVALID_TEMPERATURE  0x8000
-#define RE_5_INVALID_HUMIDITY     0xFFFF
-#define RE_5_INVALID_PRESSURE     0xFFFF
-#define RE_5_INVALID_ACCELERATION 0x8000
-#define RE_5_INVALID_SEQUENCE     0xFFFF
-#define RE_5_INVALID_MOVEMENT     0xFF
-#define RE_5_INVALID_VOLTAGE      0x07FF
-#define RE_5_INVALID_POWER        0x1F
-#define RE_5_INVALID_MAC          0xFFFFFFFFFFFF
-#define RE_5_DATA_LENGTH          24
+#define RE_5_DESTINATION          (0x05U)
+#define RE_5_INVALID_TEMPERATURE  (0x8000U)
+#define RE_5_INVALID_HUMIDITY     (0xFFFFU)
+#define RE_5_INVALID_PRESSURE     (0xFFFFU)
+#define RE_5_INVALID_ACCELERATION (0x8000U)
+#define RE_5_INVALID_SEQUENCE     (0xFFFFU)
+#define RE_5_INVALID_MOVEMENT     (0xFFU)
+#define RE_5_INVALID_VOLTAGE      (0x07FFU)
+#define RE_5_INVALID_POWER        (0x1FU)
+#define RE_5_INVALID_MAC          (0xFFFFFFFFFFFFU)
+#define RE_5_DATA_LENGTH          (24U)
 
 #define RE_5_TEMP_MAX          (163.835f)
 #define RE_5_TEMP_MIN          (-163.835f)

@@ -138,9 +138,9 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
     }
     else
     {
-        buffer[RE_LOG_WRITE_TS_MSB_IDX] = (uint8_t) ( (timestamp_s >> 24) & 0xFFU);
-        buffer[RE_LOG_WRITE_TS_B2_IDX] = (uint8_t) ( (timestamp_s >> 16) & 0xFFU);
-        buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t) ( (timestamp_s >> 8) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_MSB_IDX] = (uint8_t) ( (timestamp_s >> 24U) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_B2_IDX] = (uint8_t) ( (timestamp_s >> 16U) & 0xFFU);
+        buffer[RE_LOG_WRITE_TS_B3_IDX] = (uint8_t) ( (timestamp_s >> 8U) & 0xFFU);
         buffer[RE_LOG_WRITE_TS_LSB_IDX] = (uint8_t) (timestamp_s & 0xFFU);
     }
 
