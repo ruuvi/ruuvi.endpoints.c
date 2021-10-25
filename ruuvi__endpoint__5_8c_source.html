@@ -137,12 +137,12 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__5_8c_source.html','')
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_5_encode_acceleration (uint8_t * <span class="keyword">const</span> acceleration_slot,</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                                      <span class="keywordtype">float</span> acceleration)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    int16_t coded_acceleration = RE_5_INVALID_ACCELERATION;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">if</span> (!isnan (acceleration))</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        re_clip (&amp;acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        coded_acceleration = (uint16_t) roundf (acceleration * RE_5_ACC_RATIO);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        coded_acceleration = (int16_t) roundf (acceleration * RE_5_ACC_RATIO);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    acceleration_slot[0] = (coded_acceleration &gt;&gt; RE_5_BYTE_1_SHIFT);</div>
