@@ -1,3 +1,6 @@
+# 3.2.0
+ - Add security-related endpoint 2A
+
 # 3.1.1
  - Conditionally compile endpoints to save flash on constrained targets.
 
