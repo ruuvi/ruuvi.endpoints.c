@@ -110,7 +110,9 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
     if (!isnan (temperature))
     {
         re_clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
-        coded_temperature = (uint16_t) roundf (temperature * RE_5_TEMP_RATIO);
+        int16_t rounded_temperature = roundf (temperature * RE_5_TEMP_RATIO);
+        // Type cast adds 2^16 to a negative signed value, not changing bits.
+        coded_temperature = (uint16_t) rounded_temperature;
     }
 
     buffer[RE_5_OFFSET_TEMP_MSB] = coded_temperature >> RE_5_BYTE_1_SHIFT;
