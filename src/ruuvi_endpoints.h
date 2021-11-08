@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "3.2.0"          //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "3.2.1"          //!< SEMVER of endpoints.
 
 #define RE_SUCCESS                  (0U)        //!< Encoded successfully.
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.

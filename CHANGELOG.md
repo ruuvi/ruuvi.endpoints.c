@@ -1,3 +1,6 @@
+# 3.2.1
+ - Fix endpoint 5 negative temperatures being compiler-dependent.
+
 # 3.2.0
  - Add security-related endpoint 2A
 
