@@ -14,7 +14,7 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "3.2.1"          //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "4.0.0"          //!< SEMVER of endpoints.
 
 #define RE_SUCCESS                  (0U)        //!< Encoded successfully.
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.
@@ -75,7 +75,7 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
                                                     RE_STANDARD_OP_READ_BIT)
 
 #define RE_STANDARD_OP_TIMEOUT                 (0xE0)  //!< Internal timeout, aborting operation.
-#define RE_STANDARD_OP_UNAUTHORIZED            (0xEEU) //!< Operation was unauthorized
+#define RE_STANDARD_OP_UNAUTHORIZED            (0xEAU) //!< Operation was unauthorized
 #define RE_STANDARD_OP_ERROR                   (0xEEU) //!< internal error has occured
 
 #define RE_LOG_READ_CURRENT_MSB_IDX            (3U)    //!< MSB of current time.

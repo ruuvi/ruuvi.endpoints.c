@@ -1,3 +1,6 @@
+# 4.0.0
+ - Refactor constants to not use 0xF0 ... 0xFF space, these are reserved for customization.
+
 # 3.2.1
  - Fix endpoint 5 negative temperatures being compiler-dependent.
 
