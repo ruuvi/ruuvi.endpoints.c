@@ -70,6 +70,10 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_STANDARD_LOG_VALUE_READ             (RE_STANDARD_LOG_VALUE_WRITE | \
                                                     RE_STANDARD_OP_READ_BIT)
 
+#define RE_SYS_CONFIG_WRITE_HEARTBEAT          (0xF2U)
+#define RE_SYS_CONFIG_READ_HEARTBEAT           (RE_SYS_CONFIG_WRITE_HEARTBEAT | \
+                                                    RE_STANDARD_OP_READ_BIT)
+
 #define RE_STANDARD_OP_TIMEOUT                 (0xF0)  //!< Internal timeout, aborting operation.
 #define RE_STANDARD_OP_UNAUTHORIZED            (0xFEU) //!< Operation was unauthorized
 #define RE_STANDARD_OP_ERROR                   (0xFFU) //!< internal error has occured
@@ -106,6 +110,7 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_STANDARD_DESTINATION_ADC_BATTERY    (0x20U) //!< ADC battery vs GND
 #define RE_STANDARD_DESTINATION_RTC            (0x21U) //!< RTC value
 #define RE_STANDARD_DESTINATION_PASSWORD       (0x2AU) //!< Password endpoint.
+#define RE_STANDARD_DESTINATION_SYS_CONFIG     (0x22U) //!< Configuration of system settings 
 
 typedef enum
 {
