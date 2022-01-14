@@ -74,9 +74,9 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_SYS_CONFIG_READ_HEARTBEAT           (RE_SYS_CONFIG_WRITE_HEARTBEAT | \
                                                     RE_STANDARD_OP_READ_BIT)
 
-#define RE_STANDARD_OP_TIMEOUT                 (0xF0)  //!< Internal timeout, aborting operation.
-#define RE_STANDARD_OP_UNAUTHORIZED            (0xFEU) //!< Operation was unauthorized
-#define RE_STANDARD_OP_ERROR                   (0xFFU) //!< internal error has occured
+#define RE_STANDARD_OP_TIMEOUT                 (0xE0)  //!< Internal timeout, aborting operation.
+#define RE_STANDARD_OP_UNAUTHORIZED            (0xEEU) //!< Operation was unauthorized
+#define RE_STANDARD_OP_ERROR                   (0xEEU) //!< internal error has occured
 
 #define RE_LOG_READ_CURRENT_MSB_IDX            (3U)    //!< MSB of current time.
 #define RE_LOG_READ_CURRENT_B2_IDX             (4U)    //!< B2 of current time.
