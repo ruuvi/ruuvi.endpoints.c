@@ -49,7 +49,7 @@ jobs:
       run: make pvs
 
     - name: Install SSH Client 🔑
-      uses: webfactory/ssh-agent@v0.4.1
+      uses: webfactory/ssh-agent@v0.5.2
       with:
           ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
