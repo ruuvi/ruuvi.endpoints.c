@@ -268,6 +268,26 @@ static re_status_t re_ca_uart_decode_fltr_id (const uint8_t * const buffer,
     return err_code;
 }
 
+static re_status_t re_ca_uart_decode_led_ctrl (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+
+    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_LED_CTRL_LEN
+                                         + (RE_CA_UART_LED_CTRL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    {
+        err_code |= RE_ERROR_DECODING_LEN;
+    }
+    else
+    {
+        payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
+        payload->params.led_ctrl_param.time_interval_ms = * ( (uint16_t *)
+                &buffer[RE_CA_UART_PAYLOAD_INDEX]);
+    }
+
+    return err_code;
+}
+
 static re_status_t re_ca_uart_decode_ack (const uint8_t * const buffer,
         re_ca_uart_payload_t * const payload)
 {
@@ -529,6 +549,10 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                 err_code |= re_ca_uart_decode_fltr_id (buffer, payload);
                 break;
 
+            case RE_CA_UART_LED_CTRL:
+                err_code |= re_ca_uart_decode_led_ctrl (buffer, payload);
+                break;
+
             case RE_CA_UART_SET_ALL:
                 err_code |= re_ca_uart_decode_all (buffer, payload);
                 break;
@@ -652,6 +676,38 @@ static re_status_t re_ca_uart_encode_fltr_id (uint8_t * const buffer,
                 (void *) &payload->params.fltr_id_param.id,
                 RE_CA_UART_CMD_FLTR_ID_LEN);
         written += RE_CA_UART_CMD_FLTR_ID_LEN;
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        add_crc16 (buffer, &written);
+        buffer[written++] = RE_CA_UART_ETX;
+        *buf_len = written;
+    }
+
+    return err_code;
+}
+
+static re_status_t re_ca_uart_encode_led_ctrl (uint8_t * const buffer,
+        uint8_t * const buf_len,
+        const re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint32_t written = 0;
+
+    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    {
+        err_code |= RE_ERROR_DATA_SIZE;
+    }
+    else
+    {
+        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_LED_CTRL_LEN
+                                       + (RE_CA_UART_LED_CTRL_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
+        written += RE_CA_UART_HEADER_SIZE;
+        memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
+                (void *) &payload->params.led_ctrl_param.time_interval_ms,
+                RE_CA_UART_CMD_LED_CTRL_LEN);
+        written += RE_CA_UART_CMD_LED_CTRL_LEN;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         add_crc16 (buffer, &written);
         buffer[written++] = RE_CA_UART_ETX;
@@ -866,6 +922,10 @@ re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
 
             case RE_CA_UART_SET_FLTR_ID:
                 err_code |= re_ca_uart_encode_fltr_id (buffer, buf_len, payload);
+                break;
+
+            case RE_CA_UART_LED_CTRL:
+                err_code |= re_ca_uart_encode_led_ctrl (buffer, buf_len, payload);
                 break;
 
             case RE_CA_UART_SET_ALL:
