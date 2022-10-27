@@ -502,6 +502,66 @@ void test_ruuvi_endpoint_ca_uart_fltr_id_encode_invalid (void)
     TEST_ASSERT (memcmp (expected, buffer, sizeof (expected)));
 }
 
+void test_ruuvi_endpoint_ca_uart_led_ctrl_encode (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    const uint8_t expected_size = 3 + CMD_IN_LEN;
+    uint8_t expected[] =
+    {
+        RE_CA_UART_STX,
+        expected_size,
+        RE_CA_UART_LED_CTRL,
+        0xDCU, 0x05U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x6AU, 0x57U, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_cmd_t cmd = RE_CA_UART_LED_CTRL;
+    re_ca_uart_led_ctrl_t params =
+    {
+        .time_interval_ms = 1500,
+    };
+    re_ca_uart_payload_t payload = {0};
+    payload.cmd = cmd;
+    payload.params.led_ctrl_param = params;
+    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer_len = sizeof (buffer);
+    err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
+}
+
+void test_ruuvi_endpoint_ca_uart_led_ctrl_encode_invalid (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    const uint8_t expected_size = 3 + CMD_IN_LEN;
+    uint8_t expected[] =
+    {
+        RE_CA_UART_STX,
+        expected_size,
+        RE_CA_UART_LED_CTRL,
+        0x01U, 0x01U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0xA8U, 0x39U, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_cmd_t cmd = RE_CA_UART_LED_CTRL;
+    re_ca_uart_led_ctrl_t params =
+    {
+        .time_interval_ms = 1500,
+    };
+    re_ca_uart_payload_t payload = {0};
+    payload.cmd = cmd;
+    payload.params.led_ctrl_param = params;
+    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer_len = 1;
+    err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
+    TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
+    TEST_ASSERT (buffer_len != sizeof (expected));
+    TEST_ASSERT (memcmp (expected, buffer, sizeof (expected)));
+}
+
 void test_ruuvi_endpoint_ca_uart_bool_encode (void)
 {
     re_status_t err_code = RE_SUCCESS;
@@ -1003,6 +1063,58 @@ void test_ruuvi_endpoint_ca_uart_id_decode_invalid (void)
     err_code = re_ca_uart_decode (data, &payload);
     TEST_ASSERT (RE_ERROR_DECODING_LEN == err_code);
     TEST_ASSERT (memcmp (&expect_params, &payload.params.fltr_id_param,
+                         sizeof (expect_params)));
+    TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
+}
+
+void test_ruuvi_endpoint_ca_uart_led_ctrl_decode (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t data[] =
+    {
+        RE_CA_UART_STX,
+        3 + CMD_IN_LEN,
+        RE_CA_UART_LED_CTRL,
+        0xDCU, 0x05U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x6AU, 0x57U, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_led_ctrl_t expect_params =
+    {
+        .time_interval_ms = 1500,
+    };
+    re_ca_uart_cmd_t expect_cmd = RE_CA_UART_LED_CTRL;
+    re_ca_uart_payload_t payload = {0};
+    err_code = re_ca_uart_decode (data, &payload);
+    TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (!memcmp (&expect_params, &payload.params.led_ctrl_param,
+                          sizeof (expect_params)));
+    TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
+}
+
+void test_ruuvi_endpoint_ca_uart_led_ctrl_decode_invalid (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t data[] =
+    {
+        RE_CA_UART_STX,
+        4 + CMD_IN_LEN,
+        RE_CA_UART_LED_CTRL,
+        0xDCU, 0x05U, 0x00U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x36U, 0x2EU, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_led_ctrl_t expect_params =
+    {
+        .time_interval_ms = 1500,
+    };
+    re_ca_uart_cmd_t expect_cmd = RE_CA_UART_LED_CTRL;
+    re_ca_uart_payload_t payload = {0};
+    err_code = re_ca_uart_decode (data, &payload);
+    TEST_ASSERT (RE_ERROR_DECODING_LEN == err_code);
+    TEST_ASSERT (memcmp (&expect_params, &payload.params.led_ctrl_param,
                          sizeof (expect_params)));
     TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }

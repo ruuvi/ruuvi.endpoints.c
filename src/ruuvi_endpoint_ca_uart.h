@@ -90,6 +90,7 @@
 #define RE_CA_UART_DEVICE_ADDR_LEN      (6U) //!< Length of device addr payload
 #define RE_CA_UART_CMD_BOOL_LEN         (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_FLTR_ID_LEN      (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_LED_CTRL_LEN     (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ACK_LEN          (2U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ALL_BOOL_LEN     (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_CMD_ALL_LEN          (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN)
@@ -101,6 +102,7 @@
 #define RE_CA_UART_GET_DEVICE_ID_FIELDS (0U)
 #define RE_CA_UART_GET_ALL_FIELDS       (0U)
 #define RE_CA_UART_FLTR_ID_FIELDS       (1U)
+#define RE_CA_UART_LED_CTRL_FIELDS      (1U)
 #define RE_CA_UART_ALL_FIELDS           (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
 /** @breif Command types. */
@@ -122,6 +124,7 @@ typedef enum
     RE_CA_UART_SET_CH_37        = 10, //!< Set channel 37.
     RE_CA_UART_SET_CH_38        = 11, //!< Set channel 38.
     RE_CA_UART_SET_CH_39        = 12, //!< Set channel 39.
+    RE_CA_UART_LED_CTRL         = 14,//!< Turn on LED.
     RE_CA_UART_SET_ALL          = 15,//!< Set all config.
     RE_CA_UART_ADV_RPRT         = 16,//!< Advertisement report. ACK no need.
     RE_CA_UART_DEVICE_ID        = 17,//!< Send device id. ACK no need.
@@ -167,6 +170,12 @@ typedef struct
 {
     uint16_t id; //!< Manufacturer ID, MSB first. 0x0499 for Ruuvi.
 } re_ca_uart_ble_fltr_id_t;
+
+/** @brief LED control payload. */
+typedef struct
+{
+    uint16_t time_interval_ms; //!< LED ON time interval in milliseconds
+} re_ca_uart_led_ctrl_t;
 
 /** @brief Ack filter payload. */
 typedef struct
@@ -247,6 +256,7 @@ typedef struct
         re_ca_uart_ble_ack_t      ack;          //!< Ack param.
         re_ca_uart_ble_bool_t     bool_param;   //!< Bool param.
         re_ca_uart_ble_fltr_id_t  fltr_id_param;//!< Filter id param.
+        re_ca_uart_led_ctrl_t     led_ctrl_param;//!< LED control param.
         re_ca_uart_ble_all_t      all_params;   //!< All param.
         re_ca_uart_ble_id_t       device_id;    //!< Device id report.
     } params; //!< Command payload.
