@@ -221,6 +221,7 @@ INC_PARAMS=$(foreach d, $(INCLUDES), -I$d)
 SOURCES=\
 src/ruuvi_endpoint_3.c \
 src/ruuvi_endpoint_5.c \
+src/ruuvi_endpoint_6.c \
 src/ruuvi_endpoint_ibeacon.c
 OBJECTS=$(SOURCES:.c=.o)
 ANALYSIS=$(SOURCES:.c=.a)
