@@ -206,10 +206,7 @@
 CXX=gcc
 
 PROJ_DIR := src
-PVS_CFG=./PVS-Studio.cfg
 # csv, errorfile, fullhtml, html, tasklist, xml
-LOG_FORMAT=fullhtml
-PVS_LOG=./doxygen/html
 DOXYGEN_DIR=./doxygen
 
 CFLAGS  = -c -Wall -pedantic -Wno-variadic-macros -Wno-long-long -Wno-shadow -std=c11
@@ -219,32 +216,17 @@ DFLAGS=
 INCLUDES+=src/
 INC_PARAMS=$(foreach d, $(INCLUDES), -I$d)
 SOURCES=\
-src/ruuvi_endpoint_3.c \
-src/ruuvi_endpoint_5.c \
-src/ruuvi_endpoint_6.c \
-src/ruuvi_endpoint_ibeacon.c
-OBJECTS=$(SOURCES:.c=.o)
+	src/ruuvi_endpoint_3.c \
+	src/ruuvi_endpoint_5.c \
+	src/ruuvi_endpoint_6.c \
+	src/ruuvi_endpoint_ibeacon.c
+
 ANALYSIS=$(SOURCES:.c=.a)
-IOBJECTS=$(SOURCES:.c=.o.PVS-Studio.i)
-POBJECTS=$(SOURCES:.c=.o.PVS-Studio.log)
-EXECUTABLE=ruuvi-drivers
 SONAR=npa-analysis
 
-.PHONY: clean doxygen pvs sonar astyle
+.PHONY: all clean doxygen sonar astyle
 
-pvs: $(SOURCES) $(EXECUTABLE) 
-
-$(EXECUTABLE): $(OBJECTS)
-# Converting
-	plog-converter -a 'GA:1,2,3;OP:1,2,3;CS:1,2,3;MISRA:1,2,3' -t $(LOG_FORMAT) $(POBJECTS) -o $(PVS_LOG)
-
-.c.o:
-# Build
-	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) $(LDFLAGS) -o $@
-# Preprocessing
-	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(LDFLAGS) -E -o $@.PVS-Studio.i
-# Analysis
-	pvs-studio --cfg $(PVS_CFG) --source-file $< --i-file $@.PVS-Studio.i --output-file $@.PVS-Studio.log
+all: clean astyle doxygen sonar
 
 doxygen: clean
 	doxygen
@@ -252,16 +234,14 @@ doxygen: clean
 sonar: clean $(SOURCES) $(SONAR) 
 $(SONAR): $(ANALYSIS)
 
-.c.a:
-# Build
+$(ANALYSIS): %.a: %.c
 	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
 
 astyle:
 	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
 
 clean:
-	rm -f $(OBJECTS) $(IOBJECTS) $(POBJECTS)
-	rm -rf $(PVS_LOG)/fullhtml
+	rm -f $(ANALYSIS)
 	rm -rf $(DOXYGEN_DIR)/html
 	rm -rf $(DOXYGEN_DIR)/latex
 	rm -f *.gcov
