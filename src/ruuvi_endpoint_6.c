@@ -51,6 +51,7 @@ static void re_6_encode_pm (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_PM_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_PM_MASK;
     coded_val <<= ofs;
     p_slot[0] |= ( ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK);
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
@@ -67,6 +68,7 @@ static void re_6_encode_co2 (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_CO2_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_CO2_MASK;
     coded_val <<= RE_6_OFFSET_CO2_OFS;
     p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
@@ -83,6 +85,7 @@ static void re_6_encode_humidity (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_HUMIDITY_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_HUMIDITY_MASK;
     coded_val <<= RE_6_OFFSET_HUMIDITY_OFS;
     p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
@@ -99,6 +102,7 @@ static void re_6_encode_voc (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_VOC_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_VOC_INDEX_MASK;
     coded_val <<= RE_6_OFFSET_VOC_INDEX_OFS;
     p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
@@ -115,6 +119,7 @@ static void re_6_encode_nox (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_NOX_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_NOX_INDEX_MASK;
     coded_val <<= RE_6_OFFSET_NOX_INDEX_OFS;
     p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
@@ -131,6 +136,7 @@ static void re_6_encode_temperature (uint8_t * const p_slot,
         coded_val = (uint16_t) lrintf (val * RE_6_TEMPERATURE_RATIO);
     }
 
+    coded_val &= RE_6_OFFSET_TEMPERATURE_MASK;
     coded_val <<= RE_6_OFFSET_TEMPERATURE_OFS;
     p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
     p_slot[1] |= (coded_val & RE_6_BYTE_MASK);

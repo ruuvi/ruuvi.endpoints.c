@@ -33,10 +33,10 @@
 #define RE_6_HUMIDITY_MIN         (0.0f)
 
 #define RE_6_VOC_INDEX_MAX        (500.0f)
-#define RE_6_VOC_INDEX_MIN        (1.0f)
+#define RE_6_VOC_INDEX_MIN        (0.0f)
 
 #define RE_6_NOX_INDEX_MAX        (500.0f)
-#define RE_6_NOX_INDEX_MIN        (1.0f)
+#define RE_6_NOX_INDEX_MIN        (0.0f)
 
 #define RE_6_TEMPERATURE_MAX      (102.3f)
 #define RE_6_TEMPERATURE_MIN      (-102.3f)
