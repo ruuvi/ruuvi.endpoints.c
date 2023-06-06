@@ -17,7 +17,7 @@ void tearDown (void)
 
 // Ignore tests of unimplemented functionality.
 #if 0
-void test_ruuvi_endpoint_ca_uart_encode_filter_ruuvi (void)
+void dtest_ruuvi_endpoint_ca_uart_encode_filter_ruuvi (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t expected[] =
@@ -41,7 +41,7 @@ void test_ruuvi_endpoint_ca_uart_encode_filter_ruuvi (void)
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
-void test_ruuvi_endpoint_ca_uart_encode_filter_clear (void)
+void dtest_ruuvi_endpoint_ca_uart_encode_filter_clear (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t expected[] =
@@ -64,7 +64,7 @@ void test_ruuvi_endpoint_ca_uart_encode_filter_clear (void)
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
-void test_ruuvi_endpoint_ca_uart_channels_encode (void)
+void dtest_ruuvi_endpoint_ca_uart_channels_encode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t expected[] =
@@ -93,7 +93,7 @@ void test_ruuvi_endpoint_ca_uart_channels_encode (void)
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
-void test_ruuvi_endpoint_ca_uart_phy_encode (void)
+void dtest_ruuvi_endpoint_ca_uart_phy_encode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t expected[] =
@@ -707,7 +707,7 @@ void test_ruuvi_endpoint_ca_uart_adv_encode_invalid (void)
 }
 
 #ifdef RE_CA_SUPPORT_OLD_CMD
-void test_ruuvi_endpoint_ca_uart_decode_filter_ruuvi (void)
+void dtest_ruuvi_endpoint_ca_uart_decode_filter_ruuvi (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -727,7 +727,7 @@ void test_ruuvi_endpoint_ca_uart_decode_filter_ruuvi (void)
     TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_decode_filter_invalid_ruuvi (void)
+void dtest_ruuvi_endpoint_ca_uart_decode_filter_invalid_ruuvi (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -747,7 +747,7 @@ void test_ruuvi_endpoint_ca_uart_decode_filter_invalid_ruuvi (void)
     TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_decode_filter_clear (void)
+void dtest_ruuvi_endpoint_ca_uart_decode_filter_clear (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -766,7 +766,7 @@ void test_ruuvi_endpoint_ca_uart_decode_filter_clear (void)
     TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_decode_filter_invalid_clear (void)
+void dtest_ruuvi_endpoint_ca_uart_decode_filter_invalid_clear (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -796,7 +796,7 @@ void test_ruuvi_endpoint_ca_uart_decode_null (void)
 }
 
 #ifdef RE_CA_SUPPORT_OLD_CMD
-void test_ruuvi_endpoint_ca_uart_channels_decode (void)
+void dtest_ruuvi_endpoint_ca_uart_channels_decode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -821,7 +821,7 @@ void test_ruuvi_endpoint_ca_uart_channels_decode (void)
     TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_channels_decode_invalid (void)
+void dtest_ruuvi_endpoint_ca_uart_channels_decode_invalid (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -846,7 +846,7 @@ void test_ruuvi_endpoint_ca_uart_channels_decode_invalid (void)
     TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_phy_decode (void)
+void dtest_ruuvi_endpoint_ca_uart_phy_decode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -871,7 +871,7 @@ void test_ruuvi_endpoint_ca_uart_phy_decode (void)
     TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_phy_decode_invalid (void)
+void dtest_ruuvi_endpoint_ca_uart_phy_decode_invalid (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =

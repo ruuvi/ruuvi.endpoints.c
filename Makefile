@@ -210,11 +210,16 @@ PROJ_DIR := src
 DOXYGEN_DIR=./doxygen
 
 CFLAGS  = -c -Wall -pedantic -Wno-variadic-macros -Wno-long-long -Wno-shadow -std=c11
-OFLAGS=-g3
-LDFLAGS=-lm
-DFLAGS=
-INCLUDES+=src/
-INC_PARAMS=$(foreach d, $(INCLUDES), -I$d)
+OFLAGS = -g3
+LDFLAGS =
+DFLAGS =
+
+INCLUDES += src/
+INCLUDES += ./CMock/vendor/unity/src
+INCLUDES += ./build/test/mocks
+INC_PARAMS = $(foreach d, $(INCLUDES), -I$d)
+INCLUDE_PATH = ${INC_PARAMS}
+
 SOURCES=\
 	src/ruuvi_endpoint_3.c \
 	src/ruuvi_endpoint_5.c \
@@ -223,6 +228,19 @@ SOURCES=\
 
 ANALYSIS=$(SOURCES:.c=.a)
 SONAR=npa-analysis
+
+BUILD_DIR = ./build
+TEST_BUILD_DIR = ${BUILD_DIR}/test
+TEST_OUT_DIR = ${TEST_BUILD_DIR}/out
+
+# Setup environment variables for ${CMOCK_DIR}/scripts/create_makefile.rb:
+export CMOCK_DIR ?= ./CMock
+UNITY_DIR = ${CMOCK_DIR}/vendor/unity
+DISABLE_CMOCK_TEST_SUMMARY_PER_PROJECT=1
+
+TEST_MAKEFILE = ${TEST_BUILD_DIR}/MakefileTestSupport
+
+-include ${TEST_MAKEFILE}
 
 .PHONY: all clean doxygen sonar astyle
 
@@ -245,4 +263,24 @@ clean:
 	rm -rf $(DOXYGEN_DIR)/html
 	rm -rf $(DOXYGEN_DIR)/latex
 	rm -f *.gcov
+	rm -rf $(BUILD_DIR)
+	make setup_test
+	make generate_cmock_mocks_and_runners
 
+test_all:
+	rm -rf build_ceedling
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
+	gcov  -b -c build/gcov/out/*.gcno
+
+test:
+	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR} TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb
+
+setup_test:
+	mkdir -p ${BUILD_DIR}
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml \
+		BUILD_DIR=${BUILD_DIR} \
+		TEST_BUILD_DIR=${TEST_BUILD_DIR} \
+		TEST_OUT_DIR=${TEST_OUT_DIR} \
+		TEST_MAKEFILE=${TEST_MAKEFILE} \
+		ruby ${CMOCK_DIR}/scripts/create_makefile.rb
