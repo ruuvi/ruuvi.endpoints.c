@@ -9,7 +9,7 @@
   :use_exceptions: FALSE
   :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
-  :build_root: build
+  :build_root: build_ceedling
 #  :release_build: TRUE
   :test_file_prefix: test_
   :which_ceedling: gem
@@ -64,6 +64,10 @@
   :test_preprocess:
     - *common_defines
     - TEST
+  :test_ruuvi_endpoint_6:
+    - *common_defines
+    - TEST
+    - RE_6_ENABLED
 
 :cmock:
   :mock_prefix: mock_
