@@ -22,6 +22,7 @@
 #define RE_5_MAC_MAX             (281474976710655)
 #define RE_5_MAC_MIN             (0)
 
+#define RE_5_BYTE_0_SHIFT        (0U)
 #define RE_5_BYTE_1_SHIFT        (8U)
 #define RE_5_BYTE_2_SHIFT        (16U)
 #define RE_5_BYTE_3_SHIFT        (24U)
@@ -29,10 +30,27 @@
 #define RE_5_BYTE_5_SHIFT        (40U)
 #define RE_5_BYTE_MASK           (0xFFU)
 #define RE_5_BYTE_VOLTAGE_OFFSET (5U)
+#define RE_5_BYTE_VOLTAGE_MASK   (0x7FFU)
+#define RE_5_BYTE_TX_POWER_OFFSET (0U)
+#define RE_5_BYTE_TX_POWER_MASK   (0x1FU)
+
+#define RE_5_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET    (0U)
+#define RE_5_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL       (2U)
+#define RE_5_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET  (1U)
+#define RE_5_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL     (1U)
+#define RE_5_RAW_PACKET_ADV_DATA_TYPE_FLAG2_OFFSET  (2U)
+
+#define RE_5_RAW_PACKET_LENGTH_OFFSET               (3U)
+#define RE_5_RAW_PACKET_LENGTH_VAL                  (27U)
+#define RE_5_RAW_PACKET_TYPE_OFFSET                 (4U)
+#define RE_5_RAW_PACKET_TYPE_VAL                    (0xFFU)
+#define RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO   (5U)
+#define RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI   (6U)
+#define RE_5_RAW_PACKET_MANUFACTURER_ID_VAL         (0x499U)
 
 // Avoid mocking simple function
 #ifdef TEST
-void re_clip (float * const value, const float min, const float max)
+static void re_clip (float * const value, const float min, const float max)
 {
     if (*value > max)
     {
@@ -63,6 +81,21 @@ static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
     acceleration_slot[1] = (coded_acceleration & RE_5_BYTE_MASK);
 }
 
+static float re_5_decode_acceleration (const uint8_t * const acceleration_slot)
+{
+    uint16_t coded_acceleration = 0;
+    coded_acceleration |= acceleration_slot[1] & RE_5_BYTE_MASK;
+    coded_acceleration |= ( (uint16_t) acceleration_slot[0] & RE_5_BYTE_MASK) <<
+                          RE_5_BYTE_1_SHIFT;
+
+    if (RE_5_INVALID_ACCELERATION == coded_acceleration)
+    {
+        return NAN;
+    }
+
+    return (float) (int16_t) coded_acceleration / RE_5_ACC_RATIO;
+}
+
 static void re_5_encode_set_address (uint8_t * const buffer, const re_5_data_t * data)
 {
     // Address is 64 bits, skip 2 first bytes
@@ -87,6 +120,25 @@ static void re_5_encode_set_address (uint8_t * const buffer, const re_5_data_t *
     buffer[addr_offset] = (mac >> 0) & RE_5_BYTE_MASK;
 }
 
+static uint64_t re_5_decode_address (const uint8_t * const p_buffer)
+{
+    // Address is 64 bits, skip 2 first bytes
+    uint8_t addr_offset = RE_5_OFFSET_ADDR_MSB;
+    uint64_t mac = 0;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_5_SHIFT;
+    addr_offset++;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_4_SHIFT;
+    addr_offset++;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_3_SHIFT;
+    addr_offset++;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_2_SHIFT;
+    addr_offset++;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_1_SHIFT;
+    addr_offset++;
+    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_0_SHIFT;
+    return mac;
+}
+
 static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;
@@ -100,6 +152,21 @@ static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * da
 
     buffer[RE_5_OFFSET_HUMI_MSB] = coded_humidity >> RE_5_BYTE_1_SHIFT;
     buffer[RE_5_OFFSET_HUMI_LSB] = coded_humidity & RE_5_BYTE_MASK;
+}
+
+static float re_5_decode_humidity (const uint8_t * const buffer)
+{
+    uint16_t coded_humidity = 0;
+    coded_humidity |= buffer[RE_5_OFFSET_HUMI_LSB] & RE_5_BYTE_MASK;
+    coded_humidity |= ( (uint16_t) buffer[RE_5_OFFSET_HUMI_MSB] & RE_5_BYTE_MASK) <<
+                      RE_5_BYTE_1_SHIFT;
+
+    if (RE_5_INVALID_HUMIDITY == coded_humidity)
+    {
+        return NAN;
+    }
+
+    return (float) coded_humidity / RE_5_HUMI_RATIO;
 }
 
 static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t * data)
@@ -119,6 +186,21 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
     buffer[RE_5_OFFSET_TEMP_LSB] = coded_temperature & RE_5_BYTE_MASK;
 }
 
+static float re_5_decode_temperature (const uint8_t * const buffer)
+{
+    uint16_t coded_temperature = 0;
+    coded_temperature |= buffer[RE_5_OFFSET_TEMP_LSB] & RE_5_BYTE_MASK;
+    coded_temperature |= ( (uint16_t) buffer[RE_5_OFFSET_TEMP_MSB] & RE_5_BYTE_MASK) <<
+                         RE_5_BYTE_1_SHIFT;
+
+    if (RE_5_INVALID_TEMPERATURE == coded_temperature)
+    {
+        return NAN;
+    }
+
+    return (float) (int16_t) coded_temperature / RE_5_TEMP_RATIO;
+}
+
 static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_pressure = RE_5_INVALID_PRESSURE;
@@ -133,6 +215,21 @@ static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * da
 
     buffer[RE_5_OFFSET_PRES_MSB] = coded_pressure >> RE_5_BYTE_1_SHIFT;
     buffer[RE_5_OFFSET_PRES_LSB] = coded_pressure & RE_5_BYTE_MASK;
+}
+
+static float re_5_decode_pressure (const uint8_t * const buffer)
+{
+    uint16_t coded_pressure = 0;
+    coded_pressure |= buffer[RE_5_OFFSET_PRES_LSB] & RE_5_BYTE_MASK;
+    coded_pressure |= ( (uint16_t) buffer[RE_5_OFFSET_PRES_MSB] & RE_5_BYTE_MASK) <<
+                      RE_5_BYTE_1_SHIFT;
+
+    if (RE_5_INVALID_PRESSURE == coded_pressure)
+    {
+        return NAN;
+    }
+
+    return ( (float) coded_pressure - RE_5_PRES_OFFSET) / RE_5_PRES_RATIO;
 }
 
 static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
@@ -164,6 +261,38 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
     buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
 }
 
+static void re_5_decode_pwr (const uint8_t * const buffer, float * const p_battery_v,
+                             int8_t * const p_tx_power)
+{
+    uint16_t power_info = 0;
+    power_info |= buffer[RE_5_OFFSET_POWER_LSB] & RE_5_BYTE_MASK;
+    power_info |= ( (uint16_t) buffer[RE_5_OFFSET_POWER_MSB] & RE_5_BYTE_MASK) <<
+                  RE_5_BYTE_1_SHIFT;
+    uint16_t coded_voltage = ( (uint32_t) power_info >> RE_5_BYTE_VOLTAGE_OFFSET) &
+                             RE_5_BYTE_VOLTAGE_MASK;
+    uint16_t coded_tx_power = ( (uint32_t) power_info >> RE_5_BYTE_TX_POWER_OFFSET) &
+                              RE_5_BYTE_TX_POWER_MASK;
+
+    if (RE_5_INVALID_VOLTAGE == coded_voltage)
+    {
+        *p_battery_v = NAN;
+    }
+    else
+    {
+        *p_battery_v = (float) (RE_5_BATT_OFFSET + coded_voltage) / RE_5_BATT_RATIO;
+    }
+
+    if (RE_5_INVALID_POWER == coded_tx_power)
+    {
+        *p_tx_power = RE_5_INVALID_POWER;
+    }
+    else
+    {
+        *p_tx_power = (int8_t) lrintf ( (float) coded_tx_power * RE_5_TXPWR_RATIO -
+                                        RE_5_TXPWR_OFFSET);
+    }
+}
+
 static void re_5_encode_movement (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint8_t movement_count = RE_5_INVALID_MOVEMENT;
@@ -174,6 +303,12 @@ static void re_5_encode_movement (uint8_t * const buffer, const re_5_data_t * da
     }
 
     buffer[RE_5_OFFSET_MVTCTR] = movement_count;
+}
+
+static uint8_t re_5_decode_movement (const uint8_t * const buffer)
+{
+    const uint8_t movement_count = buffer[RE_5_OFFSET_MVTCTR];
+    return movement_count;
 }
 
 static void re_5_encode_sequence (uint8_t * const buffer, const re_5_data_t * data)
@@ -187,6 +322,15 @@ static void re_5_encode_sequence (uint8_t * const buffer, const re_5_data_t * da
 
     buffer[RE_5_OFFSET_SEQCTR_MSB] = (measurement_seq >> RE_5_BYTE_1_SHIFT);
     buffer[RE_5_OFFSET_SEQCTR_LSB] = (measurement_seq & RE_5_BYTE_MASK);
+}
+
+static uint16_t re_5_decode_sequence (const uint8_t * const p_buffer)
+{
+    uint16_t measurement_seq = 0;
+    measurement_seq |= p_buffer[RE_5_OFFSET_SEQCTR_LSB] & RE_5_BYTE_MASK;
+    measurement_seq |= (p_buffer[RE_5_OFFSET_SEQCTR_MSB] & RE_5_BYTE_MASK) <<
+                       RE_5_BYTE_1_SHIFT;
+    return measurement_seq;
 }
 
 re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
@@ -212,6 +356,82 @@ re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
         re_5_encode_set_address (buffer, data);
     }
 
+    return result;
+}
+
+bool re_5_check_format (const uint8_t * const p_buffer)
+{
+    if (NULL == p_buffer)
+    {
+        return false;
+    }
+
+    if (RE_5_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL !=
+            p_buffer[RE_5_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET])
+    {
+        return false;
+    }
+
+    if (RE_5_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL !=
+            p_buffer[RE_5_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET])
+    {
+        return false;
+    }
+
+    if (RE_5_RAW_PACKET_LENGTH_VAL != p_buffer[RE_5_RAW_PACKET_LENGTH_OFFSET])
+    {
+        return false;
+    }
+
+    if (RE_5_RAW_PACKET_TYPE_VAL != p_buffer[RE_5_RAW_PACKET_TYPE_OFFSET])
+    {
+        return false;
+    }
+
+    const uint16_t manufacturer_id = (p_buffer[RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] <<
+                                      8)
+                                     + p_buffer[RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];
+
+    if (RE_5_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)
+    {
+        return false;
+    }
+
+    if (RE_5_DESTINATION != p_buffer[RE_5_OFFSET_PAYLOAD + RE_5_OFFSET_HEADER])
+    {
+        return false;
+    }
+
+    return true;
+}
+
+re_status_t re_5_decode (const uint8_t * p_buffer, re_5_data_t * const p_data)
+{
+    p_buffer += RE_5_OFFSET_PAYLOAD;
+    re_status_t result = RE_SUCCESS;
+
+    if ( (NULL == p_buffer) || (NULL == p_data))
+    {
+        return RE_ERROR_NULL;
+    }
+
+    memset (p_data, 0, sizeof (*p_data));
+
+    if (RE_5_DESTINATION != p_buffer[RE_5_OFFSET_HEADER])
+    {
+        return RE_ERROR_INVALID_PARAM;
+    }
+
+    p_data->humidity_rh = re_5_decode_humidity (p_buffer);
+    p_data->temperature_c = re_5_decode_temperature (p_buffer);
+    p_data->pressure_pa = re_5_decode_pressure (p_buffer);
+    p_data->accelerationx_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCX_MSB]);
+    p_data->accelerationy_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCY_MSB]);
+    p_data->accelerationz_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCZ_MSB]);
+    p_data->movement_count = re_5_decode_movement (p_buffer);
+    p_data->measurement_count = re_5_decode_sequence (p_buffer);
+    re_5_decode_pwr (p_buffer, &p_data->battery_v, &p_data->tx_power);
+    p_data->address = re_5_decode_address (p_buffer);
     return result;
 }
 

@@ -271,7 +271,7 @@ test_all:
 	rm -rf build_ceedling
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
-	gcov  -b -c build/gcov/out/*.gcno
+	gcov  -b -c build_ceedling/gcov/out/*.gcno
 
 test:
 	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR} TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb

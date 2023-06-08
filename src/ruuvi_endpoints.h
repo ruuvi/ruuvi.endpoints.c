@@ -4,12 +4,27 @@
 #ifdef APPLICATION_ENDPOINTS_CONFIGURED
 #   include "app_config.h"
 #else
+#if !defined(RE_3_ENABLED)
 #   define RE_3_ENABLED  (1U)
+#endif
+#if !defined(RE_5_ENABLED)
 #   define RE_5_ENABLED  (1U)
+#endif
+#if !defined(RE_6_ENABLED)
+#   define RE_6_ENABLED  (1U)
+#endif
+#if !defined(RE_8_ENABLED)
 #   define RE_8_ENABLED  (1U)
+#endif
+#if !defined(RE_CA_ENABLED)
 #   define RE_CA_ENABLED (1U)
+#endif
+#if !defined(RE_FA_ENABLED)
 #   define RE_FA_ENABLED (1U)
+#endif
+#if !defined(RE_IBEACON_ENABLED)
 #   define RE_IBEACON_ENABLED (1U)
+#endif
 #endif
 
 #include <stdint.h>
@@ -197,15 +212,6 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
  */
 re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
                                const uint8_t source);
-
-/**
- * @brief Clip given float to the given range.
- *
- * @param[out] value Value to clip.
- * @param[in]  min Minimum value. Value pointer will be >= min.
- * @param[in]  max Maximum value. Value pointer will be <= max.
- */
-void re_clip (float * const value, const float min, const float max);
 
 /**
  * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07

@@ -9,6 +9,7 @@
 #ifndef RUUVI_ENDPOINT_6_H
 #define RUUVI_ENDPOINT_6_H
 #include "ruuvi_endpoints.h"
+#include <stdbool.h>
 
 #define RE_6_DESTINATION          (0x06U)
 #define RE_6_INVALID_MAC          (0xFFFFFFFFFFFFU)
@@ -44,6 +45,7 @@
 #define RE_6_SEQ_CTR_MAX          (65534)
 #define RE_6_SEQ_CTR_MIN          (0)
 
+#define RE_6_OFFSET_PAYLOAD          (7U)
 
 #define RE_6_OFFSET_HEADER           (0U)
 
@@ -129,12 +131,39 @@ typedef struct
  *
  * NAN can be used as a placeholder for invalid / not available values.
  *
- * @param[in] buffer uint8_t array with length of 24 bytes.
+ * @param[out] buffer uint8_t array with length of 24 bytes.
  * @param[in] data Struct containing all necessary information
  *            for encoding the data into buffer.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t re_6_encode (uint8_t * const buffer, const re_6_data_t * data);
 
+
+/**
+ * @brief Checks if the provided buffer conforms to the Ruuvi DF6 format.
+ *
+ * This function examines the input buffer to determine if its content
+ * represents data in the Ruuvi DF6 format.
+ *
+ * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes to be checked.
+ * @return Returns 'true' if the buffer format is Ruuvi DF6, 'false' otherwise.
+ */
+bool re_6_check_format (const uint8_t * const p_buffer);
+
+
+/**
+ * @brief Decodes a given buffer using the Ruuvi DF6 format.
+ *
+ * Ruuvi DF6 is a data format used by the Ruuvi AirQ environmental sensor.
+ *
+ * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes
+ *  representing a Bluetooth frame with Ruuvi DF6 formatted payload.
+ * @param[out] p_data Pointer to a re_6_data_t struct.
+ *  After the function executes, this struct will contain the data decoded from the input buffer.
+ * @return Returns RE_SUCCESS if the data was decoded successfully,
+ *  i.e., if the input buffer was a valid Ruuvi DF6 buffer and `p_data` now points to a valid `re_6_data_t` object.
+ *  If the decoding fails, the function returns a code indicating the type of error occurred.
+ */
+re_status_t re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_data);
 
 #endif
