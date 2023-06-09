@@ -41,7 +41,7 @@
 
 // Avoid mocking simple function
 #ifdef TEST
-static void re_clip (float * const value, const float min, const float max)
+void re_clip (float * const value, const float min, const float max)
 {
     if (*value > max)
     {

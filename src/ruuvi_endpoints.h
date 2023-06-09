@@ -214,6 +214,15 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
                                const uint8_t source);
 
 /**
+ * @brief Clip given float to the given range.
+ *
+ * @param[out] value Value to clip.
+ * @param[in]  min Minimum value. Value pointer will be >= min.
+ * @param[in]  max Maximum value. Value pointer will be <= max.
+ */
+void re_clip (float * const value, const float min, const float max);
+
+/**
  * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07
  *
  * @param[in] DataArray Array to checksum
