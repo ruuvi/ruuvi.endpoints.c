@@ -50,7 +50,7 @@
 
 // Avoid mocking simple function
 #ifdef TEST
-void re_clip (float * const value, const float min, const float max)
+void re_clip (re_float * const value, const re_float min, const re_float max)
 {
     if (*value > max)
     {
@@ -65,7 +65,7 @@ void re_clip (float * const value, const float min, const float max)
 #endif
 
 static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
-                                      float acceleration)
+                                      re_float acceleration)
 {
     uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;
 
@@ -81,7 +81,7 @@ static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
     acceleration_slot[1] = (coded_acceleration & RE_5_BYTE_MASK);
 }
 
-static float re_5_decode_acceleration (const uint8_t * const acceleration_slot)
+static re_float re_5_decode_acceleration (const uint8_t * const acceleration_slot)
 {
     uint16_t coded_acceleration = 0;
     coded_acceleration |= acceleration_slot[1] & RE_5_BYTE_MASK;
@@ -93,7 +93,7 @@ static float re_5_decode_acceleration (const uint8_t * const acceleration_slot)
         return NAN;
     }
 
-    return (float) (int16_t) coded_acceleration / RE_5_ACC_RATIO;
+    return (re_float) (int16_t) coded_acceleration / RE_5_ACC_RATIO;
 }
 
 static void re_5_encode_set_address (uint8_t * const buffer, const re_5_data_t * data)
@@ -125,24 +125,29 @@ static uint64_t re_5_decode_address (const uint8_t * const p_buffer)
     // Address is 64 bits, skip 2 first bytes
     uint8_t addr_offset = RE_5_OFFSET_ADDR_MSB;
     uint64_t mac = 0;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_5_SHIFT;
+    mac |= p_buffer[addr_offset];
+    mac <<= RE_5_BYTE_1_SHIFT;
     addr_offset++;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_4_SHIFT;
+    mac |= p_buffer[addr_offset];
+    mac <<= RE_5_BYTE_1_SHIFT;
     addr_offset++;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_3_SHIFT;
+    mac |= p_buffer[addr_offset];
+    mac <<= RE_5_BYTE_1_SHIFT;
     addr_offset++;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_2_SHIFT;
+    mac |= p_buffer[addr_offset];
+    mac <<= RE_5_BYTE_1_SHIFT;
     addr_offset++;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_1_SHIFT;
+    mac |= p_buffer[addr_offset];
+    mac <<= RE_5_BYTE_1_SHIFT;
     addr_offset++;
-    mac |= (uint64_t) (p_buffer[addr_offset] & RE_5_BYTE_MASK) << RE_5_BYTE_0_SHIFT;
+    mac |= p_buffer[addr_offset];
     return mac;
 }
 
 static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;
-    float humidity = data->humidity_rh;
+    re_float humidity = data->humidity_rh;
 
     if (!isnan (humidity))
     {
@@ -154,7 +159,7 @@ static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * da
     buffer[RE_5_OFFSET_HUMI_LSB] = coded_humidity & RE_5_BYTE_MASK;
 }
 
-static float re_5_decode_humidity (const uint8_t * const buffer)
+static re_float re_5_decode_humidity (const uint8_t * const buffer)
 {
     uint16_t coded_humidity = 0;
     coded_humidity |= buffer[RE_5_OFFSET_HUMI_LSB] & RE_5_BYTE_MASK;
@@ -166,13 +171,13 @@ static float re_5_decode_humidity (const uint8_t * const buffer)
         return NAN;
     }
 
-    return (float) coded_humidity / RE_5_HUMI_RATIO;
+    return (re_float) coded_humidity / RE_5_HUMI_RATIO;
 }
 
 static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_temperature = RE_5_INVALID_TEMPERATURE;
-    float temperature = data->temperature_c;
+    re_float temperature = data->temperature_c;
 
     if (!isnan (temperature))
     {
@@ -186,7 +191,7 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
     buffer[RE_5_OFFSET_TEMP_LSB] = coded_temperature & RE_5_BYTE_MASK;
 }
 
-static float re_5_decode_temperature (const uint8_t * const buffer)
+static re_float re_5_decode_temperature (const uint8_t * const buffer)
 {
     uint16_t coded_temperature = 0;
     coded_temperature |= buffer[RE_5_OFFSET_TEMP_LSB] & RE_5_BYTE_MASK;
@@ -198,13 +203,13 @@ static float re_5_decode_temperature (const uint8_t * const buffer)
         return NAN;
     }
 
-    return (float) (int16_t) coded_temperature / RE_5_TEMP_RATIO;
+    return (re_float) (int16_t) coded_temperature / RE_5_TEMP_RATIO;
 }
 
 static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_pressure = RE_5_INVALID_PRESSURE;
-    float pressure = data->pressure_pa;
+    re_float pressure = data->pressure_pa;
 
     if (!isnan (pressure))
     {
@@ -217,7 +222,7 @@ static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * da
     buffer[RE_5_OFFSET_PRES_LSB] = coded_pressure & RE_5_BYTE_MASK;
 }
 
-static float re_5_decode_pressure (const uint8_t * const buffer)
+static re_float re_5_decode_pressure (const uint8_t * const buffer)
 {
     uint16_t coded_pressure = 0;
     coded_pressure |= buffer[RE_5_OFFSET_PRES_LSB] & RE_5_BYTE_MASK;
@@ -229,15 +234,15 @@ static float re_5_decode_pressure (const uint8_t * const buffer)
         return NAN;
     }
 
-    return ( (float) coded_pressure - RE_5_PRES_OFFSET) / RE_5_PRES_RATIO;
+    return ( (re_float) coded_pressure - RE_5_PRES_OFFSET) / RE_5_PRES_RATIO;
 }
 
 static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
 {
     uint16_t coded_voltage = RE_5_INVALID_VOLTAGE;
-    float voltage = data->battery_v;
+    re_float voltage = data->battery_v;
     uint16_t coded_tx_power = RE_5_INVALID_POWER;
-    float tx_power = (float) data->tx_power;
+    re_float tx_power = (re_float) data->tx_power;
 
     if (!isnan (voltage))
     {
@@ -261,7 +266,7 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
     buffer[RE_5_OFFSET_POWER_LSB] = (power_info & RE_5_BYTE_MASK);
 }
 
-static void re_5_decode_pwr (const uint8_t * const buffer, float * const p_battery_v,
+static void re_5_decode_pwr (const uint8_t * const buffer, re_float * const p_battery_v,
                              int8_t * const p_tx_power)
 {
     uint16_t power_info = 0;
@@ -279,7 +284,7 @@ static void re_5_decode_pwr (const uint8_t * const buffer, float * const p_batte
     }
     else
     {
-        *p_battery_v = (float) (RE_5_BATT_OFFSET + coded_voltage) / RE_5_BATT_RATIO;
+        *p_battery_v = (re_float) (RE_5_BATT_OFFSET + coded_voltage) / RE_5_BATT_RATIO;
     }
 
     if (RE_5_INVALID_POWER == coded_tx_power)
@@ -288,7 +293,7 @@ static void re_5_decode_pwr (const uint8_t * const buffer, float * const p_batte
     }
     else
     {
-        *p_tx_power = (int8_t) lrintf ( (float) coded_tx_power * RE_5_TXPWR_RATIO -
+        *p_tx_power = (int8_t) lrintf ( (re_float) coded_tx_power * RE_5_TXPWR_RATIO -
                                         RE_5_TXPWR_OFFSET);
     }
 }
@@ -388,8 +393,8 @@ bool re_5_check_format (const uint8_t * const p_buffer)
         return false;
     }
 
-    const uint16_t manufacturer_id = (p_buffer[RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] <<
-                                      8)
+    const uint16_t manufacturer_id = ( (uint16_t)
+                                       p_buffer[RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] << RE_5_BYTE_1_SHIFT)
                                      + p_buffer[RE_5_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];
 
     if (RE_5_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)
@@ -405,33 +410,33 @@ bool re_5_check_format (const uint8_t * const p_buffer)
     return true;
 }
 
-re_status_t re_5_decode (const uint8_t * p_buffer, re_5_data_t * const p_data)
+re_status_t re_5_decode (const uint8_t * const p_buffer, re_5_data_t * const p_data)
 {
-    p_buffer += RE_5_OFFSET_PAYLOAD;
+    const uint8_t * const p_payload = &p_buffer[RE_5_OFFSET_PAYLOAD];
     re_status_t result = RE_SUCCESS;
 
-    if ( (NULL == p_buffer) || (NULL == p_data))
+    if ( (NULL == p_payload) || (NULL == p_data))
     {
         return RE_ERROR_NULL;
     }
 
     memset (p_data, 0, sizeof (*p_data));
 
-    if (RE_5_DESTINATION != p_buffer[RE_5_OFFSET_HEADER])
+    if (RE_5_DESTINATION != p_payload[RE_5_OFFSET_HEADER])
     {
         return RE_ERROR_INVALID_PARAM;
     }
 
-    p_data->humidity_rh = re_5_decode_humidity (p_buffer);
-    p_data->temperature_c = re_5_decode_temperature (p_buffer);
-    p_data->pressure_pa = re_5_decode_pressure (p_buffer);
-    p_data->accelerationx_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCX_MSB]);
-    p_data->accelerationy_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCY_MSB]);
-    p_data->accelerationz_g = re_5_decode_acceleration (&p_buffer[RE_5_OFFSET_ACCZ_MSB]);
-    p_data->movement_count = re_5_decode_movement (p_buffer);
-    p_data->measurement_count = re_5_decode_sequence (p_buffer);
-    re_5_decode_pwr (p_buffer, &p_data->battery_v, &p_data->tx_power);
-    p_data->address = re_5_decode_address (p_buffer);
+    p_data->humidity_rh = re_5_decode_humidity (p_payload);
+    p_data->temperature_c = re_5_decode_temperature (p_payload);
+    p_data->pressure_pa = re_5_decode_pressure (p_payload);
+    p_data->accelerationx_g = re_5_decode_acceleration (&p_payload[RE_5_OFFSET_ACCX_MSB]);
+    p_data->accelerationy_g = re_5_decode_acceleration (&p_payload[RE_5_OFFSET_ACCY_MSB]);
+    p_data->accelerationz_g = re_5_decode_acceleration (&p_payload[RE_5_OFFSET_ACCZ_MSB]);
+    p_data->movement_count = re_5_decode_movement (p_payload);
+    p_data->measurement_count = re_5_decode_sequence (p_payload);
+    re_5_decode_pwr (p_payload, &p_data->battery_v, &p_data->tx_power);
+    p_data->address = re_5_decode_address (p_payload);
     return result;
 }
 

@@ -125,6 +125,6 @@ bool re_5_check_format (const uint8_t * const p_buffer);
  *  i.e., if the input buffer was a valid Ruuvi DF5 buffer and `p_data` now points to a valid `re_5_data_t` object.
  *  If the decoding fails, the function returns a code indicating the type of error occurred.
  */
-re_status_t re_5_decode (const uint8_t * p_buffer, re_5_data_t * const p_data);
+re_status_t re_5_decode (const uint8_t * const p_buffer, re_5_data_t * const p_data);
 
 #endif
