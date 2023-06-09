@@ -270,6 +270,10 @@ clean:
 test_all:
 	rm -rf build_ceedling
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
+
+test_all_gcov:
+	rm -rf build_ceedling
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
 	gcov  -b -c build_ceedling/gcov/out/*.gcno
 
