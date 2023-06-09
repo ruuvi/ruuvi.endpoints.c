@@ -284,7 +284,8 @@ static void re_5_decode_pwr (const uint8_t * const buffer, re_float * const p_ba
     }
     else
     {
-        *p_battery_v = (re_float) (RE_5_BATT_OFFSET + coded_voltage) / RE_5_BATT_RATIO;
+        const re_float voltage = RE_5_BATT_OFFSET + coded_voltage;
+        *p_battery_v = voltage / RE_5_BATT_RATIO;
     }
 
     if (RE_5_INVALID_POWER == coded_tx_power)
