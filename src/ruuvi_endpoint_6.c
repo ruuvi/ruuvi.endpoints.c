@@ -385,8 +385,8 @@ bool re_6_check_format (const uint8_t * const p_buffer)
         return false;
     }
 
-    const uint16_t manufacturer_id = ( (uint16_t)
-                                       p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] << RE_6_BYTE_1_SHIFT)
+    const uint16_t manufacturer_id = (uint16_t) ( (uint16_t)
+                                     p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] << RE_6_BYTE_1_SHIFT)
                                      + p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];
 
     if (RE_6_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)
