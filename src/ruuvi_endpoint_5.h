@@ -9,6 +9,7 @@
 #ifndef RUUVI_ENDPOINT_5_H
 #define RUUVI_ENDPOINT_5_H
 #include "ruuvi_endpoints.h"
+#include <stdbool.h>
 
 #define RE_5_DESTINATION          (0x05U)
 #define RE_5_INVALID_TEMPERATURE  (0x8000U)
@@ -38,6 +39,8 @@
 #define RE_5_MVTCTR_MIN        (0)
 #define RE_5_SEQCTR_MAX        (65534)
 #define RE_5_SEQCTR_MIN        (0)
+
+#define RE_5_OFFSET_PAYLOAD    (7U)
 
 #define RE_5_OFFSET_HEADER     (0U)
 #define RE_5_OFFSET_TEMP_MSB   (1U)
@@ -98,5 +101,30 @@ typedef struct
  */
 re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data);
 
+/**
+ * @brief Checks if the provided buffer conforms to the Ruuvi DF5 format.
+ *
+ * This function examines the input buffer to determine if its content
+ * represents data in the Ruuvi DF5 format.
+ *
+ * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes to be checked.
+ * @return Returns 'true' if the buffer format is Ruuvi DF5, 'false' otherwise.
+ */
+bool re_5_check_format (const uint8_t * const p_buffer);
+
+/**
+ * @brief Decodes a given buffer using the Ruuvi DF5 format.
+ *
+ * Ruuvi DF5 is a data format used by the Ruuvi Tag environmental sensor.
+ *
+ * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes
+ *  representing a Bluetooth frame with Ruuvi DF5 formatted payload.
+ * @param[out] p_data Pointer to a re_5_data_t struct.
+ *  After the function executes, this struct will contain the data decoded from the input buffer.
+ * @return Returns RE_SUCCESS if the data was decoded successfully,
+ *  i.e., if the input buffer was a valid Ruuvi DF5 buffer and `p_data` now points to a valid `re_5_data_t` object.
+ *  If the decoding fails, the function returns a code indicating the type of error occurred.
+ */
+re_status_t re_5_decode (const uint8_t * const p_buffer, re_5_data_t * const p_data);
 
 #endif

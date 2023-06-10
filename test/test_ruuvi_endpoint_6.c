@@ -47,6 +47,27 @@ void test_ruuvi_endpoint_6_get_ok (void)
     err_code = re_6_encode (test_buffer, &m_re_6_data_ok);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     TEST_ASSERT (! (memcmp (test_buffer, valid_data, sizeof (valid_data))));
+    uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04};
+    memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
+    re_6_data_t decoded_data = {0};
+    TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_decode (raw_buf, &decoded_data));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.pm1p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm1p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.pm2p5_ppm * 10.0f),
+                       lrintf (decoded_data.pm2p5_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.pm4p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm4p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.pm10p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm10p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.co2), lrintf (decoded_data.co2));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.humidity_rh * 10.0f),
+                       lrintf (decoded_data.humidity_rh * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.voc_index), lrintf (decoded_data.voc_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.nox_index), lrintf (decoded_data.nox_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok.temperature_c * 10.0f),
+                       lrintf (decoded_data.temperature_c * 10.0f));
+    TEST_ASSERT_EQUAL (m_re_6_data_ok.measurement_count, decoded_data.measurement_count);
+    TEST_ASSERT_EQUAL (m_re_6_data_ok.address, decoded_data.address);
 }
 
 void test_ruuvi_endpoint_6_get_ok_max (void)
@@ -80,6 +101,29 @@ void test_ruuvi_endpoint_6_get_ok_max (void)
                              (const re_6_data_t *) &m_re_6_data_ok_max);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (max_data))));
+    uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04};
+    memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
+    re_6_data_t decoded_data = {0};
+    TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_decode (raw_buf, &decoded_data));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.pm1p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm1p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.pm2p5_ppm * 10.0f),
+                       lrintf (decoded_data.pm2p5_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.pm4p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm4p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.pm10p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm10p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.co2), lrintf (decoded_data.co2));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.humidity_rh * 10.0f),
+                       lrintf (decoded_data.humidity_rh * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.voc_index),
+                       lrintf (decoded_data.voc_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.nox_index),
+                       lrintf (decoded_data.nox_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_max.temperature_c * 10.0f),
+                       lrintf (decoded_data.temperature_c * 10.0f));
+    TEST_ASSERT_EQUAL (m_re_6_data_ok_max.measurement_count, decoded_data.measurement_count);
+    TEST_ASSERT_EQUAL (m_re_6_data_ok_max.address, decoded_data.address);
 }
 
 void test_ruuvi_endpoint_6_get_ok_min (void)
@@ -113,6 +157,29 @@ void test_ruuvi_endpoint_6_get_ok_min (void)
                              (const re_6_data_t *) &m_re_6_data_ok_min);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, min_data, sizeof (min_data))));
+    uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04};
+    memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
+    re_6_data_t decoded_data = {0};
+    TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_decode (raw_buf, &decoded_data));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.pm1p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm1p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.pm2p5_ppm * 10.0f),
+                       lrintf (decoded_data.pm2p5_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.pm4p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm4p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.pm10p0_ppm * 10.0f),
+                       lrintf (decoded_data.pm10p0_ppm * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.co2), lrintf (decoded_data.co2));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.humidity_rh * 10.0f),
+                       lrintf (decoded_data.humidity_rh * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.voc_index),
+                       lrintf (decoded_data.voc_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.nox_index),
+                       lrintf (decoded_data.nox_index));
+    TEST_ASSERT_EQUAL (lrintf (m_re_6_data_ok_min.temperature_c * 10.0f),
+                       lrintf (decoded_data.temperature_c * 10.0f));
+    TEST_ASSERT_EQUAL (m_re_6_data_ok_min.measurement_count, decoded_data.measurement_count);
+    TEST_ASSERT_EQUAL (m_re_6_data_ok_min.address, decoded_data.address);
 }
 
 /**
@@ -255,4 +322,28 @@ void test_ruuvi_endpoint_6_overflow (void)
     err_code = re_6_encode (test_buffer, &m_re_6_data_overflow);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, max_data, sizeof (max_data))));
+}
+
+void test_ruuvi_endpoint_6_check_format_ok (void)
+{
+    const uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04, 0x06};
+    TEST_ASSERT_TRUE (re_6_check_format (raw_buf));
+}
+
+void test_ruuvi_endpoint_6_check_format_fail (void)
+{
+    const uint8_t raw_buf_payload_format[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04, 0x05};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_payload_format));
+    const uint8_t raw_buf_manufacturer_id_1[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x05, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_manufacturer_id_1));
+    const uint8_t raw_buf_manufacturer_id_2[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x9a, 0x04, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_manufacturer_id_2));
+    const uint8_t raw_buf_type[31] = {0x02, 0x01, 0x04, 0x1B, 0xFE, 0x99, 0x04, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_type));
+    const uint8_t raw_buf_len[31] = {0x02, 0x01, 0x04, 0x1A, 0xFF, 0x99, 0x04, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_len));
+    const uint8_t raw_buf_byte1[31] = {0x02, 0x02, 0x04, 0x1B, 0xFF, 0x99, 0x04, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte1));
+    const uint8_t raw_buf_byte0[31] = {0x03, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04, 0x06};
+    TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte0));
 }
