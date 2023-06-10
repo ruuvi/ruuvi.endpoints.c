@@ -108,7 +108,7 @@ re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data);
  * represents data in the Ruuvi DF5 format.
  *
  * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes to be checked.
- * @return Returns 'true' if the buffer format is Ruuvi DF6, 'false' otherwise.
+ * @return Returns 'true' if the buffer format is Ruuvi DF5, 'false' otherwise.
  */
 bool re_5_check_format (const uint8_t * const p_buffer);
 
