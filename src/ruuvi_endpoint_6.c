@@ -155,9 +155,8 @@ static void re_6_encode_voc (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_VOC_INDEX;
 
-    if (!isnan (val))
+    if ( (!isnan (val)) && (val >= RE_6_VOC_INDEX_MIN) && (val <= RE_6_VOC_INDEX_MAX))
     {
-        re_clip (&val, RE_6_VOC_INDEX_MIN, RE_6_VOC_INDEX_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_VOC_RATIO);
     }
 
@@ -187,9 +186,8 @@ static void re_6_encode_nox (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_NOX_INDEX;
 
-    if (!isnan (val))
+    if ( (!isnan (val)) && (val >= RE_6_NOX_INDEX_MIN) && (val <= RE_6_NOX_INDEX_MAX))
     {
-        re_clip (&val, RE_6_NOX_INDEX_MIN, RE_6_NOX_INDEX_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_NOX_RATIO);
     }
 
