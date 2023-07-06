@@ -258,7 +258,6 @@ void test_ruuvi_endpoint_6_get_invalid_data (void)
                              (const re_6_data_t *) &m_re_6_data_invalid);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, invalid_data, sizeof (invalid_data))));
-
     uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04};
     memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
     re_6_data_t decoded_data = {0};
