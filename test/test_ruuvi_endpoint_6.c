@@ -258,6 +258,21 @@ void test_ruuvi_endpoint_6_get_invalid_data (void)
                              (const re_6_data_t *) &m_re_6_data_invalid);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (! (memcmp (test_buffer, invalid_data, sizeof (invalid_data))));
+    uint8_t raw_buf[31] = {0x02, 0x01, 0x04, 0x1B, 0xFF, 0x99, 0x04};
+    memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
+    re_6_data_t decoded_data = {0};
+    TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_decode (raw_buf, &decoded_data));
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.pm1p0_ppm, decoded_data.pm1p0_ppm);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.pm2p5_ppm, decoded_data.pm1p0_ppm);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.pm4p0_ppm, decoded_data.pm1p0_ppm);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.pm10p0_ppm, decoded_data.pm1p0_ppm);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.co2, decoded_data.co2);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.humidity_rh, decoded_data.humidity_rh);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.voc_index, decoded_data.voc_index);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.nox_index, decoded_data.nox_index);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.temperature_c, decoded_data.temperature_c);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.measurement_count, decoded_data.measurement_count);
+    TEST_ASSERT_EQUAL (m_re_6_data_invalid.address, decoded_data.address);
 }
 
 void test_ruuvi_endpoint_6_underflow (void)

@@ -237,15 +237,15 @@ static re_float re_6_decode_temperature (const uint8_t * const p_slot)
     coded_val >>= RE_6_OFFSET_TEMPERATURE_OFS;
     coded_val &= RE_6_OFFSET_TEMPERATURE_MASK;
 
+    if (RE_6_INVALID_TEMPERATURE == coded_val)
+    {
+        return NAN;
+    }
+
     if (0 != (coded_val & ( (RE_6_OFFSET_TEMPERATURE_MASK + 1) >> 1U)))
     {
         // it's negative val, we need to set all most significant bits to '1'
         coded_val |= ~RE_6_OFFSET_TEMPERATURE_MASK;
-    }
-
-    if (RE_6_INVALID_TEMPERATURE == coded_val)
-    {
-        return NAN;
     }
 
     return (re_float) (int16_t) coded_val / RE_6_TEMPERATURE_RATIO;
