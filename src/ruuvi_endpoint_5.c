@@ -46,6 +46,7 @@ void re_clip (float * const value, const float min, const float max)
 }
 #endif
 
+/*
 static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
                                       float acceleration)
 {
@@ -62,6 +63,7 @@ static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
     acceleration_slot[0] = (coded_acceleration >> RE_5_BYTE_1_SHIFT);
     acceleration_slot[1] = (coded_acceleration & RE_5_BYTE_MASK);
 }
+*/
 
 static void re_5_encode_set_address (uint8_t * const buffer, const re_5_data_t * data)
 {
@@ -203,9 +205,9 @@ re_status_t re_5_encode (uint8_t * const buffer, const re_5_data_t * data)
         re_5_encode_humidity (buffer, data);
         re_5_encode_temperature (buffer, data);
         re_5_encode_pressure (buffer, data);
-        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCX_MSB], data->accelerationx_g);
+        /*re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCX_MSB], data->accelerationx_g);
         re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCY_MSB], data->accelerationy_g);
-        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCZ_MSB], data->accelerationz_g);
+        re_5_encode_acceleration (&buffer[RE_5_OFFSET_ACCZ_MSB], data->accelerationz_g);*/
         re_5_encode_movement (buffer, data);
         re_5_encode_sequence (buffer, data);
         re_5_encode_pwr (buffer, data);
