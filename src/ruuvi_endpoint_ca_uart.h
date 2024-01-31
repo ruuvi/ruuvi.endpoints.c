@@ -15,7 +15,17 @@
 #define RE_CA_UART_DEVICE_ID_BYTES (8U) //!< Number of bytes in DEVICE_ID
 #define RE_CA_UART_DEVICE_ADDR_BYTES (8U) //!< Number of bytes in DEVICE_ADDR
 #define RE_CA_UART_MAC_BYTES (6U) //!< Number of bytes in MAC address
-#define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement. 
+
+#if defined(RI_ADV_EXTENDED_ENABLED) && RI_ADV_EXTENDED_ENABLED
+#   if defined(RI_COMM_BLE_PAYLOAD_MAX_LENGTH)
+#       define RE_CA_UART_ADV_BYTES (RI_COMM_BLE_PAYLOAD_MAX_LENGTH) //!< Number of bytes in Advertisement.
+#   else
+#       define RE_CA_UART_ADV_BYTES (238) //!< Number of bytes in Advertisement.
+#   endif
+#else
+#   define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement.
+#endif
+
 #define RE_CA_UART_RSSI_BYTES (1U) //!< Number of bytes in RSSI report.
 #if RE_CA_UART_LEGACY_MODE
 #   define RE_CA_UART_STX (0x02U) //!< Start UART Command. ASCII STX.
@@ -38,8 +48,8 @@
                                     + RE_CA_UART_MAXFIELDS) //!< data + delimiters
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
-/** @brief STX, LEN, CMD, Payload, ETX */
-#define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 4U)
+/** @brief STX, LEN, CMD, Payload, CRC, ETX */
+#define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 6U)
 
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
