@@ -16,6 +16,9 @@
 #if !defined(RE_8_ENABLED)
 #   define RE_8_ENABLED  (1U)
 #endif
+#if !defined(RE_C5_ENABLED)
+#   define RE_C5_ENABLED (1U)
+#endif
 #if !defined(RE_CA_ENABLED)
 #   define RE_CA_ENABLED (1U)
 #endif
@@ -29,7 +32,7 @@
 
 #include <stdint.h>
 
-#define RUUVI_ENDPOINTS_SEMVER "4.0.0"          //!< SEMVER of endpoints.
+#define RUUVI_ENDPOINTS_SEMVER "4.1.0"          //!< SEMVER of endpoints.
 
 #define RE_SUCCESS                  (0U)        //!< Encoded successfully.
 #define RE_ERROR_DATA_SIZE          (1U << 3U)  //!< Data size too large/small.
