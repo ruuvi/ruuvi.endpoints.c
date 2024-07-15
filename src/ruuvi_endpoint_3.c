@@ -57,8 +57,7 @@ static void re_3_encode_acceleration (uint8_t * const buffer,
 {
     if (!isnan (re_3_encode_check_invalid (acceleration, invalid)))
     {
-        int16_t decimal = (int16_t) round ( (acceleration *
-                                             RE_3_ENCODE_ACC_CONVERT_RATIO));
+        int16_t decimal = (int16_t) roundf (acceleration * RE_3_ENCODE_ACC_CONVERT_RATIO);
         buffer[0] = ( (uint16_t) decimal) >> RE_3_BYTE_OFFSET;
         buffer[1] = ( (uint16_t) decimal) & RE_3_BYTE_MASK;
     }
@@ -78,9 +77,8 @@ static void re_3_encode_data (uint8_t * const buffer,
     if (!isnan (re_3_encode_check_invalid (data->humidity_rh, invalid)))
     {
         //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
-        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( ( (data->humidity_rh *
-                                       RE_3_ENCODE_HUMIDITY_CONVERT_RATIO) +
-                                       RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET));
+        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) roundf (data->humidity_rh *
+                                       RE_3_ENCODE_HUMIDITY_CONVERT_RATIO);
     }
     else
     {
