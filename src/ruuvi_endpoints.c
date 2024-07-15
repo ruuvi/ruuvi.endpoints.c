@@ -150,7 +150,7 @@ re_status_t re_log_write_timestamp (uint8_t * const buffer, const uint64_t times
 static int32_t f2i (re_float value)
 {
     int32_t rvalue = 0x80000000;
-    value = (value) >= 0 ? (value) + 0.5 : (value) - 0.5;
+    value = (value) >= 0 ? (value) + 0.5f : (value) - 0.5f;
 
     if (value >= INT32_MAX)
     {
