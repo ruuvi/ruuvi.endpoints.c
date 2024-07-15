@@ -41,7 +41,7 @@ static void re_8_encode_humidity (uint8_t * const buffer, const re_8_data_t * da
     uint16_t coded_humidity = RE_8_INVALID_HUMIDITY;
     float humidity = data->humidity_rh;
 
-    if (!isnanf (humidity))
+    if (!isnan (humidity))
     {
         re_clip (&humidity, RE_8_HUMI_MIN, RE_8_HUMI_MAX);
         coded_humidity = (uint16_t) roundf (humidity * RE_8_HUMI_RATIO);
@@ -56,7 +56,7 @@ static void re_8_encode_temperature (uint8_t * const buffer, const re_8_data_t *
     uint16_t coded_temperature = RE_8_INVALID_TEMPERATURE;
     float temperature = data->temperature_c;
 
-    if (!isnanf (temperature))
+    if (!isnan (temperature))
     {
         re_clip (&temperature, RE_8_TEMP_MIN, RE_8_TEMP_MAX);
         coded_temperature = (uint16_t) roundf (temperature * RE_8_TEMP_RATIO);
@@ -71,7 +71,7 @@ static void re_8_encode_pressure (uint8_t * const buffer, const re_8_data_t * da
     uint16_t coded_pressure = RE_8_INVALID_PRESSURE;
     float pressure = data->pressure_pa;
 
-    if (!isnanf (pressure))
+    if (!isnan (pressure))
     {
         re_clip (&pressure, RE_8_PRES_MIN, RE_8_PRES_MAX);
         pressure += RE_8_PRES_OFFSET;
@@ -89,7 +89,7 @@ static void re_8_encode_pwr (uint8_t * const buffer, const re_8_data_t * data)
     uint16_t coded_tx_power = RE_8_INVALID_POWER;
     float tx_power = (float) data->tx_power;
 
-    if (!isnanf (voltage))
+    if (!isnan (voltage))
     {
         re_clip (&voltage, RE_8_VOLTAGE_MIN, RE_8_VOLTAGE_MAX);
         coded_voltage = (uint16_t) roundf ( (voltage * RE_8_BATT_RATIO)

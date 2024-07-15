@@ -59,7 +59,7 @@ static void re_6_encode_pm (uint8_t * const p_slot, re_float val, const uint32_t
 {
     uint16_t coded_val = RE_6_INVALID_PM;
 
-    if (!isnanf (val))
+    if (!isnan (val))
     {
         re_clip (&val, RE_6_PM_MIN, RE_6_PM_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_PM_RATIO);
@@ -91,7 +91,7 @@ static void re_6_encode_co2 (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_CO2;
 
-    if (!isnanf (val))
+    if (!isnan (val))
     {
         re_clip (&val, RE_6_CO2_MIN, RE_6_CO2_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_CO2_RATIO);
@@ -123,7 +123,7 @@ static void re_6_encode_humidity (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_HUMIDITY;
 
-    if (!isnanf (val))
+    if (!isnan (val))
     {
         re_clip (&val, RE_6_HUMIDITY_MIN, RE_6_HUMIDITY_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_HUMIDITY_RATIO);
@@ -155,7 +155,7 @@ static void re_6_encode_voc (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_VOC_INDEX;
 
-    if ( (!isnanf (val)) && (val >= RE_6_VOC_INDEX_MIN) && (val <= RE_6_VOC_INDEX_MAX))
+    if ( (!isnan (val)) && (val >= RE_6_VOC_INDEX_MIN) && (val <= RE_6_VOC_INDEX_MAX))
     {
         coded_val = (uint16_t) lrintf (val * RE_6_VOC_RATIO);
     }
@@ -186,7 +186,7 @@ static void re_6_encode_nox (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_NOX_INDEX;
 
-    if ( (!isnanf (val)) && (val >= RE_6_NOX_INDEX_MIN) && (val <= RE_6_NOX_INDEX_MAX))
+    if ( (!isnan (val)) && (val >= RE_6_NOX_INDEX_MIN) && (val <= RE_6_NOX_INDEX_MAX))
     {
         coded_val = (uint16_t) lrintf (val * RE_6_NOX_RATIO);
     }
@@ -217,7 +217,7 @@ static void re_6_encode_temperature (uint8_t * const p_slot, re_float val)
 {
     uint16_t coded_val = RE_6_INVALID_TEMPERATURE;
 
-    if (!isnanf (val))
+    if (!isnan (val))
     {
         re_clip (&val, RE_6_TEMPERATURE_MIN, RE_6_TEMPERATURE_MAX);
         coded_val = (uint16_t) lrintf (val * RE_6_TEMPERATURE_RATIO);

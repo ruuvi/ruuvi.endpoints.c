@@ -69,7 +69,7 @@ static void re_5_encode_acceleration (uint8_t * const acceleration_slot,
 {
     uint16_t coded_acceleration = RE_5_INVALID_ACCELERATION;
 
-    if (!isnanf (acceleration))
+    if (!isnan (acceleration))
     {
         re_clip (&acceleration, RE_5_ACC_MIN, RE_5_ACC_MAX);
         int16_t rounded_acceleration = (int16_t) roundf (acceleration * RE_5_ACC_RATIO);
@@ -149,7 +149,7 @@ static void re_5_encode_humidity (uint8_t * const buffer, const re_5_data_t * da
     uint16_t coded_humidity = RE_5_INVALID_HUMIDITY;
     re_float humidity = data->humidity_rh;
 
-    if (!isnanf (humidity))
+    if (!isnan (humidity))
     {
         re_clip (&humidity, RE_5_HUMI_MIN, RE_5_HUMI_MAX);
         coded_humidity = (uint16_t) roundf (humidity * RE_5_HUMI_RATIO);
@@ -179,7 +179,7 @@ static void re_5_encode_temperature (uint8_t * const buffer, const re_5_data_t *
     uint16_t coded_temperature = RE_5_INVALID_TEMPERATURE;
     re_float temperature = data->temperature_c;
 
-    if (!isnanf (temperature))
+    if (!isnan (temperature))
     {
         re_clip (&temperature, RE_5_TEMP_MIN, RE_5_TEMP_MAX);
         int16_t rounded_temperature = (int16_t) roundf (temperature * RE_5_TEMP_RATIO);
@@ -211,7 +211,7 @@ static void re_5_encode_pressure (uint8_t * const buffer, const re_5_data_t * da
     uint16_t coded_pressure = RE_5_INVALID_PRESSURE;
     re_float pressure = data->pressure_pa;
 
-    if (!isnanf (pressure))
+    if (!isnan (pressure))
     {
         re_clip (&pressure, RE_5_PRES_MIN, RE_5_PRES_MAX);
         pressure += RE_5_PRES_OFFSET;
@@ -244,7 +244,7 @@ static void re_5_encode_pwr (uint8_t * const buffer, const re_5_data_t * data)
     uint16_t coded_tx_power = RE_5_INVALID_POWER;
     re_float tx_power = (re_float) data->tx_power;
 
-    if (!isnanf (voltage))
+    if (!isnan (voltage))
     {
         re_clip (&voltage, RE_5_VOLTAGE_MIN, RE_5_VOLTAGE_MAX);
         coded_voltage = (uint16_t) roundf ( (voltage * RE_5_BATT_RATIO)
