@@ -78,7 +78,7 @@ static void re_3_encode_data (uint8_t * const buffer,
     if (!isnan (re_3_encode_check_invalid (data->humidity_rh, invalid)))
     {
         //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
-        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( (re_float) ( (data->humidity_rh *
+        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( ( (data->humidity_rh *
                                        RE_3_ENCODE_HUMIDITY_CONVERT_RATIO) +
                                        RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET));
     }
@@ -110,7 +110,7 @@ static void re_3_encode_data (uint8_t * const buffer,
         // cap the temperature
         if (RE_3_ENCODE_TEMP_CONVERT_CAP < temperature)
         {
-            temperature = (re_float) RE_3_ENCODE_TEMP_CONVERT_CAP;
+            temperature = RE_3_ENCODE_TEMP_CONVERT_CAP;
         }
 
         buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (uint8_t) (
