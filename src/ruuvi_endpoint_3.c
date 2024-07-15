@@ -24,9 +24,9 @@ static re_float re_3_encode_check_invalid (const re_float data,
 {
     re_float result;
 
-    if (isnan (invalid))
+    if (isnanf (invalid))
     {
-        if (!isnan (data))
+        if (!isnanf (data))
         {
             result = RE_3_ENCODE_INVALID_PRECISION;
         }
@@ -55,7 +55,7 @@ static re_float re_3_encode_check_invalid (const re_float data,
 static void re_3_encode_acceleration (uint8_t * const buffer,
                                       const re_float acceleration, const re_float invalid)
 {
-    if (!isnan (re_3_encode_check_invalid (acceleration, invalid)))
+    if (!isnanf (re_3_encode_check_invalid (acceleration, invalid)))
     {
         int16_t decimal = (int16_t) roundf (acceleration * RE_3_ENCODE_ACC_CONVERT_RATIO);
         buffer[0] = ( (uint16_t) decimal) >> RE_3_BYTE_OFFSET;
@@ -74,7 +74,7 @@ static void re_3_encode_data (uint8_t * const buffer,
     buffer[RE_3_OFFSET_HEADER] = RE_3_DESTINATION;
 
     // HUMIDITY
-    if (!isnan (re_3_encode_check_invalid (data->humidity_rh, invalid)))
+    if (!isnanf (re_3_encode_check_invalid (data->humidity_rh, invalid)))
     {
         //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
         buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) roundf (data->humidity_rh *
@@ -87,7 +87,7 @@ static void re_3_encode_data (uint8_t * const buffer,
 
     // Temperature
 
-    if (!isnan (re_3_encode_check_invalid (data->temperature_c, invalid)))
+    if (!isnanf (re_3_encode_check_invalid (data->temperature_c, invalid)))
     {
         //Temperature (MSB is sign, next 7 bits are decimal value)
         re_float temperature = data->temperature_c;
@@ -126,7 +126,7 @@ static void re_3_encode_data (uint8_t * const buffer,
 
     // Pressure
 
-    if (!isnan (re_3_encode_check_invalid (data->pressure_pa, invalid)))
+    if (!isnanf (re_3_encode_check_invalid (data->pressure_pa, invalid)))
     {
         uint32_t pressure = (uint32_t) data->pressure_pa;
         pressure -= RE_3_ENCODE_PRESSURE_INIT_OFFSET;
@@ -148,7 +148,7 @@ static void re_3_encode_data (uint8_t * const buffer,
                               data->accelerationz_g, invalid);
     // voltage
 
-    if (!isnan (re_3_encode_check_invalid (data->battery_v, invalid)))
+    if (!isnanf (re_3_encode_check_invalid (data->battery_v, invalid)))
     {
         uint32_t voltage = 0;
         re_float voltage_in_mv = (data->battery_v *

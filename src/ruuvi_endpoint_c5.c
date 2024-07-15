@@ -79,7 +79,7 @@ static void re_c5_encode_humidity (uint8_t * const buffer, const re_c5_data_t * 
     uint16_t coded_humidity = RE_C5_INVALID_HUMIDITY;
     re_float humidity = data->humidity_rh;
 
-    if (!isnan (humidity))
+    if (!isnanf (humidity))
     {
         re_clip (&humidity, RE_C5_HUMI_MIN, RE_C5_HUMI_MAX);
         coded_humidity = (uint16_t) roundf (humidity * RE_C5_HUMI_RATIO);
@@ -94,7 +94,7 @@ static void re_c5_encode_temperature (uint8_t * const buffer, const re_c5_data_t
     uint16_t coded_temperature = RE_C5_INVALID_TEMPERATURE;
     re_float temperature = data->temperature_c;
 
-    if (!isnan (temperature))
+    if (!isnanf (temperature))
     {
         re_clip (&temperature, RE_C5_TEMP_MIN, RE_C5_TEMP_MAX);
         int16_t rounded_temperature = (int16_t) roundf (temperature * RE_C5_TEMP_RATIO);
@@ -111,7 +111,7 @@ static void re_c5_encode_pressure (uint8_t * const buffer, const re_c5_data_t * 
     uint16_t coded_pressure = RE_C5_INVALID_PRESSURE;
     re_float pressure = data->pressure_pa;
 
-    if (!isnan (pressure))
+    if (!isnanf (pressure))
     {
         re_clip (&pressure, RE_C5_PRES_MIN, RE_C5_PRES_MAX);
         pressure += RE_C5_PRES_OFFSET;
@@ -130,7 +130,7 @@ static void re_c5_encode_pwr (uint8_t * const buffer, const re_c5_data_t * data)
     uint16_t coded_tx_power = RE_C5_INVALID_POWER;
     re_float tx_power = (re_float) data->tx_power;
 
-    if (!isnan (voltage))
+    if (!isnanf (voltage))
     {
         re_clip (&voltage, RE_C5_VOLTAGE_MIN, RE_C5_VOLTAGE_MAX);
         coded_voltage = (uint16_t) roundf ( (voltage * RE_C5_BATT_RATIO)

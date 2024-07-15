@@ -193,7 +193,7 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
     {
         err_code |= RE_ERROR_NULL;
     }
-    else if (isnan (data) || isinf (data))
+    else if (isnanf (data) || isinff (data))
     {
         err_code |= RE_ERROR_INVALID_PARAM;
     }
