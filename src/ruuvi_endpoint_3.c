@@ -9,11 +9,11 @@
 #define RE_3_ENCODE_INVALID_PRECISION       0.00001f
 #define RE_3_ENCODE_ACC_CONVERT_RATIO       1000
 #define RE_3_ENCODE_HUMIDITY_CONVERT_RATIO  2
-#define RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET 0.5
+#define RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET 0.5f
 #define RE_3_ENCODE_PRESSURE_INIT_OFFSET    50000
 #define RE_3_ENCODE_BATTERY_CONVERT_RATIO   1000
 #define RE_3_ENCODE_TEMP_CONVERT_RATIO      100
-#define RE_3_ENCODE_TEMP_CONVERT_CAP        127.99
+#define RE_3_ENCODE_TEMP_CONVERT_CAP        127.99f
 
 #define RE_3_BYTE_SIGN_OFFSET               7
 #define RE_3_BYTE_OFFSET                    8
@@ -57,8 +57,7 @@ static void re_3_encode_acceleration (uint8_t * const buffer,
 {
     if (!isnan (re_3_encode_check_invalid (acceleration, invalid)))
     {
-        int16_t decimal = (int16_t) round ( (acceleration *
-                                             RE_3_ENCODE_ACC_CONVERT_RATIO));
+        int16_t decimal = (int16_t) roundf (acceleration * RE_3_ENCODE_ACC_CONVERT_RATIO);
         buffer[0] = ( (uint16_t) decimal) >> RE_3_BYTE_OFFSET;
         buffer[1] = ( (uint16_t) decimal) & RE_3_BYTE_MASK;
     }
@@ -78,9 +77,8 @@ static void re_3_encode_data (uint8_t * const buffer,
     if (!isnan (re_3_encode_check_invalid (data->humidity_rh, invalid)))
     {
         //Humidity (one lsb is 0.5%, e.g. 128 is 64%). Round the value
-        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) ( (re_float) ( (data->humidity_rh *
-                                       RE_3_ENCODE_HUMIDITY_CONVERT_RATIO) +
-                                       RE_3_ENCODE_HUMIDITY_CONVERT_OFFSET));
+        buffer[RE_3_OFFSET_HUMIDITY] = (uint8_t) roundf (data->humidity_rh *
+                                       RE_3_ENCODE_HUMIDITY_CONVERT_RATIO);
     }
     else
     {
@@ -110,12 +108,12 @@ static void re_3_encode_data (uint8_t * const buffer,
         // cap the temperature
         if (RE_3_ENCODE_TEMP_CONVERT_CAP < temperature)
         {
-            temperature = (re_float) RE_3_ENCODE_TEMP_CONVERT_CAP;
+            temperature = RE_3_ENCODE_TEMP_CONVERT_CAP;
         }
 
         buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (uint8_t) (
                     sign << RE_3_BYTE_SIGN_OFFSET);
-        uint8_t temperature_fraction = (uint8_t) round ( (temperature - floor (
+        uint8_t temperature_fraction = (uint8_t) roundf ( (temperature - floorf (
                                            temperature)) *
                                        RE_3_ENCODE_TEMP_CONVERT_RATIO);
         buffer[RE_3_OFFSET_TEMPERATURE_FRACTION] = temperature_fraction;
