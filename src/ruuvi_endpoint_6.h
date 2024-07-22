@@ -166,4 +166,12 @@ bool re_6_check_format (const uint8_t * const p_buffer);
  */
 re_status_t re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_data);
 
+/**
+ * @brief Create invalid Ruuvi DF6 data.
+ * @param measurement_cnt Running counter of measurement.
+ * @param radio_mac BLE address of device.
+ * @return /ref re_6_data_t with all values set to NAN.
+ */
+re_6_data_t re_6_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac);
+
 #endif
