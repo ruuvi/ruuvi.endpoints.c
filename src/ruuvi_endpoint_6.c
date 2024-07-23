@@ -435,4 +435,23 @@ re_status_t re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_d
     return result;
 }
 
+re_6_data_t re_6_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
+{
+    const re_6_data_t data =
+    {
+        .pm1p0_ppm         = NAN,
+        .pm2p5_ppm         = NAN,
+        .pm4p0_ppm         = NAN,
+        .pm10p0_ppm        = NAN,
+        .co2               = NAN,
+        .humidity_rh       = NAN,
+        .voc_index         = NAN,
+        .nox_index         = NAN,
+        .temperature_c     = NAN,
+        .measurement_count = measurement_cnt,
+        .address           = radio_mac,
+    };
+    return data;
+}
+
 #endif
