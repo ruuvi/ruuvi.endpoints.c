@@ -50,6 +50,9 @@
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, CRC, ETX */
 #define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 6U)
+#define RE_CA_UART_TX_LEN(data_len) (RE_CA_UART_HEADER_SIZE + \
+                                     (data_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     RE_CA_UART_CRC_SIZE + RE_CA_UART_STX_ETX_LEN)
 
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
