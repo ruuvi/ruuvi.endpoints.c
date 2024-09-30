@@ -5,6 +5,8 @@
 
 #include <string.h>
 
+#define TX_MAX_LEN (255)
+
 void setUp (void)
 {
     // No action needed.
@@ -34,7 +36,7 @@ void dtest_ruuvi_endpoint_ca_uart_encode_filter_ruuvi (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.filter = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_encode (buffer, &expected_size, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (expected_size == sizeof (expected));
@@ -57,7 +59,7 @@ void dtest_ruuvi_endpoint_ca_uart_encode_filter_clear (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.filter = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_encode (buffer, &expected_size, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (expected_size == sizeof (expected));
@@ -86,7 +88,7 @@ void dtest_ruuvi_endpoint_ca_uart_channels_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.channels = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_encode (buffer, &expected_size, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (expected_size == sizeof (expected));
@@ -115,7 +117,7 @@ void dtest_ruuvi_endpoint_ca_uart_phy_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.phys = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_encode (buffer, &expected_size, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (expected_size == sizeof (expected));
@@ -135,7 +137,7 @@ void test_ruuvi_endpoint_ca_uart_encode_null (void)
     uint8_t size = 255U;
     payload.cmd = cmd;
     payload.params.bool_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_encode (NULL, &size, &payload);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
     err_code = re_ca_uart_encode (buffer, NULL, &payload);
@@ -169,10 +171,11 @@ void test_ruuvi_endpoint_ca_uart_device_id_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.device_id = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_device_id_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (buffer_len == sizeof (expected));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
@@ -202,7 +205,7 @@ void test_ruuvi_endpoint_ca_uart_device_id_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.device_id = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_device_id_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -225,11 +228,12 @@ void test_ruuvi_endpoint_ca_uart_get_device_id_encode (void)
     re_ca_uart_cmd_t cmd = RE_CA_UART_GET_DEVICE_ID;
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_get_device_id_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -248,7 +252,7 @@ void test_ruuvi_endpoint_ca_uart_get_device_id_encode_invalid (void)
     re_ca_uart_cmd_t cmd = RE_CA_UART_GET_DEVICE_ID;
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_get_device_id_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -281,11 +285,12 @@ void test_ruuvi_endpoint_ca_uart_ack_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.ack = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_ack_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -314,7 +319,7 @@ void test_ruuvi_endpoint_ca_uart_ack_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.ack = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_ack_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -351,11 +356,12 @@ void test_ruuvi_endpoint_ca_uart_all_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.all_params = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_all_params_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -388,7 +394,7 @@ void test_ruuvi_endpoint_ca_uart_all_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.all_params = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_all_params_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -411,11 +417,12 @@ void test_ruuvi_endpoint_ca_uart_get_all_encode (void)
     re_ca_uart_cmd_t cmd = RE_CA_UART_GET_ALL;
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_get_all_params_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -434,7 +441,7 @@ void test_ruuvi_endpoint_ca_uart_get_all_encode_invalid (void)
     re_ca_uart_cmd_t cmd = RE_CA_UART_GET_ALL;
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_miso_payload_buf_encoded_get_all_params_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -464,11 +471,12 @@ void test_ruuvi_endpoint_ca_uart_fltr_id_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.fltr_id_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_fltr_id_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -494,7 +502,7 @@ void test_ruuvi_endpoint_ca_uart_fltr_id_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.fltr_id_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_fltr_id_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -524,11 +532,12 @@ void test_ruuvi_endpoint_ca_uart_led_ctrl_encode (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.led_ctrl_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -554,7 +563,7 @@ void test_ruuvi_endpoint_ca_uart_led_ctrl_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.led_ctrl_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -584,11 +593,12 @@ void test_ruuvi_endpoint_ca_uart_bool_encode (void)
     re_ca_uart_payload_t payload = {0};;
     payload.cmd = cmd;
     payload.params.bool_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_bool_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
     TEST_ASSERT (buffer_len == sizeof (expected));
+    TEST_ASSERT (buffer_len == sizeof (buffer));
     TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
 }
 
@@ -614,7 +624,7 @@ void test_ruuvi_endpoint_ca_uart_bool_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};;
     payload.cmd = cmd;
     payload.params.bool_param = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_bool_t)] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -656,7 +666,7 @@ void test_ruuvi_endpoint_ca_uart_adv_encode (void)
     re_ca_uart_payload_t payload = {0};;
     payload.cmd = cmd;
     payload.params.adv = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_SUCCESS == err_code);
@@ -698,7 +708,7 @@ void test_ruuvi_endpoint_ca_uart_adv_encode_invalid (void)
     re_ca_uart_payload_t payload = {0};;
     payload.cmd = cmd;
     payload.params.adv = params;
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     uint8_t buffer_len = 1;
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
     TEST_ASSERT (RE_ERROR_DATA_SIZE == err_code);
@@ -788,7 +798,7 @@ void test_ruuvi_endpoint_ca_uart_decode_null (void)
 {
     re_status_t err_code = RE_SUCCESS;
     re_ca_uart_payload_t payload = {0};
-    uint8_t buffer[RE_CA_UART_TX_MAX_LEN] = {0};
+    uint8_t buffer[TX_MAX_LEN] = {0};
     err_code = re_ca_uart_decode (NULL, &payload);
     TEST_ASSERT (RE_ERROR_NULL == err_code);
     err_code = re_ca_uart_decode (buffer, NULL);
