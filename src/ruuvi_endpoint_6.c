@@ -13,8 +13,8 @@
 #define RE_6_NOX_RATIO           (1.0f)
 #define RE_6_TEMPERATURE_RATIO   (10.0f)
 
-#define RE_6_MAC_MAX             (281474976710655)
-#define RE_6_MAC_MIN             (0)
+#define RE_6_MAC_MAX             (0xFFFFFFFFFFFFUL)
+#define RE_6_MAC_MIN             (0UL)
 
 #define RE_6_BYTE_0_SHIFT        (0U)
 #define RE_6_BYTE_1_SHIFT        (8U)
@@ -256,16 +256,21 @@ static void re_6_encode_set_address (uint8_t * const p_buffer, const re_6_data_t
     // Address is 64 bits, skip 2 first bytes
     uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;
     uint64_t mac = p_data->address;
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wtype-limits"
 
-    // cppcheck-suppress unsignedLessThanZero
-    if ( (RE_6_MAC_MAX < p_data->address) || (RE_6_MAC_MIN > p_data->address))
-#pragma GCC diagnostic pop
+    if (RE_6_MAC_MAX < p_data->address)
     {
         mac = RE_6_INVALID_MAC;
     }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
+
+    if (RE_6_MAC_MIN > p_data->address) // cppcheck-suppress unsignedLessThanZero
+    {
+        mac = RE_6_INVALID_MAC;
+    }
+
+#pragma GCC diagnostic pop
     p_buffer[addr_offset] = (mac >> RE_6_BYTE_5_SHIFT) & RE_6_BYTE_MASK;
     addr_offset++;
     p_buffer[addr_offset] = (mac >> RE_6_BYTE_4_SHIFT) & RE_6_BYTE_MASK;
