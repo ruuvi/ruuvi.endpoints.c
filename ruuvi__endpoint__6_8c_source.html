@@ -101,8 +101,8 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__6_8c_source.html','')
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#define RE_6_NOX_RATIO           (1.0f)</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#define RE_6_TEMPERATURE_RATIO   (10.0f)</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define RE_6_MAC_MAX             (281474976710655)</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#define RE_6_MAC_MIN             (0)</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define RE_6_MAC_MAX             (0xFFFFFFFFFFFFUL)</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#define RE_6_MAC_MIN             (0UL)</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define RE_6_BYTE_0_SHIFT        (0U)</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define RE_6_BYTE_1_SHIFT        (8U)</span></div>
@@ -345,38 +345,38 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__6_8c_source.html','')
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    uint64_t mac = p_data-&gt;<a class="code" href="structre__6__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordflow">if</span> ( (RE_6_MAC_MAX &lt; p_data-&gt;address) || (RE_6_MAC_MIN &gt; p_data-&gt;<a class="code" href="structre__6__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>))</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keywordflow">if</span> (RE_6_MAC_MAX &lt; p_data-&gt;address)</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    {</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        mac = RE_6_INVALID_MAC;</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    }</div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_5_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_4_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_3_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_2_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_1_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_0_SHIFT) &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;}</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="keyword">static</span> uint64_t re_6_decode_address (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;{</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="comment">// Address is 64 bits, skip 2 first bytes</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    uint64_t mac = 0;</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    mac |= p_buffer[addr_offset];</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    mac |= p_buffer[addr_offset];</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    addr_offset++;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    mac |= p_buffer[addr_offset];</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="preprocessor">#pragma GCC diagnostic push</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="preprocessor">#pragma GCC diagnostic ignored &quot;-Wtype-limits&quot;</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keywordflow">if</span> (RE_6_MAC_MIN &gt; p_data-&gt;<a class="code" href="structre__6__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a>) <span class="comment">// cppcheck-suppress unsignedLessThanZero</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    {</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        mac = RE_6_INVALID_MAC;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="preprocessor">#pragma GCC diagnostic pop</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_5_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_4_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_3_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_2_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_1_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    p_buffer[addr_offset] = (mac &gt;&gt; RE_6_BYTE_0_SHIFT) &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="keyword">static</span> uint64_t re_6_decode_address (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;{</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="comment">// Address is 64 bits, skip 2 first bytes</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    uint64_t mac = 0;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    mac |= p_buffer[addr_offset];</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    addr_offset++;</div>
@@ -384,165 +384,174 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__6_8c_source.html','')
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    addr_offset++;</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    mac |= p_buffer[addr_offset];</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <span class="keywordflow">return</span> mac;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;}</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_6_encode_sequence (uint8_t * <span class="keyword">const</span> p_buffer,</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                  <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;{</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    uint16_t measurement_seq = RE_6_INVALID_SEQUENCE;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keywordflow">if</span> (RE_6_SEQ_CTR_MAX &gt;= p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>)</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        measurement_seq = p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] = (measurement_seq &gt;&gt; RE_6_BYTE_1_SHIFT);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] = (measurement_seq &amp; RE_6_BYTE_MASK);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;}</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    mac |= p_buffer[addr_offset];</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    mac |= p_buffer[addr_offset];</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    mac &lt;&lt;= RE_6_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    addr_offset++;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    mac |= p_buffer[addr_offset];</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordflow">return</span> mac;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;}</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> re_6_encode_sequence (uint8_t * <span class="keyword">const</span> p_buffer,</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                                  <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;{</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    uint16_t measurement_seq = RE_6_INVALID_SEQUENCE;</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="keyword">static</span> uint16_t re_6_decode_sequence (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;{</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    uint16_t measurement_seq = 0;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    measurement_seq |= p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] &amp; RE_6_BYTE_MASK;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    measurement_seq |= (p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] &amp; RE_6_BYTE_MASK) &lt;&lt;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                       RE_6_BYTE_1_SHIFT;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordflow">return</span> measurement_seq;</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">if</span> (RE_6_SEQ_CTR_MAX &gt;= p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>)</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        measurement_seq = p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] = (measurement_seq &gt;&gt; RE_6_BYTE_1_SHIFT);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] = (measurement_seq &amp; RE_6_BYTE_MASK);</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;}</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;re_status_t re_6_encode (uint8_t * <span class="keyword">const</span> p_buffer, <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="keyword">static</span> uint16_t re_6_decode_sequence (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;{</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    re_status_t result = RE_SUCCESS;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keywordflow">if</span> ( (NULL == p_buffer) || (NULL == p_data))</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        result |= RE_ERROR_NULL;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    {</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        memset (p_buffer, 0, RE_6_DATA_LENGTH);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        p_buffer[RE_6_OFFSET_HEADER] = RE_6_DESTINATION;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_1_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a>,</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                        RE_6_OFFSET_PM_1_0_OFS);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_2_5_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a83f97f1f70325e8019a795c7b8730549">pm2p5_ppm</a>,</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                        RE_6_OFFSET_PM_2_5_OFS);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_4_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a6f1666df0ba488041b5c68a93f2153b3">pm4p0_ppm</a>,</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                        RE_6_OFFSET_PM_4_0_OFS);</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_10_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">pm10p0_ppm</a>,</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                        RE_6_OFFSET_PM_10_0_OFS);</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        re_6_encode_co2 (&amp;p_buffer[RE_6_OFFSET_CO2_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a410d6880f357f877b014f30a9aca31d1">co2</a>);</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        re_6_encode_humidity (&amp;p_buffer[RE_6_OFFSET_HUMIDITY_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a>);</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        re_6_encode_voc (&amp;p_buffer[RE_6_OFFSET_VOC_INDEX_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a>);</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        re_6_encode_nox (&amp;p_buffer[RE_6_OFFSET_NOX_INDEX_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a>);</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        re_6_encode_temperature (&amp;p_buffer[RE_6_OFFSET_TEMPERATURE_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        re_6_encode_sequence (p_buffer, p_data);</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        re_6_encode_set_address (p_buffer, p_data);</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    }</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;}</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="keywordtype">bool</span> re_6_check_format (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;{</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keywordflow">if</span> (NULL == p_buffer)</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    }</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL !=</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET])</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    }</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160; </div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL !=</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET])</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    {</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    }</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_LENGTH_VAL != p_buffer[RE_6_RAW_PACKET_LENGTH_OFFSET])</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    {</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_TYPE_VAL != p_buffer[RE_6_RAW_PACKET_TYPE_OFFSET])</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    }</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keyword">const</span> uint16_t manufacturer_id = (uint16_t) ( (uint16_t)</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                                     p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] &lt;&lt; RE_6_BYTE_1_SHIFT)</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;                                     + p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    uint16_t measurement_seq = 0;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    measurement_seq |= p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] &amp; RE_6_BYTE_MASK;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    measurement_seq |= (p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] &amp; RE_6_BYTE_MASK) &lt;&lt;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                       RE_6_BYTE_1_SHIFT;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keywordflow">return</span> measurement_seq;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;}</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;re_status_t re_6_encode (uint8_t * <span class="keyword">const</span> p_buffer, <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;{</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    re_status_t result = RE_SUCCESS;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keywordflow">if</span> ( (NULL == p_buffer) || (NULL == p_data))</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    {</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        result |= RE_ERROR_NULL;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    {</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        memset (p_buffer, 0, RE_6_DATA_LENGTH);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        p_buffer[RE_6_OFFSET_HEADER] = RE_6_DESTINATION;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_1_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a>,</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                        RE_6_OFFSET_PM_1_0_OFS);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_2_5_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a83f97f1f70325e8019a795c7b8730549">pm2p5_ppm</a>,</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                        RE_6_OFFSET_PM_2_5_OFS);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_4_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a6f1666df0ba488041b5c68a93f2153b3">pm4p0_ppm</a>,</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                        RE_6_OFFSET_PM_4_0_OFS);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        re_6_encode_pm (&amp;p_buffer[RE_6_OFFSET_PM_10_0_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">pm10p0_ppm</a>,</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                        RE_6_OFFSET_PM_10_0_OFS);</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        re_6_encode_co2 (&amp;p_buffer[RE_6_OFFSET_CO2_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a410d6880f357f877b014f30a9aca31d1">co2</a>);</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        re_6_encode_humidity (&amp;p_buffer[RE_6_OFFSET_HUMIDITY_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a>);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        re_6_encode_voc (&amp;p_buffer[RE_6_OFFSET_VOC_INDEX_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a>);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        re_6_encode_nox (&amp;p_buffer[RE_6_OFFSET_NOX_INDEX_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a>);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        re_6_encode_temperature (&amp;p_buffer[RE_6_OFFSET_TEMPERATURE_MSB], p_data-&gt;<a class="code" href="structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>);</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        re_6_encode_sequence (p_buffer, p_data);</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        re_6_encode_set_address (p_buffer, p_data);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;}</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="keywordtype">bool</span> re_6_check_format (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer)</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;{</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keywordflow">if</span> (NULL == p_buffer)</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    {</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    }</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL !=</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET])</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    {</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    }</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL !=</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET])</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    }</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_LENGTH_VAL != p_buffer[RE_6_RAW_PACKET_LENGTH_OFFSET])</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    {</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    }</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_TYPE_VAL != p_buffer[RE_6_RAW_PACKET_TYPE_OFFSET])</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    {</div>
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    }</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keywordflow">if</span> (RE_6_DESTINATION != p_buffer[RE_6_OFFSET_PAYLOAD + RE_6_OFFSET_HEADER])</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    {</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    }</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;}</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;re_status_t re_6_decode (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer, <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;{</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_payload = &amp;p_buffer[RE_6_OFFSET_PAYLOAD];</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    re_status_t result = RE_SUCCESS;</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keywordflow">if</span> ( (NULL == p_payload) || (NULL == p_data))</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    {</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">return</span> RE_ERROR_NULL;</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    }</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    memset (p_data, 0, <span class="keyword">sizeof</span> (*p_data));</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordflow">if</span> (RE_6_DESTINATION != p_payload[RE_6_OFFSET_HEADER])</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    {</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordflow">return</span> RE_ERROR_INVALID_PARAM;</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    }</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_1_0_MSB],</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;                                        RE_6_OFFSET_PM_1_0_OFS);</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a83f97f1f70325e8019a795c7b8730549">pm2p5_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_2_5_MSB],</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;                                        RE_6_OFFSET_PM_2_5_OFS);</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a6f1666df0ba488041b5c68a93f2153b3">pm4p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_4_0_MSB],</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                                        RE_6_OFFSET_PM_4_0_OFS);</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">pm10p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_10_0_MSB],</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;                                         RE_6_OFFSET_PM_10_0_OFS);</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a410d6880f357f877b014f30a9aca31d1">co2</a> = re_6_decode_co2 (&amp;p_payload[RE_6_OFFSET_CO2_MSB]);</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a> = re_6_decode_humidity (&amp;p_payload[RE_6_OFFSET_HUMIDITY_MSB]);</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a> = re_6_decode_voc (&amp;p_payload[RE_6_OFFSET_VOC_INDEX_MSB]);</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a> = re_6_decode_nox (&amp;p_payload[RE_6_OFFSET_NOX_INDEX_MSB]);</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a> = re_6_decode_temperature (&amp;p_payload[RE_6_OFFSET_TEMPERATURE_MSB]);</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a> = re_6_decode_sequence (p_payload);</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a> = re_6_decode_address (p_payload);</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;}</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<a class="code" href="structre__6__data__t.html">re_6_data_t</a> re_6_data_invalid (<span class="keyword">const</span> uint16_t measurement_cnt, <span class="keyword">const</span> uint64_t radio_mac)</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;{</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> data =</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    {</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        .<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a>         = NAN,</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        .pm2p5_ppm         = NAN,</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        .pm4p0_ppm         = NAN,</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        .pm10p0_ppm        = NAN,</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        .co2               = NAN,</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;        .humidity_rh       = NAN,</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        .voc_index         = NAN,</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        .nox_index         = NAN,</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        .temperature_c     = NAN,</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        .measurement_count = measurement_cnt,</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        .address           = radio_mac,</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    };</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    <span class="keywordflow">return</span> data;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;}</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160; </div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keyword">const</span> uint16_t manufacturer_id = (uint16_t) ( (uint16_t)</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;                                     p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] &lt;&lt; RE_6_BYTE_1_SHIFT)</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;                                     + p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keywordflow">if</span> (RE_6_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    {</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    }</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    <span class="keywordflow">if</span> (RE_6_DESTINATION != p_buffer[RE_6_OFFSET_PAYLOAD + RE_6_OFFSET_HEADER])</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    {</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160; </div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;}</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;re_status_t re_6_decode (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_buffer, <a class="code" href="structre__6__data__t.html">re_6_data_t</a> * <span class="keyword">const</span> p_data)</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;{</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_payload = &amp;p_buffer[RE_6_OFFSET_PAYLOAD];</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    re_status_t result = RE_SUCCESS;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <span class="keywordflow">if</span> ( (NULL == p_payload) || (NULL == p_data))</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    {</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <span class="keywordflow">return</span> RE_ERROR_NULL;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    }</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    memset (p_data, 0, <span class="keyword">sizeof</span> (*p_data));</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordflow">if</span> (RE_6_DESTINATION != p_payload[RE_6_OFFSET_HEADER])</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        <span class="keywordflow">return</span> RE_ERROR_INVALID_PARAM;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    }</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_1_0_MSB],</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                                        RE_6_OFFSET_PM_1_0_OFS);</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a83f97f1f70325e8019a795c7b8730549">pm2p5_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_2_5_MSB],</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;                                        RE_6_OFFSET_PM_2_5_OFS);</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a6f1666df0ba488041b5c68a93f2153b3">pm4p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_4_0_MSB],</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                                        RE_6_OFFSET_PM_4_0_OFS);</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">pm10p0_ppm</a> = re_6_decode_pm (&amp;p_payload[RE_6_OFFSET_PM_10_0_MSB],</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;                                         RE_6_OFFSET_PM_10_0_OFS);</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a410d6880f357f877b014f30a9aca31d1">co2</a> = re_6_decode_co2 (&amp;p_payload[RE_6_OFFSET_CO2_MSB]);</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a62aa386606ead2e44bc56463b3f52a77">humidity_rh</a> = re_6_decode_humidity (&amp;p_payload[RE_6_OFFSET_HUMIDITY_MSB]);</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a> = re_6_decode_voc (&amp;p_payload[RE_6_OFFSET_VOC_INDEX_MSB]);</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a> = re_6_decode_nox (&amp;p_payload[RE_6_OFFSET_NOX_INDEX_MSB]);</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a> = re_6_decode_temperature (&amp;p_payload[RE_6_OFFSET_TEMPERATURE_MSB]);</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a> = re_6_decode_sequence (p_payload);</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    p_data-&gt;<a class="code" href="structre__6__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a> = re_6_decode_address (p_payload);</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;}</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160; </div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;<a class="code" href="structre__6__data__t.html">re_6_data_t</a> re_6_data_invalid (<span class="keyword">const</span> uint16_t measurement_cnt, <span class="keyword">const</span> uint64_t radio_mac)</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;{</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    <span class="keyword">const</span> <a class="code" href="structre__6__data__t.html">re_6_data_t</a> data =</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    {</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        .<a class="code" href="structre__6__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">pm1p0_ppm</a>         = NAN,</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        .pm2p5_ppm         = NAN,</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        .pm4p0_ppm         = NAN,</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        .pm10p0_ppm        = NAN,</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        .co2               = NAN,</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        .humidity_rh       = NAN,</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        .voc_index         = NAN,</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        .nox_index         = NAN,</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;        .temperature_c     = NAN,</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        .measurement_count = measurement_cnt,</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        .address           = radio_mac,</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    };</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keywordflow">return</span> data;</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;}</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160; </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="astructre__6__data__t_html"><div class="ttname"><a href="structre__6__data__t.html">re_6_data_t</a></div><div class="ttdoc">All data required for Ruuvi dataformat 6 package.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__6_8h_source.html#l00103">ruuvi_endpoint_6.h:104</a></div></div>
 <div class="ttc" id="astructre__6__data__t_html_a2cc7e9dc3b18ec085d487b3e3f0deaab"><div class="ttname"><a href="structre__6__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">re_6_data_t::pm10p0_ppm</a></div><div class="ttdeci">re_float pm10p0_ppm</div><div class="ttdoc">Particulate matter mass concentration PM10.0 in micrograms/m3.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__6_8h_source.html#l00111">ruuvi_endpoint_6.h:111</a></div></div>
 <div class="ttc" id="astructre__6__data__t_html_a3e8b1bce5679a8bbe095f0a7327358f4"><div class="ttname"><a href="structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">re_6_data_t::temperature_c</a></div><div class="ttdeci">re_float temperature_c</div><div class="ttdoc">Temperature in degrees Celsius.</div><div class="ttdef"><b>Definition:</b> <a href="ruuvi__endpoint__6_8h_source.html#l00121">ruuvi_endpoint_6.h:121</a></div></div>
