@@ -256,8 +256,12 @@ static void re_6_encode_set_address (uint8_t * const p_buffer, const re_6_data_t
     // Address is 64 bits, skip 2 first bytes
     uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;
     uint64_t mac = p_data->address;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wtype-limits"
 
+    // cppcheck-suppress unsignedLessThanZero
     if ( (RE_6_MAC_MAX < p_data->address) || (RE_6_MAC_MIN > p_data->address))
+#pragma GCC diagnostic pop
     {
         mac = RE_6_INVALID_MAC;
     }

@@ -174,42 +174,50 @@ typedef enum
 #define RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS() \
     RE_CA_UART_TX_DATA_LEN_0_PARAMS()
 
+/** @brief Buffer for the encoded 'bool' payload. */
 typedef struct re_ca_uart_mosi_payload_buf_encoded_bool_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_BOOL())];
 } re_ca_uart_mosi_payload_buf_encoded_bool_t;
 
-typedef struct re_ca_uart_mosi_payload_buf_encoded_fltr_id_t
+/** @brief Buffer for the encoded 'set_fltr_id' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_set_fltr_id_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID())];
-} re_ca_uart_mosi_payload_buf_encoded_fltr_id_t;
+} re_ca_uart_mosi_payload_buf_encoded_set_fltr_id_t;
 
+/** @brief Buffer for the encoded 'get_device_id' payload. */
 typedef struct re_ca_uart_mosi_payload_buf_encoded_get_device_id_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID())];
 } re_ca_uart_mosi_payload_buf_encoded_get_device_id_t;
 
+/** @brief Buffer for the encoded 'all_params' payload. */
 typedef struct re_ca_uart_mosi_payload_buf_encoded_all_params_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS())];
 } re_ca_uart_mosi_payload_buf_encoded_all_params_t;
 
+/** @brief Buffer for the encoded 'led_ctrl' payload. */
 typedef struct re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL())];
 } re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t;
 
 
+/** @brief Buffer for the encoded 'device_id' payload. */
 typedef struct re_ca_uart_miso_payload_buf_encoded_device_id_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID())];
 } re_ca_uart_miso_payload_buf_encoded_device_id_t;
 
+/** @brief Buffer for the encoded 'ack' payload. */
 typedef struct re_ca_uart_miso_payload_buf_encoded_ack_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ACK())];
 } re_ca_uart_miso_payload_buf_encoded_ack_t;
 
+/** @brief Buffer for the encoded 'get_all_params' payload. */
 typedef struct re_ca_uart_miso_payload_buf_encoded_get_all_params_t
 {
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS())];
