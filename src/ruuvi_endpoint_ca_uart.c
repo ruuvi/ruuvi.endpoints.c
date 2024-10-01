@@ -233,8 +233,7 @@ static re_status_t re_ca_uart_decode_bool_payload (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_BOOL_LEN
-                                         + (RE_CA_UART_BOOL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_BOOL())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -254,8 +253,7 @@ static re_status_t re_ca_uart_decode_fltr_id (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_FLTR_ID_LEN
-                                         + (RE_CA_UART_FLTR_ID_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -273,8 +271,7 @@ static re_status_t re_ca_uart_decode_led_ctrl (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_LED_CTRL_LEN
-                                         + (RE_CA_UART_LED_CTRL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -293,8 +290,7 @@ static re_status_t re_ca_uart_decode_ack (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_ACK_LEN
-                                         + (RE_CA_UART_ACK_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_ACK())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -317,8 +313,7 @@ static re_status_t re_ca_uart_decode_device_id (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_DEVICE_ID_LEN + RE_CA_UART_DEVICE_ADDR_LEN
-                                         + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -341,8 +336,7 @@ static re_status_t re_ca_uart_decode_get_device_id (const uint8_t * const buffer
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_GET_DEVICE_ID_LEN
-                                         + (RE_CA_UART_GET_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -359,8 +353,7 @@ static re_status_t re_ca_uart_decode_get_all (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_GET_ALL_LEN
-                                         + (RE_CA_UART_GET_ALL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -377,8 +370,7 @@ static re_status_t re_ca_uart_decode_all (const uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
 
-    if (buffer[RE_CA_UART_LEN_INDEX] != (RE_CA_UART_CMD_ALL_LEN
-                                         + (RE_CA_UART_ALL_FIELDS * RE_CA_UART_DELIMITER_LEN)))
+    if (buffer[RE_CA_UART_LEN_INDEX] != RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS())
     {
         err_code |= RE_ERROR_DECODING_LEN;
     }
@@ -589,7 +581,8 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if ( (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT (
+                                     payload->params.adv.adv_len))) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -597,10 +590,8 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_MAC_BYTES
-                                       + payload->params.adv.adv_len
-                                       + RE_CA_UART_RSSI_BYTES
-                                       + RE_CA_UART_ADV_FIELDS * RE_CA_UART_DELIMITER_LEN;
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT (
+                                           payload->params.adv.adv_len);
         buffer[RE_CA_UART_CMD_INDEX] = RE_CA_UART_ADV_RPRT;
         written += RE_CA_UART_HEADER_SIZE;
         memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
@@ -630,7 +621,7 @@ static re_status_t re_ca_uart_encode_bool_payload (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if ( (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_BOOL())) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -638,8 +629,7 @@ static re_status_t re_ca_uart_encode_bool_payload (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_BOOL_LEN
-                                       + (RE_CA_UART_BOOL_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_BOOL();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         buffer[RE_CA_UART_PAYLOAD_INDEX] = (payload->params.bool_param.state & 1U);
@@ -660,7 +650,7 @@ static re_status_t re_ca_uart_encode_fltr_id (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -668,8 +658,7 @@ static re_status_t re_ca_uart_encode_fltr_id (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_FLTR_ID_LEN
-                                       + (RE_CA_UART_FLTR_ID_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
@@ -692,7 +681,7 @@ static re_status_t re_ca_uart_encode_led_ctrl (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -700,8 +689,7 @@ static re_status_t re_ca_uart_encode_led_ctrl (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_LED_CTRL_LEN
-                                       + (RE_CA_UART_LED_CTRL_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
@@ -724,7 +712,7 @@ static re_status_t re_ca_uart_encode_ack (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ACK()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -732,8 +720,7 @@ static re_status_t re_ca_uart_encode_ack (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_ACK_LEN
-                                       + (RE_CA_UART_ACK_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_ACK();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         buffer[written++] = (uint8_t) payload->params.ack.cmd;
@@ -755,7 +742,7 @@ static re_status_t re_ca_uart_encode_device_id (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -763,8 +750,7 @@ static re_status_t re_ca_uart_encode_device_id (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_DEVICE_ID_LEN + RE_CA_UART_DEVICE_ADDR_LEN
-                                       + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         u64_to_array (payload->params.device_id.id, buffer + written, RE_CA_UART_DEVICE_ID_LEN);
@@ -789,7 +775,7 @@ static re_status_t re_ca_uart_encode_get_device_id (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -797,8 +783,7 @@ static re_status_t re_ca_uart_encode_get_device_id (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_DEVICE_ID_LEN
-                                       + (RE_CA_UART_DEVICE_ID_FIELDS * RE_CA_UART_GET_DEVICE_ID_FIELDS);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         add_crc16 (buffer, &written);
@@ -816,7 +801,7 @@ static re_status_t re_ca_uart_encode_all (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -824,9 +809,7 @@ static re_status_t re_ca_uart_encode_all (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_CMD_ALL_BOOL_LEN
-                                       + RE_CA_UART_CMD_FLTR_ID_LEN
-                                       + (RE_CA_UART_ALL_FIELDS * RE_CA_UART_DELIMITER_LEN);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
@@ -865,7 +848,7 @@ static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer,
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
 
-    if (RE_CA_UART_TX_MAX_LEN > *buf_len)
+    if (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS()) > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
@@ -873,8 +856,7 @@ static re_status_t re_ca_uart_encode_get_all (uint8_t * const buffer,
     {
         buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
         // Payload length is different from total message length.
-        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_GET_ALL_LEN + (RE_CA_UART_ALL_FIELDS *
-                                       RE_CA_UART_GET_ALL_FIELDS);
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS();
         buffer[RE_CA_UART_CMD_INDEX] = payload->cmd;
         written += RE_CA_UART_HEADER_SIZE;
         add_crc16 (buffer, &written);

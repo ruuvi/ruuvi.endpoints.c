@@ -49,7 +49,6 @@
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, CRC, ETX */
-#define RE_CA_UART_TX_MAX_LEN (RE_CA_UART_PAYLOAD_MAX_LEN + 6U)
 
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
@@ -94,26 +93,14 @@
 #define RE_CA_UART_ALL_CH_39_BIT        (6U) //!< Byte of bool params, starting from 0.
 
 #define RE_CA_UART_STX_ETX_LEN          (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_GET_DEVICE_ID_LEN    (0U) //!< Length of get device id payload
-#define RE_CA_UART_GET_ALL_LEN          (0U) //!< Length of get configuration payload
 #define RE_CA_UART_DEVICE_ID_LEN        (8U) //!< Length of device id payload
 #define RE_CA_UART_DEVICE_ADDR_LEN      (6U) //!< Length of device addr payload
 #define RE_CA_UART_CMD_BOOL_LEN         (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_FLTR_ID_LEN      (2U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_LED_CTRL_LEN     (2U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ACK_LEN          (2U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_FLTR_ID_LEN      (2U) //!< Length of filter_id payload
+#define RE_CA_UART_CMD_LED_CTRL_LEN     (2U) //!< Length of led_ctrl payload
+#define RE_CA_UART_CMD_ACK_LEN          (1U) //!< Length of ack payload
 #define RE_CA_UART_CMD_ALL_BOOL_LEN     (1U) //!< Length of cmd with bool payload
-#define RE_CA_UART_CMD_ALL_LEN          (RE_CA_UART_CMD_ALL_BOOL_LEN + RE_CA_UART_CMD_FLTR_ID_LEN)
 //!< Length of all command payload
-
-#define RE_CA_UART_BOOL_FIELDS          (1U)
-#define RE_CA_UART_ACK_FIELDS           (2U)
-#define RE_CA_UART_DEVICE_ID_FIELDS     (2U)
-#define RE_CA_UART_GET_DEVICE_ID_FIELDS (0U)
-#define RE_CA_UART_GET_ALL_FIELDS       (0U)
-#define RE_CA_UART_FLTR_ID_FIELDS       (1U)
-#define RE_CA_UART_LED_CTRL_FIELDS      (1U)
-#define RE_CA_UART_ALL_FIELDS           (RE_CA_UART_BOOL_FIELDS + RE_CA_UART_FLTR_ID_FIELDS)
 
 /** @breif Command types. */
 typedef enum
@@ -142,6 +129,107 @@ typedef enum
     RE_CA_UART_GET_ALL          = 25,//!< Get all config.
     RE_CA_UART_ACK              = 32,//!< ACK
 } re_ca_uart_cmd_t;
+
+#define RE_CA_UART_TX_BUF_LEN(data_len) (RE_CA_UART_HEADER_SIZE + \
+                                     (data_len) + \
+                                     RE_CA_UART_CRC_SIZE + RE_CA_UART_STX_ETX_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_0_PARAMS() (0)
+
+#define RE_CA_UART_TX_DATA_LEN_1_PARAM(param_len) ((param_len) + RE_CA_UART_DELIMITER_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_2_PARAMS(data1_len, data2_len) (\
+                                     (data1_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (data2_len) + RE_CA_UART_DELIMITER_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_3_PARAMS(param1_len, param2_len, param3_len) ( \
+                                     (param1_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (param2_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (param3_len) + RE_CA_UART_DELIMITER_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT(data_len) \
+    RE_CA_UART_TX_DATA_LEN_3_PARAMS(data_len, RE_CA_UART_RSSI_BYTES, RE_CA_UART_MAC_BYTES)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_BOOL() \
+    RE_CA_UART_TX_DATA_LEN_1_PARAM(RE_CA_UART_CMD_BOOL_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID() \
+    RE_CA_UART_TX_DATA_LEN_1_PARAM(RE_CA_UART_CMD_FLTR_ID_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL() \
+    RE_CA_UART_TX_DATA_LEN_1_PARAM(RE_CA_UART_CMD_LED_CTRL_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_ACK() \
+    RE_CA_UART_TX_DATA_LEN_2_PARAMS(RE_CA_UART_CMD_ACK_LEN, RE_CA_UART_CMD_BOOL_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID() \
+    RE_CA_UART_TX_DATA_LEN_2_PARAMS(RE_CA_UART_DEVICE_ID_LEN, RE_CA_UART_DEVICE_ADDR_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID() \
+    RE_CA_UART_TX_DATA_LEN_0_PARAMS()
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS() \
+    RE_CA_UART_TX_DATA_LEN_2_PARAMS(RE_CA_UART_CMD_FLTR_ID_LEN, RE_CA_UART_CMD_ALL_BOOL_LEN)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS() \
+    RE_CA_UART_TX_DATA_LEN_0_PARAMS()
+
+/** @brief Buffer for the encoded 'bool' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_bool_t
+{
+    /** Buffer for the encoded 'bool' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_BOOL())];
+} re_ca_uart_mosi_payload_buf_encoded_bool_t;
+
+/** @brief Buffer for the encoded 'set_fltr_id' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_set_fltr_id_t
+{
+    /** Buffer for the encoded 'set_fltr_id' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_FLTR_ID())];
+} re_ca_uart_mosi_payload_buf_encoded_set_fltr_id_t;
+
+/** @brief Buffer for the encoded 'get_device_id' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_get_device_id_t
+{
+    /** Buffer for the encoded 'get_device_id' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_DEVICE_ID())];
+} re_ca_uart_mosi_payload_buf_encoded_get_device_id_t;
+
+/** @brief Buffer for the encoded 'all_params' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_all_params_t
+{
+    /** Buffer for the encoded 'all_params' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS())];
+} re_ca_uart_mosi_payload_buf_encoded_all_params_t;
+
+/** @brief Buffer for the encoded 'led_ctrl' payload. */
+typedef struct re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t
+{
+    /** Buffer for the encoded 'led_ctrl' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_LED_CTRL())];
+} re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t;
+
+
+/** @brief Buffer for the encoded 'device_id' payload. */
+typedef struct re_ca_uart_miso_payload_buf_encoded_device_id_t
+{
+    /** Buffer for the encoded 'device_id' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_DEVICE_ID())];
+} re_ca_uart_miso_payload_buf_encoded_device_id_t;
+
+/** @brief Buffer for the encoded 'ack' payload. */
+typedef struct re_ca_uart_miso_payload_buf_encoded_ack_t
+{
+    /** Buffer for the encoded 'ack' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ACK())];
+} re_ca_uart_miso_payload_buf_encoded_ack_t;
+
+/** @brief Buffer for the encoded 'get_all_params' payload. */
+typedef struct re_ca_uart_miso_payload_buf_encoded_get_all_params_t
+{
+    /** Buffer for the encoded 'get_all_params' payload. */
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS())];
+} re_ca_uart_miso_payload_buf_encoded_get_all_params_t;
 
 #pragma pack(push,1)
 
@@ -276,27 +364,26 @@ typedef struct
 /**
  * @brief Encode given command with given parameters into buffer.
  *
- * @param[out] buffer Buffer to encode command into. RE_CA_UART_TX_MAX_LEN bytes.
+ * @param[out] buffer Buffer to encode command into.
  * @param[in,out] buf_len Input: Size of buffer. Output: Number of bytes encoded.
- * @param[in]  cmd Command to encode.
- * @param[in]  params Parametes of command, type depends on cmd.
+ * @param[in]  payload Payload to encode.
  *
  * @retval RE_SUCCESS If encoded successfully.
  * @retval RE_ERROR_NULL If any of params is NULL.
- * @retval RE_ERROR_DATA_SIZE If buf_len is smaller than @ref RE_CA_UART_PAYLOAD_MAX_LEN.
+ * @retval RE_ERROR_DATA_SIZE If buf_len is not enough to encode the payload.
  * @retval RE_ERROR_INVALID_PARAM If data cannot be encoded.
  */
 re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
                                const re_ca_uart_payload_t * const payload);
 
 /**
- * @brief Decode given buffer to cmd + params.
+ * @brief Decode given buffer to @ref re_ca_uart_payload_t.
  *
- * param[in]  buffer Buffer to decode command. Maximum RE_CA_UART_TX_MAX_LEN bytes.
- * param[out] cmd Decoded command type.
- * param[out] params Parametes of command, type depends on cmd.
+ * param[in]  buffer Buffer to decode command.
+ * param[out] payload Pointer to the buffer to store the decoded payload.
+ * param[out] params Parameters of command, type depends on cmd.
  */
 re_status_t re_ca_uart_decode (const uint8_t * const buffer,
-                               re_ca_uart_payload_t * const cmd);
+                               re_ca_uart_payload_t * const payload);
 
 #endif // RUUVI_ENDPOINT_GW_UART_H
