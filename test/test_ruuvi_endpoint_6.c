@@ -368,20 +368,6 @@ void test_re_6_data_invalid (void)
     const uint16_t measurement_cnt = 123;
     const uint64_t radio_mac = 0xCBB8334C884FULL;
     const re_6_data_t data = re_6_data_invalid (measurement_cnt, radio_mac);
-    static const re_6_data_t m_re_6_data_invalid =
-    {
-        .pm1p0_ppm = NAN,
-        .pm2p5_ppm = NAN,
-        .pm4p0_ppm = NAN,
-        .pm10p0_ppm = NAN,
-        .co2 = NAN,
-        .humidity_rh = NAN,
-        .voc_index = NAN,
-        .nox_index = NAN,
-        .temperature_c = NAN,
-        .measurement_count = 65535,
-        .address = 0xFFFFFFFFFFFF,
-    };
     TEST_ASSERT_EQUAL (data.measurement_count, measurement_cnt);
     TEST_ASSERT_EQUAL (data.address, radio_mac);
     TEST_ASSERT_TRUE (isnan (data.pm1p0_ppm));
