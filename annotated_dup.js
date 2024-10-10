@@ -22,6 +22,8 @@ var annotated_dup =
     [ "re_ca_uart_mosi_payload_buf_encoded_led_ctrl_t", "structre__ca__uart__mosi__payload__buf__encoded__led__ctrl__t.html", "structre__ca__uart__mosi__payload__buf__encoded__led__ctrl__t" ],
     [ "re_ca_uart_mosi_payload_buf_encoded_set_fltr_id_t", "structre__ca__uart__mosi__payload__buf__encoded__set__fltr__id__t.html", "structre__ca__uart__mosi__payload__buf__encoded__set__fltr__id__t" ],
     [ "re_ca_uart_payload_t", "structre__ca__uart__payload__t.html", "structre__ca__uart__payload__t" ],
+    [ "re_e0_data_t", "structre__e0__data__t.html", "structre__e0__data__t" ],
+    [ "re_f0_data_t", "structre__f0__data__t.html", "structre__f0__data__t" ],
     [ "re_fa_data_t", "structre__fa__data__t.html", "structre__fa__data__t" ],
     [ "re_ibeacon_data_t", "structre__ibeacon__data__t.html", "structre__ibeacon__data__t" ]
 ];
