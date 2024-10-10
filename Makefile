@@ -225,6 +225,8 @@ SOURCES=\
 	src/ruuvi_endpoint_5.c \
 	src/ruuvi_endpoint_6.c \
 	src/ruuvi_endpoint_c5.c \
+	src/ruuvi_endpoint_e0.c \
+	src/ruuvi_endpoint_f0.c \
 	src/ruuvi_endpoint_ibeacon.c
 
 ANALYSIS=$(SOURCES:.c=.a)
