@@ -242,8 +242,12 @@ UNITY_DIR = ${CMOCK_DIR}/vendor/unity
 DISABLE_CMOCK_TEST_SUMMARY_PER_PROJECT=1
 
 TEST_MAKEFILE = ${TEST_BUILD_DIR}/MakefileTestSupport
+TEST_MAKEFILE_EXT_ADV_48 = ${BUILD_DIR}_ext_adv_48/MakefileTestSupport
+TEST_MAKEFILE_EXT_ADV_MAX = ${BUILD_DIR}_ext_adv_max/MakefileTestSupport
 
 -include ${TEST_MAKEFILE}
+-include ${TEST_MAKEFILE_EXT_ADV_48}
+-include ${TEST_MAKEFILE_EXT_ADV_MAX}
 
 .PHONY: all clean doxygen sonar astyle
 
@@ -267,21 +271,31 @@ clean:
 	rm -rf $(DOXYGEN_DIR)/latex
 	rm -f *.gcov
 	rm -rf $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)_ext_adv_48
+	rm -rf $(BUILD_DIR)_ext_adv_max
 	make setup_test
 	make generate_cmock_mocks_and_runners
 
 test_all:
 	rm -rf build_ceedling
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling test:all
 
 test_all_gcov:
 	rm -rf build_ceedling
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling gcov:all utils:gcov
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling gcov:all utils:gcov
 	gcov  -b -c build_ceedling/gcov/out/*.gcno
 
 test:
 	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR} TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb
+	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR}_ext_adv_48 TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb
+	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR}_ext_adv_max TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb
 
 setup_test:
 	mkdir -p ${BUILD_DIR}
@@ -290,4 +304,18 @@ setup_test:
 		TEST_BUILD_DIR=${TEST_BUILD_DIR} \
 		TEST_OUT_DIR=${TEST_OUT_DIR} \
 		TEST_MAKEFILE=${TEST_MAKEFILE} \
+		ruby ${CMOCK_DIR}/scripts/create_makefile.rb
+	mkdir -p ${BUILD_DIR}_ext_adv_48
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml \
+		BUILD_DIR=${BUILD_DIR}_ext_adv_48 \
+		TEST_BUILD_DIR=${BUILD_DIR}_ext_adv_48/test \
+		TEST_OUT_DIR=${BUILD_DIR}_ext_adv_48/out \
+		TEST_MAKEFILE=${TEST_MAKEFILE_EXT_ADV_48} \
+		ruby ${CMOCK_DIR}/scripts/create_makefile.rb
+	mkdir -p ${BUILD_DIR}_ext_adv_max
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml \
+		BUILD_DIR=${BUILD_DIR}_ext_adv_max \
+		TEST_BUILD_DIR=${BUILD_DIR}_ext_adv_max/test \
+		TEST_OUT_DIR=${BUILD_DIR}_ext_adv_max/out \
+		TEST_MAKEFILE=${TEST_MAKEFILE_EXT_ADV_MAX} \
 		ruby ${CMOCK_DIR}/scripts/create_makefile.rb

@@ -415,51 +415,51 @@ static re_status_t re_ca_uart_decode_all (const uint8_t * const buffer,
 static re_status_t re_ca_uart_decode_adv_rprt (const uint8_t * const buffer,
         re_ca_uart_payload_t * const payload)
 {
-    re_status_t err_code = RE_SUCCESS;
-    const uint8_t adv_len = buffer[RE_CA_UART_LEN_INDEX]
-                            - RE_CA_UART_MAC_BYTES
-                            - RE_CA_UART_RSSI_BYTES
-                            - (RE_CA_UART_MAXFIELDS) * RE_CA_UART_DELIMITER_LEN;
-    const uint8_t * const  p_rssi = buffer
-                                    + RE_CA_UART_PAYLOAD_INDEX
-                                    + buffer[RE_CA_UART_LEN_INDEX]
-                                    - RE_CA_UART_RSSI_BYTES
-                                    - RE_CA_UART_DELIMITER_LEN;
-    const uint8_t * const  p_data = buffer
-                                    + RE_CA_UART_PAYLOAD_INDEX
-                                    + RE_CA_UART_MAC_BYTES
-                                    + RE_CA_UART_DELIMITER_LEN;
+    const uint8_t packet_len = buffer[RE_CA_UART_LEN_INDEX];
+    _Static_assert (RE_CA_UART_PAYLOAD_ADV_RPRT_MAX_LEN <= 255,
+                    "Payload too long for uint8_t");
+    const uint8_t packet_overhead = RE_CA_UART_PAYLOAD_ADV_RPRT_MAX_LEN -
+                                    RE_CA_UART_ADV_BYTES;
+
+    if (packet_len < packet_overhead)
+    {
+        return RE_ERROR_DECODING_LEN;
+    }
+
+    const uint8_t adv_len = packet_len - packet_overhead;
 
     if (adv_len > RE_CA_UART_ADV_BYTES)
     {
-        err_code |= RE_ERROR_DECODING_LEN;
-    }
-    else if (RE_CA_UART_FIELD_DELIMITER != * (p_data - RE_CA_UART_DELIMITER_LEN))
-    {
-        err_code |= RE_ERROR_DECODING_DELIMITER;
-    }
-    else if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi - RE_CA_UART_DELIMITER_LEN))
-    {
-        err_code |= RE_ERROR_DECODING_DELIMITER;
-    }
-    else if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi + RE_CA_UART_RSSI_BYTES))
-    {
-        err_code |= RE_ERROR_DECODING_DELIMITER;
-    }
-    else
-    {
-        memcpy (payload->params.adv.mac,
-                buffer + RE_CA_UART_PAYLOAD_INDEX,
-                RE_CA_UART_MAC_BYTES);
-        memcpy (payload->params.adv.adv,
-                p_data,
-                adv_len);
-        payload->cmd = RE_CA_UART_ADV_RPRT;
-        payload->params.adv.rssi_db = u8toi8 (*p_rssi);
-        payload->params.adv.adv_len = adv_len;
+        return RE_ERROR_DECODING_LEN;
     }
 
-    return err_code;
+    const uint8_t * const  p_mac = buffer + RE_CA_UART_PAYLOAD_INDEX;
+    const uint8_t * const  p_data = p_mac
+                                    + RE_CA_UART_MAC_BYTES
+                                    + RE_CA_UART_DELIMITER_LEN;
+    const uint8_t * const  p_rssi = p_data + adv_len + RE_CA_UART_DELIMITER_LEN;
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_data - RE_CA_UART_DELIMITER_LEN))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi - RE_CA_UART_DELIMITER_LEN))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi + RE_CA_UART_RSSI_BYTES))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    memcpy (payload->params.adv.mac, p_mac, RE_CA_UART_MAC_BYTES);
+    memcpy (payload->params.adv.adv, p_data, adv_len);
+    payload->cmd = RE_CA_UART_ADV_RPRT;
+    payload->params.adv.rssi_db = u8toi8 (*p_rssi);
+    payload->params.adv.adv_len = adv_len;
+    return RE_SUCCESS;
 }
 
 re_status_t re_ca_uart_decode (const uint8_t * const buffer,
@@ -580,9 +580,11 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
 {
     re_status_t err_code = RE_SUCCESS;
     uint32_t written = 0;
+    const uint32_t tx_len = RE_CA_UART_TX_BUF_LEN (\
+                            RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT (\
+                                    payload->params.adv.adv_len));
 
-    if ( (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT (
-                                     payload->params.adv.adv_len))) > *buf_len)
+    if (tx_len > *buf_len)
     {
         err_code |= RE_ERROR_DATA_SIZE;
     }
