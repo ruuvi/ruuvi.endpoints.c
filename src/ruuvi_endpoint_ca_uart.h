@@ -2,6 +2,7 @@
 #define RUUVI_ENDPOINT_CA_UART_H
 
 #include "ruuvi_endpoints.h"
+#include <stdbool.h>
 
 #define RE_CA_CRC_DEFAULT       0xFFFF
 #define RE_CA_CRC_INVALID       0
@@ -20,7 +21,7 @@
 #   if defined(RI_COMM_BLE_PAYLOAD_MAX_LENGTH)
 #       define RE_CA_UART_ADV_BYTES (RI_COMM_BLE_PAYLOAD_MAX_LENGTH) //!< Number of bytes in Advertisement.
 #   else
-#       define RE_CA_UART_ADV_BYTES (238) //!< Number of bytes in Advertisement.
+#       error "RI_COMM_BLE_PAYLOAD_MAX_LENGTH must be defined when RI_ADV_EXTENDED_ENABLED=1"
 #   endif
 #else
 #   define RE_CA_UART_ADV_BYTES (31U) //!< Number of bytes in Advertisement.
@@ -38,17 +39,15 @@
 #   define RE_CA_UART_RSSI_MAXLEN (RE_CA_UART_RSSI_BYTES) //!< i8.
 #   define CMD_IN_LEN (0U) //!< Command is not included in data length.
 #endif
-#define RE_CA_UART_MAC_MAXLEN (RE_CA_UART_MAC_BYTES) //!< Length of MAC in UART.
-#define RE_CA_UART_ADV_MAXLEN (RE_CA_UART_ADV_BYTES) //!< Length of adv.
-#define RE_CA_UART_ADV_FIELDS (3U)   //!< On scan: mac, data, rssi.
-#define RE_CA_UART_MAXFIELDS (RE_CA_UART_ADV_FIELDS) //!< Maximum delimited fields.
-#define RE_CA_UART_PAYLOAD_MAX_LEN (RE_CA_UART_MAC_MAXLEN \
-                                    + RE_CA_UART_ADV_MAXLEN \
-                                    + RE_CA_UART_RSSI_MAXLEN \
-                                    + RE_CA_UART_MAXFIELDS) //!< data + delimiters
+#define RE_CA_UART_ADV_RPRT_FIELDS (3U)   //!< On scan: mac, data, rssi.
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, CRC, ETX */
+
+#define RE_CA_UART_PAYLOAD_ADV_RPRT_MAX_LEN (RE_CA_UART_MAC_BYTES \
+                                    + RE_CA_UART_ADV_BYTES \
+                                    + RE_CA_UART_RSSI_MAXLEN \
+                                    + RE_CA_UART_ADV_RPRT_FIELDS * RE_CA_UART_DELIMITER_LEN) //!< ADV_RPRT_LEN: data + delimiters
 
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
@@ -148,7 +147,7 @@ typedef enum
                                      (param3_len) + RE_CA_UART_DELIMITER_LEN)
 
 #define RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT(data_len) \
-    RE_CA_UART_TX_DATA_LEN_3_PARAMS(data_len, RE_CA_UART_RSSI_BYTES, RE_CA_UART_MAC_BYTES)
+    RE_CA_UART_TX_DATA_LEN_3_PARAMS(RE_CA_UART_MAC_BYTES, data_len, RE_CA_UART_RSSI_BYTES)
 
 #define RE_CA_UART_TX_DATA_LEN_CMD_BOOL() \
     RE_CA_UART_TX_DATA_LEN_1_PARAM(RE_CA_UART_CMD_BOOL_LEN)
@@ -311,28 +310,11 @@ typedef struct
 /** @brief Advertisement payload. */
 typedef struct
 {
-    uint8_t mac[RE_CA_UART_MAC_BYTES];   //!< MAC address, always 6 bytes. MSB first.
-    uint8_t adv[RE_CA_UART_ADV_BYTES];   //!< Advertisement, variable length.
-    uint8_t adv_len;                     //!< Length of advertisement.
-    int8_t rssi_db;                      //!< RSSI.
+    uint8_t mac[RE_CA_UART_MAC_BYTES]; //!< MAC address, always 6 bytes. MSB first.
+    uint8_t adv[RE_CA_UART_ADV_BYTES]; //!< Advertisement, variable length.
+    uint8_t adv_len;                   //!< Length of advertisement.
+    int8_t rssi_db;                    //!< RSSI.
 } re_ca_uart_ble_adv_t;
-
-#if 0
-/**
- * @brief  Structure of CA_UART data.
- *
- * @note: Order of elements here is not representative of order of serialized
- *        structure.  Data is serialized as STX LEN CMD PAYLOAD ETX.
- */
-typedef struct
-{
-    uint8_t payload[RE_CA_UART_PAYLOAD_MAX_LEN]; //!< Command payload.
-    uint8_t stx; //!< First byte, always fixed STX.
-    uint8_t len; //!< Length of payload, + length(cmd) in legacy mode.
-    uint8_t etx;    //!< Last byte always fixed ETX.
-    re_ca_uart_cmd_t cmd; //!< Command to send.
-} re_ca_uart_tx_t;
-#endif
 
 /** @brief Structure to contain command data.
  * MISRA deviation - use of union.
