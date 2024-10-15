@@ -28,6 +28,7 @@
 #endif
 
 #define RE_CA_UART_RSSI_BYTES (1U) //!< Number of bytes in RSSI report.
+#define RE_CA_UART_ADV_RPRT2_EXTRA_INFO_BYTES (3) //!< Number of bytes in BLE PHY extra info.
 #if RE_CA_UART_LEGACY_MODE
 #   define RE_CA_UART_STX (0x02U) //!< Start UART Command. ASCII STX.
 #   define RE_CA_UART_ETX (0x03U) //!< End UART Command. ASCII ETX.
@@ -40,6 +41,8 @@
 #   define CMD_IN_LEN (0U) //!< Command is not included in data length.
 #endif
 #define RE_CA_UART_ADV_RPRT_FIELDS (3U)   //!< On scan: mac, data, rssi.
+#define RE_CA_UART_ADV_RPRT2_FIELDS (4U)  //!< On scan: mac, data, rssi, extra_info.
+#define RE_CA_UART_ADV_RPRT2_EXTRA_INFO_LEN (3U) //!< 3 bytes for PHY, ch_index, tx_power.
 #define RE_CA_UART_FIELD_DELIMITER (0x2CU) //!< ','
 #define RE_CA_UART_DELIMITER_LEN   (1U)    //!< 1 byte delimiter.
 /** @brief STX, LEN, CMD, Payload, CRC, ETX */
@@ -48,6 +51,11 @@
                                     + RE_CA_UART_ADV_BYTES \
                                     + RE_CA_UART_RSSI_MAXLEN \
                                     + RE_CA_UART_ADV_RPRT_FIELDS * RE_CA_UART_DELIMITER_LEN) //!< ADV_RPRT_LEN: data + delimiters
+#define RE_CA_UART_PAYLOAD_ADV_RPRT2_MAX_LEN (RE_CA_UART_MAC_BYTES \
+                                    + RE_CA_UART_ADV_BYTES \
+                                    + RE_CA_UART_RSSI_MAXLEN \
+                                    + RE_CA_UART_ADV_RPRT2_EXTRA_INFO_LEN \
+                                    + RE_CA_UART_ADV_RPRT2_FIELDS * RE_CA_UART_DELIMITER_LEN) //!< ADV_RPRT2_LEN: data + delimiters
 
 #define RE_CA_UART_BLE_NOFILTER (0x0000U) //!< Do not apply filter to ID.
 
@@ -124,6 +132,7 @@ typedef enum
     RE_CA_UART_SET_ALL          = 15,//!< Set all config.
     RE_CA_UART_ADV_RPRT         = 16,//!< Advertisement report. ACK no need.
     RE_CA_UART_DEVICE_ID        = 17,//!< Send device id. ACK no need.
+    RE_CA_UART_ADV_RPRT2        = 18,//!< Advertisement report with extra info. ACK no need.
     RE_CA_UART_GET_DEVICE_ID    = 24,//!< Get device id. Expect RE_CA_UART_DEVICE_ID.
     RE_CA_UART_GET_ALL          = 25,//!< Get all config.
     RE_CA_UART_ACK              = 32,//!< ACK
@@ -146,8 +155,24 @@ typedef enum
                                      (param2_len) + RE_CA_UART_DELIMITER_LEN + \
                                      (param3_len) + RE_CA_UART_DELIMITER_LEN)
 
+#define RE_CA_UART_TX_DATA_LEN_4_PARAMS(param1_len, param2_len, param3_len, param4_len) ( \
+                                     (param1_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (param2_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (param3_len) + RE_CA_UART_DELIMITER_LEN + \
+                                     (param4_len) + RE_CA_UART_DELIMITER_LEN)
+
 #define RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT(data_len) \
-    RE_CA_UART_TX_DATA_LEN_3_PARAMS(RE_CA_UART_MAC_BYTES, data_len, RE_CA_UART_RSSI_BYTES)
+    RE_CA_UART_TX_DATA_LEN_3_PARAMS( \
+        RE_CA_UART_MAC_BYTES, \
+        data_len, \
+        RE_CA_UART_RSSI_BYTES)
+
+#define RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT2(data_len) \
+    RE_CA_UART_TX_DATA_LEN_4_PARAMS( \
+        RE_CA_UART_MAC_BYTES, \
+        data_len, \
+        RE_CA_UART_RSSI_BYTES, \
+        RE_CA_UART_ADV_RPRT2_EXTRA_INFO_BYTES)
 
 #define RE_CA_UART_TX_DATA_LEN_CMD_BOOL() \
     RE_CA_UART_TX_DATA_LEN_1_PARAM(RE_CA_UART_CMD_BOOL_LEN)
@@ -307,6 +332,20 @@ typedef struct
     uint64_t addr;                      //!< DEVICE_ADDR, 64bits
 } re_ca_uart_ble_id_t;
 
+/** @brief BLE PHY */
+typedef enum re_ca_uart_ble_phy_e
+{
+    RE_CA_UART_BLE_PHY_AUTO = 0, //!< Automatic PHY selection (BLE_GAP_PHY_AUTO).
+    RE_CA_UART_BLE_PHY_1MBPS = 1, //!< 1 Mbps PHY (BLE_GAP_PHY_1MBPS).
+    RE_CA_UART_BLE_PHY_2MBPS = 2, //!< 2 Mbps PHY (BLE_GAP_PHY_2MBPS).
+    RE_CA_UART_BLE_PHY_CODED = 4, //!< Coded PHY (BLE_GAP_PHY_CODED).
+    RE_CA_UART_BLE_PHY_NOT_SET = 0x0F, //!< PHY is not configured (RE_CA_UART_BLE_PHY_NOT_SET).
+} re_ca_uart_ble_phy_e;
+
+#define RE_CA_UART_BLE_GAP_POWER_LEVEL_INVALID (-64) /*!< Invalid TX power level (BLE_GAP_POWER_LEVEL_INVALID). */
+
+#define RE_CA_UART_BLE_GAP_CHANNEL_INDEX_INVALID (0xFF) /*!< Invalid channel index. */
+
 /** @brief Advertisement payload. */
 typedef struct
 {
@@ -314,7 +353,54 @@ typedef struct
     uint8_t adv[RE_CA_UART_ADV_BYTES]; //!< Advertisement, variable length.
     uint8_t adv_len;                   //!< Length of advertisement.
     int8_t rssi_db;                    //!< RSSI.
+
+    /**
+     * @brief Indicates the PHY on which the primary advertising
+     *        packet was received. See BLE_GAP_PHYS.
+     */
+    re_ca_uart_ble_phy_e primary_phy: 4;
+
+    /**
+     * @brief Indicates the PHY on which the secondary advertising packet
+     * was received. See BLE_GAP_PHYS.
+     * This field is set to @ref RE_CA_UART_BLE_PHY_NOT_SET if no packets were
+     * received on a secondary advertising channel.
+     */
+    re_ca_uart_ble_phy_e secondary_phy: 4;
+
+    /**
+     * @brief Channel Index on which the last advertising packet
+     * is received (0-39).
+     */
+    uint8_t ch_index;
+
+    bool is_coded_phy: 1; //!< True if Coded PHY was used
+
+    /**
+     * @brief TX Power reported by the advertiser in the last packet header
+     * received. This field is set to RE_CA_UART_BLE_GAP_POWER_LEVEL_INVALID
+     * if the last received packet did not contain the Tx Power field.
+     * @note TX Power is only included in extended advertising packets.
+     */
+    int8_t tx_power: 7;
 } re_ca_uart_ble_adv_t;
+
+#if 0
+/**
+ * @brief  Structure of CA_UART data.
+ *
+ * @note: Order of elements here is not representative of order of serialized
+ *        structure.  Data is serialized as STX LEN CMD PAYLOAD ETX.
+ */
+typedef struct
+{
+    uint8_t payload[RE_CA_UART_PAYLOAD_MAX_LEN]; //!< Command payload.
+    uint8_t stx; //!< First byte, always fixed STX.
+    uint8_t len; //!< Length of payload, + length(cmd) in legacy mode.
+    uint8_t etx;    //!< Last byte always fixed ETX.
+    re_ca_uart_cmd_t cmd; //!< Command to send.
+} re_ca_uart_tx_t;
+#endif
 
 /** @brief Structure to contain command data.
  * MISRA deviation - use of union.
