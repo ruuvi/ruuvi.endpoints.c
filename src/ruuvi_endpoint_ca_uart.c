@@ -427,10 +427,11 @@ static re_status_t re_ca_uart_decode_adv_rprt (const uint8_t * const buffer,
     }
 
     const uint8_t adv_len = packet_len - packet_overhead;
+    const size_t max_len = RE_CA_UART_ADV_BYTES;
 
-    if (adv_len > RE_CA_UART_ADV_BYTES)
+    if (adv_len > max_len)
     {
-        return RE_ERROR_DECODING_LEN;
+        return RE_ERROR_DATA_SIZE;
     }
 
     const uint8_t * const  p_mac = buffer + RE_CA_UART_PAYLOAD_INDEX;
@@ -459,6 +460,76 @@ static re_status_t re_ca_uart_decode_adv_rprt (const uint8_t * const buffer,
     payload->cmd = RE_CA_UART_ADV_RPRT;
     payload->params.adv.rssi_db = u8toi8 (*p_rssi);
     payload->params.adv.adv_len = adv_len;
+    payload->params.adv.is_coded_phy = false;
+    payload->params.adv.primary_phy = RE_CA_UART_BLE_PHY_NOT_SET;
+    payload->params.adv.secondary_phy = RE_CA_UART_BLE_PHY_NOT_SET;
+    payload->params.adv.ch_index = RE_CA_UART_BLE_GAP_CHANNEL_INDEX_INVALID;
+    payload->params.adv.tx_power = RE_CA_UART_BLE_GAP_POWER_LEVEL_INVALID;
+    return RE_SUCCESS;
+}
+
+static re_status_t re_ca_uart_decode_adv_rprt2 (const uint8_t * const buffer,
+        re_ca_uart_payload_t * const payload)
+{
+    const uint8_t packet_len = buffer[RE_CA_UART_LEN_INDEX];
+    _Static_assert (RE_CA_UART_PAYLOAD_ADV_RPRT2_MAX_LEN <= 255,
+                    "Payload too long for uint8_t");
+    const uint8_t packet_overhead = RE_CA_UART_PAYLOAD_ADV_RPRT2_MAX_LEN -
+                                    RE_CA_UART_ADV_BYTES;
+
+    if (packet_len < packet_overhead)
+    {
+        return RE_ERROR_DECODING_LEN;
+    }
+
+    const uint8_t adv_len = packet_len - packet_overhead;
+    const size_t max_len = RE_CA_UART_ADV_BYTES;
+
+    if (adv_len > max_len)
+    {
+        return RE_ERROR_DATA_SIZE;
+    }
+
+    const uint8_t * const  p_mac = buffer + RE_CA_UART_PAYLOAD_INDEX;
+    const uint8_t * const  p_data = p_mac
+                                    + RE_CA_UART_MAC_BYTES
+                                    + RE_CA_UART_DELIMITER_LEN;
+    const uint8_t * const  p_rssi = p_data + adv_len + RE_CA_UART_DELIMITER_LEN;
+    const uint8_t * const  p_extra_info = p_rssi + RE_CA_UART_RSSI_BYTES +
+                                          RE_CA_UART_DELIMITER_LEN;
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_data - RE_CA_UART_DELIMITER_LEN))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_rssi - RE_CA_UART_DELIMITER_LEN))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_extra_info - RE_CA_UART_DELIMITER_LEN))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    if (RE_CA_UART_FIELD_DELIMITER != * (p_extra_info +
+                                         RE_CA_UART_ADV_RPRT2_EXTRA_INFO_BYTES))
+    {
+        return RE_ERROR_DECODING_DELIMITER;
+    }
+
+    memcpy (payload->params.adv.mac, p_mac, RE_CA_UART_MAC_BYTES);
+    memcpy (payload->params.adv.adv, p_data, adv_len);
+    payload->cmd = RE_CA_UART_ADV_RPRT2;
+    payload->params.adv.rssi_db = u8toi8 (*p_rssi);
+    payload->params.adv.adv_len = adv_len;
+    payload->params.adv.primary_phy = p_extra_info[0] >> 4;
+    payload->params.adv.secondary_phy = p_extra_info[0] & 0x0F;
+    payload->params.adv.ch_index = p_extra_info[1];
+    payload->params.adv.is_coded_phy = (0 != ( (p_extra_info[2] >> 7U) & 0x01U)) ? true :
+                                       false;
+    payload->params.adv.tx_power = p_extra_info[2] & 0x7FU;
     return RE_SUCCESS;
 }
 
@@ -557,6 +628,10 @@ re_status_t re_ca_uart_decode (const uint8_t * const buffer,
                 err_code |=  re_ca_uart_decode_device_id (buffer, payload);
                 break;
 
+            case RE_CA_UART_ADV_RPRT2:
+                err_code |= re_ca_uart_decode_adv_rprt2 (buffer, payload);
+                break;
+
             case RE_CA_UART_GET_DEVICE_ID:
                 err_code |=  re_ca_uart_decode_get_device_id (buffer, payload);
                 break;
@@ -607,6 +682,52 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
         written += payload->params.adv.adv_len;
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         buffer[written++] = i8tou8 (payload->params.adv.rssi_db);
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        add_crc16 (buffer, &written);
+        buffer[written++] = RE_CA_UART_ETX;
+        *buf_len = written;
+    }
+
+    return err_code;
+}
+
+static re_status_t re_ca_uart_encode_adv_rprt2 (uint8_t * const buffer,
+        uint8_t * const buf_len,
+        const re_ca_uart_payload_t * const payload)
+{
+    re_status_t err_code = RE_SUCCESS;
+    uint32_t written = 0;
+
+    if ( (RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT2 (
+                                     payload->params.adv.adv_len))) > *buf_len)
+    {
+        err_code |= RE_ERROR_DATA_SIZE;
+    }
+    else
+    {
+        buffer[RE_CA_UART_STX_INDEX] = RE_CA_UART_STX;
+        // Payload length is different from total message length.
+        buffer[RE_CA_UART_LEN_INDEX] = RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT2 (
+                                           payload->params.adv.adv_len);
+        buffer[RE_CA_UART_CMD_INDEX] = RE_CA_UART_ADV_RPRT2;
+        written += RE_CA_UART_HEADER_SIZE;
+        memcpy (buffer + RE_CA_UART_PAYLOAD_INDEX,
+                payload->params.adv.mac,
+                RE_CA_UART_MAC_BYTES);
+        written += RE_CA_UART_MAC_BYTES;
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        memcpy (buffer + written,
+                payload->params.adv.adv,
+                payload->params.adv.adv_len);
+        written += payload->params.adv.adv_len;
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        buffer[written++] = i8tou8 (payload->params.adv.rssi_db);
+        buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
+        buffer[written++] = ( (payload->params.adv.primary_phy & 0x0FU) << 4U) |
+                            (payload->params.adv.secondary_phy & 0x0FU);
+        buffer[written++] = payload->params.adv.ch_index;
+        buffer[written++] = ( (payload->params.adv.is_coded_phy & 0x01U) << 7U) |
+                            (payload->params.adv.tx_power & 0x7FU);
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         add_crc16 (buffer, &written);
         buffer[written++] = RE_CA_UART_ETX;
@@ -922,6 +1043,10 @@ re_status_t re_ca_uart_encode (uint8_t * const buffer, uint8_t * const buf_len,
 
             case RE_CA_UART_DEVICE_ID:
                 err_code |=  re_ca_uart_encode_device_id (buffer, buf_len, payload);
+                break;
+
+            case RE_CA_UART_ADV_RPRT2:
+                err_code |=  re_ca_uart_encode_adv_rprt2 (buffer, buf_len, payload);
                 break;
 
             case RE_CA_UART_GET_DEVICE_ID:

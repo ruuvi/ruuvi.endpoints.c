@@ -72,7 +72,7 @@
     - *common_defines
     - TEST
     - RI_ADV_EXTENDED_ENABLED=1
-    - RI_COMM_BLE_PAYLOAD_MAX_LENGTH=239
+    - RI_COMM_BLE_PAYLOAD_MAX_LENGTH=235
 
 :cmock:
   :mock_prefix: mock_
