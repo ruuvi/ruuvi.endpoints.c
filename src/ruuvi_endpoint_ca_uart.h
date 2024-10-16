@@ -107,6 +107,7 @@
 #define RE_CA_UART_CMD_LED_CTRL_LEN     (2U) //!< Length of led_ctrl payload
 #define RE_CA_UART_CMD_ACK_LEN          (1U) //!< Length of ack payload
 #define RE_CA_UART_CMD_ALL_BOOL_LEN     (1U) //!< Length of cmd with bool payload
+#define RE_CA_UART_CMD_ALL_UINT8_LEN    (1U) //!< Length of cmd with uint8 payload
 //!< Length of all command payload
 
 /** @breif Command types. */
@@ -124,7 +125,7 @@ typedef enum
     RE_CA_UART_SET_FLTR_ID      = 6, //!< Set manufacturer ID filter.
     RE_CA_UART_SET_CODED_PHY    = 7, //!< Set coded PHY.
     RE_CA_UART_SET_SCAN_1MB_PHY = 8, //!< Set scan 1MBbit/PHY.
-    RE_CA_UART_SET_EXT_PAYLOAD  = 9, //!< Set extended payload.
+    RE_CA_UART_SET_SCAN_2MB_PHY = 9, //!< Set scan 2MBbit/PHY.
     RE_CA_UART_SET_CH_37        = 10, //!< Set channel 37.
     RE_CA_UART_SET_CH_38        = 11, //!< Set channel 38.
     RE_CA_UART_SET_CH_39        = 12, //!< Set channel 39.
@@ -195,6 +196,9 @@ typedef enum
 #define RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS() \
     RE_CA_UART_TX_DATA_LEN_2_PARAMS(RE_CA_UART_CMD_FLTR_ID_LEN, RE_CA_UART_CMD_ALL_BOOL_LEN)
 
+#define RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS_WITH_MAX_ADV_LEN() \
+    RE_CA_UART_TX_DATA_LEN_3_PARAMS(RE_CA_UART_CMD_FLTR_ID_LEN, RE_CA_UART_CMD_ALL_BOOL_LEN, RE_CA_UART_CMD_ALL_UINT8_LEN)
+
 #define RE_CA_UART_TX_DATA_LEN_CMD_GET_ALL_PARAMS() \
     RE_CA_UART_TX_DATA_LEN_0_PARAMS()
 
@@ -223,7 +227,8 @@ typedef struct re_ca_uart_mosi_payload_buf_encoded_get_device_id_t
 typedef struct re_ca_uart_mosi_payload_buf_encoded_all_params_t
 {
     /** Buffer for the encoded 'all_params' payload. */
-    uint8_t buf[RE_CA_UART_TX_BUF_LEN (RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS())];
+    uint8_t buf[RE_CA_UART_TX_BUF_LEN (
+                                          RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS_WITH_MAX_ADV_LEN())];
 } re_ca_uart_mosi_payload_buf_encoded_all_params_t;
 
 /** @brief Buffer for the encoded 'led_ctrl' payload. */
@@ -318,11 +323,14 @@ typedef struct
     re_ca_uart_ble_bool_t ch_39;        //!< Channel 39 bool state.
 } re_ca_uart_ble_all_bools_t;
 
+#define RE_CA_UART_BLE_ALL_PARAMS_MAX_ADV_LEN_NO_LIMIT (0U) //!< No limit on max advertisement length.
+
 /** @brief BLE config struct. */
 typedef struct
 {
     re_ca_uart_ble_fltr_id_t fltr_id;   //!< Filter id.
     re_ca_uart_ble_all_bools_t bools;   //!< All bool state in payload.
+    uint8_t max_adv_len;                //!< Max advertisement length.
 } re_ca_uart_ble_all_t;
 
 /** @brief BLE device id struct. */
