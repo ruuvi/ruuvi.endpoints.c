@@ -371,7 +371,7 @@ typedef struct
     /**
      * @brief Indicates the PHY on which the secondary advertising packet
      * was received. See BLE_GAP_PHYS.
-     * This field is set to @ref RE_CA_UART_BLE_PHY_NOT_SET if no packets were
+     * This field is set to RE_CA_UART_BLE_PHY_NOT_SET if no packets were
      * received on a secondary advertising channel.
      */
     re_ca_uart_ble_phy_e secondary_phy: 4;
