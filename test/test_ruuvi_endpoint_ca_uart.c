@@ -329,7 +329,7 @@ void test_ruuvi_endpoint_ca_uart_ack_encode_invalid (void)
     TEST_ASSERT (memcmp (expected, buffer, sizeof (expected)));
 }
 
-void test_ruuvi_endpoint_ca_uart_all_encode (void)
+void test_ruuvi_endpoint_ca_uart_set_all_params_encode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     const uint8_t expected_size = 5 + CMD_IN_LEN;
@@ -355,16 +355,60 @@ void test_ruuvi_endpoint_ca_uart_all_encode (void)
     params.bools.ch_37.state = 1;
     params.bools.ch_38.state = 1;
     params.bools.ch_39.state = 1;
+    params.max_adv_len = 0;
     re_ca_uart_payload_t payload = {0};
     payload.cmd = cmd;
     payload.params.all_params = params;
     uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_all_params_t)] = {0};
     uint8_t buffer_len = sizeof (buffer);
     err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
-    TEST_ASSERT (RE_SUCCESS == err_code);
-    TEST_ASSERT (buffer_len == sizeof (expected));
-    TEST_ASSERT (buffer_len == sizeof (buffer));
-    TEST_ASSERT (!memcmp (expected, buffer, sizeof (expected)));
+    TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
+    TEST_ASSERT_EQUAL (sizeof (expected), buffer_len);
+    TEST_ASSERT (sizeof (buffer) >= sizeof (expected));
+    TEST_ASSERT_EQUAL_HEX8_ARRAY (expected, buffer, sizeof (expected));
+}
+
+void test_ruuvi_endpoint_ca_uart_set_all_params_with_max_adv_len_encode (void)
+{
+    re_status_t err_code = RE_SUCCESS;
+    const uint8_t expected_size = 7 + CMD_IN_LEN;
+    const uint8_t max_adv_len = 48;
+    uint8_t expected[] =
+    {
+        RE_CA_UART_STX,
+        expected_size,
+        RE_CA_UART_SET_ALL,
+        0x01U, 0x01U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x7FU,
+        RE_CA_UART_FIELD_DELIMITER,
+        max_adv_len,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x02U, 0x8BU, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_cmd_t cmd = RE_CA_UART_SET_ALL;
+    re_ca_uart_ble_all_t params = {0};
+    params.fltr_id.id = 0x101;
+    params.bools.fltr_tags.state = 1;
+    params.bools.coded_phy.state = 1;
+    params.bools.scan_phy.state = 1;
+    params.bools.ext_payload.state = 1;
+    params.bools.ch_37.state = 1;
+    params.bools.ch_38.state = 1;
+    params.bools.ch_39.state = 1;
+    params.bools.ch_39.state = 1;
+    params.max_adv_len = max_adv_len;
+    re_ca_uart_payload_t payload = {0};
+    payload.cmd = cmd;
+    payload.params.all_params = params;
+    uint8_t buffer[sizeof (re_ca_uart_mosi_payload_buf_encoded_all_params_t)] = {0};
+    uint8_t buffer_len = sizeof (buffer);
+    err_code = re_ca_uart_encode (buffer, &buffer_len, &payload);
+    TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
+    TEST_ASSERT_EQUAL (sizeof (expected), buffer_len);
+    TEST_ASSERT (sizeof (buffer) >= sizeof (expected));
+    TEST_ASSERT_EQUAL_HEX8_ARRAY (expected, buffer, sizeof (expected));
 }
 
 void test_ruuvi_endpoint_ca_uart_all_encode_invalid (void)
@@ -1267,7 +1311,7 @@ void test_ruuvi_endpoint_ca_uart_ack_decode_invalid (void)
     TEST_ASSERT (memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
 }
 
-void test_ruuvi_endpoint_ca_uart_all_decode (void)
+void test_ruuvi_endpoint_ca_uart_set_all_params_decode (void)
 {
     re_status_t err_code = RE_SUCCESS;
     uint8_t data[] =
@@ -1291,13 +1335,51 @@ void test_ruuvi_endpoint_ca_uart_all_decode (void)
     expect_params.bools.ch_37.state = 1;
     expect_params.bools.ch_38.state = 1;
     expect_params.bools.ch_39.state = 1;
+    expect_params.max_adv_len = 0;
     re_ca_uart_cmd_t expect_cmd = RE_CA_UART_SET_ALL;
     re_ca_uart_payload_t payload = {0};
     err_code = re_ca_uart_decode (data, &payload);
-    TEST_ASSERT (RE_SUCCESS == err_code);
-    TEST_ASSERT (!memcmp (&expect_params, &payload.params.all_params,
-                          sizeof (expect_params)));
-    TEST_ASSERT (!memcmp (&expect_cmd, &payload.cmd, sizeof (expect_cmd)));
+    TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY (&expect_params, &payload.params.all_params,
+                                  sizeof (expect_params));
+    TEST_ASSERT_EQUAL (expect_cmd, payload.cmd);
+}
+
+void test_ruuvi_endpoint_ca_uart_set_all_params_with_max_adv_len_decode (void)
+{
+    const uint8_t max_adv_len = 48;
+    re_status_t err_code = RE_SUCCESS;
+    uint8_t data[] =
+    {
+        RE_CA_UART_STX,
+        7 + CMD_IN_LEN,
+        RE_CA_UART_SET_ALL,
+        0x01U, 0x01U,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x7FU,
+        RE_CA_UART_FIELD_DELIMITER,
+        max_adv_len,
+        RE_CA_UART_FIELD_DELIMITER,
+        0x02U, 0x8BU, //crc
+        RE_CA_UART_ETX
+    };
+    re_ca_uart_ble_all_t expect_params = {0};
+    expect_params.fltr_id.id = 0x101;
+    expect_params.bools.fltr_tags.state = 1;
+    expect_params.bools.coded_phy.state = 1;
+    expect_params.bools.scan_phy.state = 1;
+    expect_params.bools.ext_payload.state = 1;
+    expect_params.bools.ch_37.state = 1;
+    expect_params.bools.ch_38.state = 1;
+    expect_params.bools.ch_39.state = 1;
+    expect_params.max_adv_len = max_adv_len;
+    re_ca_uart_cmd_t expect_cmd = RE_CA_UART_SET_ALL;
+    re_ca_uart_payload_t payload = {0};
+    err_code = re_ca_uart_decode (data, &payload);
+    TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY (&expect_params, &payload.params.all_params,
+                                  sizeof (expect_params));
+    TEST_ASSERT_EQUAL (expect_cmd, payload.cmd);
 }
 
 void test_ruuvi_endpoint_ca_uart_all_decode_invalid (void)
