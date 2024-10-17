@@ -387,12 +387,12 @@ static re_status_t re_ca_uart_decode_set_all_params (
                                      + RE_CA_UART_CMD_FLTR_ID_LEN];
         payload->params.all_params.bools.fltr_tags.state =
             (flags >> RE_CA_UART_ALL_FLTR_TAG_BIT) & 1U;
-        payload->params.all_params.bools.coded_phy.state =
-            (flags >> RE_CA_UART_ALL_CODED_PHY_BIT) & 1U;
-        payload->params.all_params.bools.scan_phy.state =
-            (flags >> RE_CA_UART_ALL_SCAN_PHY_BIT) & 1U;
-        payload->params.all_params.bools.ext_payload.state =
-            (flags >> RE_CA_UART_ALL_EXT_PLD_BIT) & 1U;
+        payload->params.all_params.bools.use_coded_phy.state =
+            (flags >> RE_CA_UART_ALL_USE_CODED_PHY_BIT) & 1U;
+        payload->params.all_params.bools.use_1m_phy.state =
+            (flags >> RE_CA_UART_ALL_USE_1M_PHY_BIT) & 1U;
+        payload->params.all_params.bools.use_2m_phy.state =
+            (flags >> RE_CA_UART_ALL_USE_2M_PHY_BIT) & 1U;
         payload->params.all_params.bools.ch_37.state =
             (flags >> RE_CA_UART_ALL_CH_37_BIT) & 1U;
         payload->params.all_params.bools.ch_38.state =
@@ -953,12 +953,12 @@ static re_status_t re_ca_uart_encode_set_all_params (uint8_t * const buffer,
         buffer[written++] = RE_CA_UART_FIELD_DELIMITER;
         buffer[written] = ( ( (payload->params.all_params.bools.fltr_tags.state & 1U)
                               << RE_CA_UART_ALL_FLTR_TAG_BIT)
-                            | ( (payload->params.all_params.bools.coded_phy.state  & 1U)
-                                << RE_CA_UART_ALL_CODED_PHY_BIT)
-                            | ( (payload->params.all_params.bools.scan_phy.state  & 1U)
-                                << RE_CA_UART_ALL_SCAN_PHY_BIT)
-                            | ( (payload->params.all_params.bools.ext_payload.state  & 1U)
-                                << RE_CA_UART_ALL_EXT_PLD_BIT)
+                            | ( (payload->params.all_params.bools.use_coded_phy.state  & 1U)
+                                << RE_CA_UART_ALL_USE_CODED_PHY_BIT)
+                            | ( (payload->params.all_params.bools.use_1m_phy.state  & 1U)
+                                << RE_CA_UART_ALL_USE_1M_PHY_BIT)
+                            | ( (payload->params.all_params.bools.use_2m_phy.state  & 1U)
+                                << RE_CA_UART_ALL_USE_2M_PHY_BIT)
                             | ( (payload->params.all_params.bools.ch_37.state  & 1U)
                                 << RE_CA_UART_ALL_CH_37_BIT)
                             | ( (payload->params.all_params.bools.ch_38.state  & 1U)
