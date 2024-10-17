@@ -1,6 +1,3 @@
-# Source, copyright: https://github.com/viva64/pvs-studio-makefile-examples
-# commit 82a0f0a, /example-1
-# Modified for C on mac, added Doxygen
 	#                               Apache License
 	#                         Version 2.0, January 2004
 	#                      http://www.apache.org/licenses/
@@ -214,7 +211,7 @@ OFLAGS = -g3
 LDFLAGS =
 DFLAGS =
 
-INCLUDES += src/
+INCLUDES += src
 INCLUDES += ./CMock/vendor/unity/src
 INCLUDES += ./build/test/mocks
 INC_PARAMS = $(foreach d, $(INCLUDES), -I$d)
@@ -252,6 +249,20 @@ TEST_MAKEFILE_EXT_ADV_MAX = ${BUILD_DIR}_ext_adv_max/MakefileTestSupport
 .PHONY: all clean doxygen sonar astyle
 
 all: clean astyle doxygen sonar
+
+# Specify all tests as dependencies of 'all' (workaround for JetBrains CLion)
+# It is needed because on the first scan of Makefile the $(TEST_MAKEFILE) does not exist and it is not included.
+all: test_ruuvi_endpoint_3 \
+	test_ruuvi_endpoint_5 \
+	test_ruuvi_endpoint_6 \
+	test_ruuvi_endpoint_8 \
+	test_ruuvi_endpoint_c5 \
+	test_ruuvi_endpoint_ca_uart \
+	test_ruuvi_endpoint_e0 \
+	test_ruuvi_endpoint_f0 \
+	test_ruuvi_endpoint_fa \
+	test_ruuvi_endpoint_ibeacon \
+	test_ruuvi_endpoints
 
 doxygen: clean
 	doxygen

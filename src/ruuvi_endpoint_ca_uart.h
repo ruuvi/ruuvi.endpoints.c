@@ -89,15 +89,15 @@
 #define RE_CA_UART_ACK_BYTE         (1U) //!< Byte of bool params, starting from 0.
 #define RE_CA_UART_ACK_BIT          (0U) //!< Bit of bool params, starting from 0.
 
-#define RE_CA_UART_FLTR_ID_BYTE         (2U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_BOOL_BYTE        (1U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_FLTR_TAG_BIT     (0U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_CODED_PHY_BIT    (1U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_SCAN_PHY_BIT     (2U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_EXT_PLD_BIT      (3U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_CH_37_BIT        (4U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_CH_38_BIT        (5U) //!< Byte of bool params, starting from 0.
-#define RE_CA_UART_ALL_CH_39_BIT        (6U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_FLTR_ID_BYTE          (2U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_BOOL_BYTE         (1U) //!< Byte of bool params, starting from 0.
+#define RE_CA_UART_ALL_FLTR_TAG_BIT      (0U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_USE_CODED_PHY_BIT (1U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_USE_1M_PHY_BIT    (2U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_USE_2M_PHY_BIT    (3U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_37_BIT         (4U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_38_BIT         (5U) //!< Bit of bool params, starting from 0.
+#define RE_CA_UART_ALL_CH_39_BIT         (6U) //!< Bit of bool params, starting from 0.
 
 #define RE_CA_UART_STX_ETX_LEN          (1U) //!< Length of cmd with bool payload
 #define RE_CA_UART_DEVICE_ID_LEN        (8U) //!< Length of device id payload
@@ -315,9 +315,9 @@ typedef struct
 typedef struct
 {
     re_ca_uart_ble_bool_t fltr_tags;    //!< Filter tag bool state.
-    re_ca_uart_ble_bool_t coded_phy;    //!< Coded phy bool state.
-    re_ca_uart_ble_bool_t scan_phy;     //!< Scanned phy bool state.
-    re_ca_uart_ble_bool_t ext_payload;  //!< Pyload extension bool state.
+    re_ca_uart_ble_bool_t use_coded_phy;//!< Use BLE Coded PHY bool state.
+    re_ca_uart_ble_bool_t use_1m_phy;   //!< Use BLE 1M PHY bool state.
+    re_ca_uart_ble_bool_t use_2m_phy;   //!< Use BLE 2M PHY bool state.
     re_ca_uart_ble_bool_t ch_37;        //!< Channel 37 bool state.
     re_ca_uart_ble_bool_t ch_38;        //!< Channel 38 bool state.
     re_ca_uart_ble_bool_t ch_39;        //!< Channel 39 bool state.
