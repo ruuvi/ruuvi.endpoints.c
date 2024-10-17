@@ -112,12 +112,51 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="s
 int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#a3e9e9f0a0be7f6956f3c28789d8e66ad">rssi_db</a></td></tr>
 <tr class="memdesc:a3e9e9f0a0be7f6956f3c28789d8e66ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">RSSI. <br /></td></tr>
 <tr class="separator:a3e9e9f0a0be7f6956f3c28789d8e66ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba6acc0e7724460f4fc704cd923f765b"><td class="memItemLeft" align="right" valign="top"><a id="aba6acc0e7724460f4fc704cd923f765b"></a>
+re_ca_uart_ble_phy_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#aba6acc0e7724460f4fc704cd923f765b">primary_phy</a>: 4</td></tr>
+<tr class="memdesc:aba6acc0e7724460f4fc704cd923f765b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the PHY on which the primary advertising packet was received. See BLE_GAP_PHYS. <br /></td></tr>
+<tr class="separator:aba6acc0e7724460f4fc704cd923f765b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc9d43afa280bfdebcc1a3c18b5e4194"><td class="memItemLeft" align="right" valign="top"><a id="afc9d43afa280bfdebcc1a3c18b5e4194"></a>
+re_ca_uart_ble_phy_e&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#afc9d43afa280bfdebcc1a3c18b5e4194">secondary_phy</a>: 4</td></tr>
+<tr class="memdesc:afc9d43afa280bfdebcc1a3c18b5e4194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the PHY on which the secondary advertising packet was received. See BLE_GAP_PHYS. This field is set to RE_CA_UART_BLE_PHY_NOT_SET if no packets were received on a secondary advertising channel. <br /></td></tr>
+<tr class="separator:afc9d43afa280bfdebcc1a3c18b5e4194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3019635bf45a220fa066d3e3581846c"><td class="memItemLeft" align="right" valign="top"><a id="aa3019635bf45a220fa066d3e3581846c"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#aa3019635bf45a220fa066d3e3581846c">ch_index</a></td></tr>
+<tr class="memdesc:aa3019635bf45a220fa066d3e3581846c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Channel Index on which the last advertising packet is received (0-39). <br /></td></tr>
+<tr class="separator:aa3019635bf45a220fa066d3e3581846c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a642ae1da830f8a2e8882a90667b8bc6c"><td class="memItemLeft" align="right" valign="top"><a id="a642ae1da830f8a2e8882a90667b8bc6c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#a642ae1da830f8a2e8882a90667b8bc6c">is_coded_phy</a>: 1</td></tr>
+<tr class="memdesc:a642ae1da830f8a2e8882a90667b8bc6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if Coded PHY was used. <br /></td></tr>
+<tr class="separator:a642ae1da830f8a2e8882a90667b8bc6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72a96ade6a01c9bd107a0977b6a3059c"><td class="memItemLeft" align="right" valign="top">int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structre__ca__uart__ble__adv__t.html#a72a96ade6a01c9bd107a0977b6a3059c">tx_power</a>: 7</td></tr>
+<tr class="memdesc:a72a96ade6a01c9bd107a0977b6a3059c"><td class="mdescLeft">&#160;</td><td class="mdescRight">TX Power reported by the advertiser in the last packet header received. This field is set to RE_CA_UART_BLE_GAP_POWER_LEVEL_INVALID if the last received packet did not contain the Tx Power field.  <a href="structre__ca__uart__ble__adv__t.html#a72a96ade6a01c9bd107a0977b6a3059c">More...</a><br /></td></tr>
+<tr class="separator:a72a96ade6a01c9bd107a0977b6a3059c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Advertisement payload. </p>
 
-<p class="definition">Definition at line <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html#l00312">312</a> of file <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html#l00358">358</a> of file <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a>.</p>
+</div><h2 class="groupheader">Field Documentation</h2>
+<a id="a72a96ade6a01c9bd107a0977b6a3059c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72a96ade6a01c9bd107a0977b6a3059c">&#9670;&nbsp;</a></span>tx_power</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int8_t tx_power</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>TX Power reported by the advertiser in the last packet header received. This field is set to RE_CA_UART_BLE_GAP_POWER_LEVEL_INVALID if the last received packet did not contain the Tx Power field. </p>
+<dl class="section note"><dt>Note</dt><dd>TX Power is only included in extended advertising packets. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html#l00393">393</a> of file <a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/<a class="el" href="ruuvi__endpoint__ca__uart_8h_source.html">ruuvi_endpoint_ca_uart.h</a></li>
 </ul>
 </div><!-- contents -->
