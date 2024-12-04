@@ -320,7 +320,7 @@ void test_ruuvi_endpoint_f0_get_invalid_data (void)
         .flag_low_battery = false,
         .flag_calibration_in_progress = false,
         .flag_boost_mode = false,
-        .flag_seq_cnt = RE_F0_FLAGS_SEQ_INVALID,
+        .flag_seq_cnt = 0,
         .address = 0xFFFFFFFFFFFF,
     };
     static const uint8_t invalid_data[] =
