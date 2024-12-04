@@ -27,7 +27,6 @@
 
 #define RE_F0_FLAGS_SEQ_MASK                (0x0FU)
 #define RE_F0_FLAGS_SEQ_OFFSET              (4U)
-#define RE_F0_FLAGS_SEQ_INVALID             (0x0FU)
 #define RE_F0_FLAGS_USB_ON                  (0x01U)
 #define RE_F0_FLAGS_LOW_BATTERY             (0x02U)
 #define RE_F0_FLAGS_CALIBRATION_IN_PROGRESS (0x04U)
