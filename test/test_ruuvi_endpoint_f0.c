@@ -338,7 +338,7 @@ void test_ruuvi_endpoint_f0_get_invalid_data (void)
         0xFF, // NOX
         0xFF, // Luminosity
         0xFF, // Sound avg
-        0xF0, // Flags
+        0x00, // Flags
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
     };
     re_status_t err_code = RE_SUCCESS;
