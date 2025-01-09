@@ -29,7 +29,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Install Ceedling
-      run: gem install ceedling
+      run: gem install ceedling -v 0.31.1
 
     # Runs a set of commands using the runners shell
     - name: Run a multi-line script
