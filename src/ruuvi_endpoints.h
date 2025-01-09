@@ -121,23 +121,23 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_LOG_WRITE_MULTI__RECORD_LEN_IDX      (4U)    //!< Length of record.
 #define RE_LOG_WRITE_MULTI__PAYLOAD_IDX         (5U)    //!< Start of payload.
 
-#define RE_LOG_WRITE_AIR_TIMESTAMP_MSB_OFS     (0U)    //!< MSB offset of timestamp.
-#define RE_LOG_WRITE_AIR_TEMPERATURE_MSB_OFS   (4U)    //!< MSB offset of temperature.
-#define RE_LOG_WRITE_AIR_HUMIDITY_MSB_OFS      (6U)    //!< MSB offset of humidity.
-#define RE_LOG_WRITE_AIR_PRESSURE_MSB_OFS      (8U)    //!< MSB offset of pressure.
-#define RE_LOG_WRITE_AIR_PM1P0_MSB_OFS         (10U)   //!< MSB offset of pm1p0.
-#define RE_LOG_WRITE_AIR_PM2P5_MSB_OFS         (12U)   //!< MSB offset of pm2p5.
-#define RE_LOG_WRITE_AIR_PM4P0_MSB_OFS         (14U)   //!< MSB offset of pm4p0.
-#define RE_LOG_WRITE_AIR_PM10P0_MSB_OFS        (16U)   //!< MSB offset of pm10p0.
-#define RE_LOG_WRITE_AIR_CO2_MSB_OFS           (18U)   //!< MSB offset of CO2.
-#define RE_LOG_WRITE_AIR_VOC_MSB_OFS           (20U)   //!< MSB offset of VOC index.
-#define RE_LOG_WRITE_AIR_NOX_MSB_OFS           (22U)   //!< MSB offset of NOx index.
-#define RE_LOG_WRITE_AIR_LUMINOSITY_MSB_OFS    (24U)   //!< MSB offset of luminosity.
-#define RE_LOG_WRITE_AIR_SOUND_DBA_AVG_OFS     (26U)   //!< MSB offset of sound_dba_avg.
-#define RE_LOG_WRITE_AIR_SOUND_DBA_PEAK_OFS    (27U)   //!< MSB offset of sound_dba_peak.
-#define RE_LOG_WRITE_AIR_VOLTAGE_MSB_OFS       (28U)   //!< MSB offset of voltage.
-#define RE_LOG_WRITE_AIR_FLAGS_MSB_OFS         (30U)   //!< MSB offset of flags.
-#define RE_LOG_WRITE_AIR_RECORD_LEN            (32U)   //!< Length of record.
+#define RE_LOG_WRITE_AIRQ_TIMESTAMP_MSB_OFS     (0U)    //!< MSB offset of timestamp.
+#define RE_LOG_WRITE_AIRQ_TEMPERATURE_MSB_OFS   (4U)    //!< MSB offset of temperature.
+#define RE_LOG_WRITE_AIRQ_HUMIDITY_MSB_OFS      (6U)    //!< MSB offset of humidity.
+#define RE_LOG_WRITE_AIRQ_PRESSURE_MSB_OFS      (8U)    //!< MSB offset of pressure.
+#define RE_LOG_WRITE_AIRQ_PM1P0_MSB_OFS         (10U)   //!< MSB offset of pm1p0.
+#define RE_LOG_WRITE_AIRQ_PM2P5_MSB_OFS         (12U)   //!< MSB offset of pm2p5.
+#define RE_LOG_WRITE_AIRQ_PM4P0_MSB_OFS         (14U)   //!< MSB offset of pm4p0.
+#define RE_LOG_WRITE_AIRQ_PM10P0_MSB_OFS        (16U)   //!< MSB offset of pm10p0.
+#define RE_LOG_WRITE_AIRQ_CO2_MSB_OFS           (18U)   //!< MSB offset of CO2.
+#define RE_LOG_WRITE_AIRQ_VOC_MSB_OFS           (20U)   //!< MSB offset of VOC index.
+#define RE_LOG_WRITE_AIRQ_NOX_MSB_OFS           (22U)   //!< MSB offset of NOx index.
+#define RE_LOG_WRITE_AIRQ_LUMINOSITY_MSB_OFS    (24U)   //!< MSB offset of luminosity.
+#define RE_LOG_WRITE_AIRQ_SOUND_DBA_AVG_OFS     (26U)   //!< MSB offset of sound_dba_avg.
+#define RE_LOG_WRITE_AIRQ_SOUND_DBA_PEAK_OFS    (27U)   //!< MSB offset of sound_dba_peak.
+#define RE_LOG_WRITE_AIRQ_VOLTAGE_MSB_OFS       (28U)   //!< MSB offset of voltage.
+#define RE_LOG_WRITE_AIRQ_FLAGS_MSB_OFS         (30U)   //!< MSB offset of flags.
+#define RE_LOG_WRITE_AIRQ_RECORD_LEN            (32U)   //!< Length of record.
 
 
 #define RE_STANDARD_DESTINATION_ACCELERATION   (0x4AU) //!< XYZ acceleration combined
@@ -152,7 +152,7 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_STANDARD_DESTINATION_HUMIDITY       (0x31U) //!< Humidity
 #define RE_STANDARD_DESTINATION_PRESSURE       (0x32U) //!< Pressure
 #define RE_STANDARD_DESTINATION_ENVIRONMENTAL  (0x3AU) //!< Temp Humi Pres combined.
-#define RE_STANDARD_DESTINATION_AIR            (0x3BU) //!< All RuuviAir measurements combined.
+#define RE_STANDARD_DESTINATION_AIRQ           (0x3BU) //!< All AIRQ measurements combined.
 #define RE_STANDARD_DESTINATION_ADC_BATTERY    (0x20U) //!< ADC battery vs GND
 #define RE_STANDARD_DESTINATION_RTC            (0x21U) //!< RTC value
 #define RE_STANDARD_DESTINATION_PASSWORD       (0x2AU) //!< Password endpoint.
@@ -169,7 +169,7 @@ typedef enum
     RE_GYR_Y    = RE_STANDARD_DESTINATION_GYRATION_Y,
     RE_GYR_Z    = RE_STANDARD_DESTINATION_GYRATION_Z,
     RE_ENV_ALL  = RE_STANDARD_DESTINATION_ENVIRONMENTAL,
-    RE_ENV_AIR  = RE_STANDARD_DESTINATION_AIR,
+    RE_ENV_AIRQ = RE_STANDARD_DESTINATION_AIRQ,
     RE_ENV_TEMP = RE_STANDARD_DESTINATION_TEMPERATURE,
     RE_ENV_HUMI = RE_STANDARD_DESTINATION_HUMIDITY,
     RE_ENV_PRES = RE_STANDARD_DESTINATION_PRESSURE,
