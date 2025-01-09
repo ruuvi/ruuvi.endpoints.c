@@ -22,10 +22,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v4
 
-    - name: Set up Ruby 3.3
+    - name: Set up Ruby 3.0
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.3'
+        ruby-version: '3.0'
 
     # Runs a single command using the runners shell
     - name: Install Ceedling
