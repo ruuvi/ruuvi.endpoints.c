@@ -117,9 +117,9 @@ typedef float    re_float;                      //!< Ruuvi endpoint float type
 #define RE_LOG_WRITE_VALUE_B3_IDX              (9U)    //!< B3 of value.
 #define RE_LOG_WRITE_VALUE_LSB_IDX             (10U)   //!< LSB of value.
 
-#define RE_LOG_WRITE_MULTI__NUM_RECORDS_IDX     (3U)    //!< Number of records.
-#define RE_LOG_WRITE_MULTI__RECORD_LEN_IDX      (4U)    //!< Length of record.
-#define RE_LOG_WRITE_MULTI__PAYLOAD_IDX         (5U)    //!< Start of payload.
+#define RE_LOG_WRITE_MULTI_NUM_RECORDS_IDX     (3U)    //!< Number of records.
+#define RE_LOG_WRITE_MULTI_RECORD_LEN_IDX      (4U)    //!< Length of record.
+#define RE_LOG_WRITE_MULTI_PAYLOAD_IDX         (5U)    //!< Start of payload.
 
 #define RE_LOG_WRITE_AIRQ_TIMESTAMP_MSB_OFS     (0U)    //!< MSB offset of timestamp.
 #define RE_LOG_WRITE_AIRQ_TEMPERATURE_MSB_OFS   (4U)    //!< MSB offset of temperature.
