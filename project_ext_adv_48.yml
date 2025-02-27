@@ -7,7 +7,6 @@
 
 :project:
   :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
   :build_root: build_ceedling
 #  :release_build: TRUE
@@ -118,22 +117,7 @@
   :release: []
 
 :plugins:
-  :load_paths:
-    - "#{Ceedling.load_path}"
   :enabled:
-    - stdout_pretty_tests_report
     - module_generator
     - gcov 
-
-:flags:
-  :test:
-    :compile:
-      :*:
-        - -Wall
-        - -std=c11
-  :gcov:
-    :compile:
-      :*:
-        - -Wall
-        - -std=c11
 ...

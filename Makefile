@@ -296,11 +296,8 @@ test_all:
 test_all_gcov:
 	rm -rf build_ceedling
 	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
-	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
 	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling test:all
-	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling gcov:all utils:gcov
 	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling test:all
-	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling gcov:all utils:gcov
 	gcov  -b -c build_ceedling/gcov/out/*.gcno
 
 test:
