@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['voc_5findex_163',['voc_index',['../structre__6__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05',1,'re_6_data_t::voc_index()'],['../structre__e0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05',1,'re_e0_data_t::voc_index()'],['../structre__f0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05',1,'re_f0_data_t::voc_index()']]],
-  ['voltage_164',['voltage',['../structre__e0__data__t.html#a4e72c7f011d6ce6db0be70e178d66b34',1,'re_e0_data_t']]]
+  ['use_5f1m_5fphy_0',['use_1m_phy',['../structre__ca__uart__ble__all__bools__t.html#a8a09319b05dd789b11667e3794b4a04e',1,'re_ca_uart_ble_all_bools_t']]],
+  ['use_5f2m_5fphy_1',['use_2m_phy',['../structre__ca__uart__ble__all__bools__t.html#af31bb54b78a2b61eda81033d5745a02d',1,'re_ca_uart_ble_all_bools_t']]],
+  ['use_5fcoded_5fphy_2',['use_coded_phy',['../structre__ca__uart__ble__all__bools__t.html#a403ec72be34bb15fda43f45773228353',1,'re_ca_uart_ble_all_bools_t']]]
 ];
