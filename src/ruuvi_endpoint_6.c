@@ -6,332 +6,417 @@
 
 #if RE_6_ENABLED
 
-#define RE_6_PM_RATIO            (10.0f)
-#define RE_6_CO2_RATIO           (1.0f)
-#define RE_6_HUMIDITY_RATIO      (10.0f)
-#define RE_6_VOC_RATIO           (1.0f)
-#define RE_6_NOX_RATIO           (1.0f)
-#define RE_6_TEMPERATURE_RATIO   (10.0f)
+// Advertising Data (AD) Element 1: Flags
+#define RE_6_RAW_PACKET_AD1_FLAGS_LEN_OFFSET     (0U)
+#define RE_6_RAW_PACKET_AD1_FLAGS_LEN_VAL        (2U)
+#define RE_6_RAW_PACKET_AD1_FLAGS_AD_TYPE_OFFSET (1U)
+#define RE_6_RAW_PACKET_AD1_FLAGS_AD_TYPE_VAL    (1U)
+#define RE_6_RAW_PACKET_AD1_FLAGS_AD_DATA_OFFSET (2U)
 
-#define RE_6_MAC_MAX             (0xFFFFFFFFFFFFUL)
-#define RE_6_MAC_MIN             (0UL)
+// Advertising Data (AD) Element 2: Complete List of 16-bit Service Class UUIDs
+#define RE_6_RAW_PACKET_AD2_UUID_LEN_OFFSET      (3U)
+#define RE_6_RAW_PACKET_AD2_UUID_LEN_VAL         (3U)
+#define RE_6_RAW_PACKET_AD2_UUID_AD_TYPE_OFFSET  (4U)
+#define RE_6_RAW_PACKET_AD2_UUID_AD_TYPE_VAL     (3U)
+#define RE_6_RAW_PACKET_AD2_UUID_AD_DATA1_OFFSET (5U)
+#define RE_6_RAW_PACKET_AD2_UUID_AD_DATA2_OFFSET (6U)
+#define RE_6_RAW_PACKET_AD2_UUID_VAL             (0xFC98U)
 
-#define RE_6_BYTE_0_SHIFT        (0U)
-#define RE_6_BYTE_1_SHIFT        (8U)
-#define RE_6_BYTE_2_SHIFT        (16U)
-#define RE_6_BYTE_3_SHIFT        (24U)
-#define RE_6_BYTE_4_SHIFT        (32U)
-#define RE_6_BYTE_5_SHIFT        (40U)
-#define RE_6_BYTE_MASK           (0xFFU)
+// Advertising Data (AD) Element 3: Manufacturer Specific Data (MSD)
+#define RE_6_RAW_PACKET_AD3_MSD_LEN_OFFSET                (7U)
+#define RE_6_RAW_PACKET_AD3_MSD_LEN_VAL                   (23U)
+#define RE_6_RAW_PACKET_AD3_MSD_AD_TYPE_OFFSET            (8U)
+#define RE_6_RAW_PACKET_AD3_MSD_AD_TYPE_VAL               (0xFFU)
+#define RE_6_RAW_PACKET_AD3_MSD_MANUFACTURER_ID_OFFSET_LO (9U)
+#define RE_6_RAW_PACKET_AD3_MSD_MANUFACTURER_ID_OFFSET_HI (10U)
+#define RE_6_RAW_PACKET_AD3_MANUFACTURER_ID_VAL           (0x499U)
 
-#define RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET    (0U)
-#define RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL       (2U)
-#define RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET  (1U)
-#define RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL     (1U)
-#define RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG2_OFFSET  (2U)
+typedef uint8_t re_t_bit_offset_t;
 
-#define RE_6_RAW_PACKET_LENGTH_OFFSET               (3U)
-#define RE_6_RAW_PACKET_LENGTH_VAL                  (27U)
-#define RE_6_RAW_PACKET_TYPE_OFFSET                 (4U)
-#define RE_6_RAW_PACKET_TYPE_VAL                    (0xFFU)
-#define RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO   (5U)
-#define RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI   (6U)
-#define RE_6_RAW_PACKET_MANUFACTURER_ID_VAL         (0x499U)
-
-
-// Avoid mocking simple function
-#ifdef TEST
-void re_clip (re_float * const value, const re_float min, const re_float max)
+static inline uint8_t
+get_high_byte (const uint16_t value)
 {
-    if (*value > max)
-    {
-        *value = max;
-    }
-
-    if (*value < min)
-    {
-        *value = min;
-    }
+    return (uint8_t) ( (value >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK);
 }
-#endif
 
-static void re_6_encode_pm (uint8_t * const p_slot, re_float val, const uint32_t ofs)
+static inline uint8_t
+get_low_byte (const uint16_t value)
 {
-    uint16_t coded_val = RE_6_INVALID_PM;
+    return (uint8_t) (value & RE_6_BYTE_MASK);
+}
+
+static void
+re_6_encode_u16 (
+    uint8_t * const p_slot,
+    const re_float val,
+    const uint16_t invalid_val,
+    const re_float min_val,
+    const re_float max_val,
+    const re_float scale_factor)
+{
+    uint16_t coded_val = invalid_val;
 
     if (!isnan (val))
     {
-        re_clip (&val, RE_6_PM_MIN, RE_6_PM_MAX);
-        coded_val = (uint16_t) lrintf (val * RE_6_PM_RATIO);
+        const re_float val_clipped = RE_CLIP (val, min_val, max_val);
+        coded_val                  = (uint16_t) lrintf ( (val_clipped - min_val) * scale_factor);
     }
 
-    coded_val &= RE_6_OFFSET_PM_MASK;
-    coded_val <<= ofs;
-    p_slot[0] |= ( ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK);
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    p_slot[0] |= get_high_byte (coded_val);
+    p_slot[1] |= get_low_byte (coded_val);
 }
 
-static re_float re_6_decode_pm (const uint8_t * const p_slot, const uint32_t ofs)
+static re_float
+re_6_decode_u16 (
+    const uint8_t * const p_slot,
+    const uint16_t       invalid_val,
+    const re_float       min_val,
+    const re_float       scale_factor)
 {
     uint16_t coded_val = 0;
     coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= ofs;
-    coded_val &= RE_6_OFFSET_PM_MASK;
+    coded_val |= ( (uint16_t) p_slot[0]) << RE_6_BYTE_1_SHIFT;
 
-    if (RE_6_INVALID_PM == coded_val)
+    if (invalid_val == coded_val)
     {
         return NAN;
     }
 
-    return (re_float) coded_val / RE_6_PM_RATIO;
+    return (re_float) coded_val / scale_factor + min_val;
 }
 
-static void re_6_encode_co2 (uint8_t * const p_slot, re_float val)
+static void
+re_6_encode_u9 (
+    uint8_t * const          p_slot,
+    uint8_t * const          p_flags,
+    const re_t_bit_offset_t bit9_offset,
+    const re_float          val,
+    const uint16_t          invalid_val,
+    const re_float          min_val,
+    const re_float          max_val,
+    const re_float          scale_factor)
 {
-    uint16_t coded_val = RE_6_INVALID_CO2;
+    uint16_t coded_val = invalid_val;
 
     if (!isnan (val))
     {
-        re_clip (&val, RE_6_CO2_MIN, RE_6_CO2_MAX);
-        coded_val = (uint16_t) lrintf (val * RE_6_CO2_RATIO);
+        const re_float val_clipped = RE_CLIP (val, min_val, max_val);
+        coded_val                  = (uint16_t) lrintf ( (val_clipped - min_val) * scale_factor);
     }
 
-    coded_val &= RE_6_OFFSET_CO2_MASK;
-    coded_val <<= RE_6_OFFSET_CO2_OFS;
-    p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    *p_slot |= get_low_byte (coded_val);
+    const uint8_t flags = (get_high_byte (coded_val) & RE_6_BIT1_MASK) << bit9_offset;
+    *p_flags |= flags;
 }
 
-static re_float re_6_decode_co2 (const uint8_t * const p_slot)
+static re_float
+re_6_decode_u9 (
+    const uint8_t * const    p_slot,
+    const uint8_t * const    p_flags,
+    const re_t_bit_offset_t bit9_offset,
+    const uint16_t          invalid_val,
+    const re_float          min_val,
+    const re_float          scale_factor)
 {
     uint16_t coded_val = 0;
-    coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= RE_6_OFFSET_CO2_OFS;
-    coded_val &= RE_6_OFFSET_CO2_MASK;
+    coded_val |= *p_slot & RE_6_BYTE_MASK;
+    const uint16_t bit9_val = (*p_flags >> bit9_offset) & RE_6_BIT1_MASK;
+    coded_val |= bit9_val << RE_6_BYTE_1_SHIFT;
 
-    if (RE_6_INVALID_CO2 == coded_val)
+    if (invalid_val == coded_val)
     {
         return NAN;
     }
 
-    return (re_float) coded_val / RE_6_CO2_RATIO;
+    return (re_float) coded_val / scale_factor + min_val;
 }
 
-static void re_6_encode_humidity (uint8_t * const p_slot, re_float val)
+static void
+re_6_encode_temperature (uint8_t * const p_slot, const re_float val)
 {
-    uint16_t coded_val = RE_6_INVALID_HUMIDITY;
+    int16_t coded_val_i16 = RE_6_INVALID_TEMPERATURE;
 
     if (!isnan (val))
     {
-        re_clip (&val, RE_6_HUMIDITY_MIN, RE_6_HUMIDITY_MAX);
-        coded_val = (uint16_t) lrintf (val * RE_6_HUMIDITY_RATIO);
+        const re_float val_clipped = RE_CLIP (val, RE_6_TEMPERATURE_MIN, RE_6_TEMPERATURE_MAX);
+        coded_val_i16              = (int16_t) lrintf (val_clipped *
+                                     RE_6_TEMPERATURE_SCALE_FACTOR);
     }
 
-    coded_val &= RE_6_OFFSET_HUMIDITY_MASK;
-    coded_val <<= RE_6_OFFSET_HUMIDITY_OFS;
-    p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    const uint16_t coded_val_u16 = (uint16_t) coded_val_i16;
+    p_slot[0] |= get_high_byte (coded_val_u16);
+    p_slot[1] |= get_low_byte (coded_val_u16);
 }
 
-static re_float re_6_decode_humidity (const uint8_t * const p_slot)
+static re_float
+re_6_decode_temperature (const uint8_t * const p_slot)
 {
-    uint16_t coded_val = 0;
-    coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= RE_6_OFFSET_HUMIDITY_OFS;
-    coded_val &= RE_6_OFFSET_HUMIDITY_MASK;
+    uint16_t coded_val_u16 = 0;
+    coded_val_u16 |= p_slot[1] & RE_6_BYTE_MASK;
+    coded_val_u16 |= ( (uint16_t) p_slot[0]) << RE_6_BYTE_1_SHIFT;
 
-    if (RE_6_INVALID_HUMIDITY == coded_val)
+    if (RE_6_INVALID_TEMPERATURE == coded_val_u16)
     {
         return NAN;
     }
 
-    return (re_float) coded_val / RE_6_HUMIDITY_RATIO;
+    const int16_t coded_val_i16 = (int16_t) coded_val_u16;
+    return (re_float) coded_val_i16 / RE_6_TEMPERATURE_SCALE_FACTOR;
 }
 
-static void re_6_encode_voc (uint8_t * const p_slot, re_float val)
+static void
+re_6_encode_humidity (uint8_t * const p_slot, const re_float val)
 {
-    uint16_t coded_val = RE_6_INVALID_VOC_INDEX;
-
-    if ( (!isnan (val)) && (val >= RE_6_VOC_INDEX_MIN) && (val <= RE_6_VOC_INDEX_MAX))
-    {
-        coded_val = (uint16_t) lrintf (val * RE_6_VOC_RATIO);
-    }
-
-    coded_val &= RE_6_OFFSET_VOC_INDEX_MASK;
-    coded_val <<= RE_6_OFFSET_VOC_INDEX_OFS;
-    p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    re_6_encode_u16 (
+        p_slot,
+        val,
+        RE_6_INVALID_HUMIDITY,
+        RE_6_HUMIDITY_MIN,
+        RE_6_HUMIDITY_MAX,
+        RE_6_HUMIDITY_SCALE_FACTOR);
 }
 
-static re_float re_6_decode_voc (const uint8_t * const p_slot)
+static re_float
+re_6_decode_humidity (const uint8_t * const p_slot)
 {
-    uint16_t coded_val = 0;
-    coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= RE_6_OFFSET_VOC_INDEX_OFS;
-    coded_val &= RE_6_OFFSET_VOC_INDEX_MASK;
-
-    if (RE_6_INVALID_VOC_INDEX == coded_val)
-    {
-        return NAN;
-    }
-
-    return (re_float) coded_val / RE_6_VOC_RATIO;
+    return re_6_decode_u16 (p_slot, RE_6_INVALID_HUMIDITY, RE_6_HUMIDITY_MIN,
+                            RE_6_HUMIDITY_SCALE_FACTOR);
 }
 
-static void re_6_encode_nox (uint8_t * const p_slot, re_float val)
+static void
+re_6_encode_pressure (uint8_t * const p_slot, const re_float val)
 {
-    uint16_t coded_val = RE_6_INVALID_NOX_INDEX;
-
-    if ( (!isnan (val)) && (val >= RE_6_NOX_INDEX_MIN) && (val <= RE_6_NOX_INDEX_MAX))
-    {
-        coded_val = (uint16_t) lrintf (val * RE_6_NOX_RATIO);
-    }
-
-    coded_val &= RE_6_OFFSET_NOX_INDEX_MASK;
-    coded_val <<= RE_6_OFFSET_NOX_INDEX_OFS;
-    p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    re_6_encode_u16 (
+        p_slot,
+        val,
+        RE_6_INVALID_PRESSURE,
+        RE_6_PRESSURE_MIN,
+        RE_6_PRESSURE_MAX,
+        RE_6_PRESSURE_SCALE_FACTOR);
 }
 
-static re_float re_6_decode_nox (const uint8_t * const p_slot)
+static re_float
+re_6_decode_pressure (const uint8_t * const p_slot)
 {
-    uint16_t coded_val = 0;
-    coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= RE_6_OFFSET_NOX_INDEX_OFS;
-    coded_val &= RE_6_OFFSET_NOX_INDEX_MASK;
-
-    if (RE_6_INVALID_NOX_INDEX == coded_val)
-    {
-        return NAN;
-    }
-
-    return (re_float) coded_val / RE_6_NOX_RATIO;
+    return re_6_decode_u16 (p_slot, RE_6_INVALID_PRESSURE, RE_6_PRESSURE_MIN,
+                            RE_6_PRESSURE_SCALE_FACTOR);
 }
 
-static void re_6_encode_temperature (uint8_t * const p_slot, re_float val)
+static void
+re_6_encode_pm (uint8_t * const p_slot, const re_float val)
 {
-    uint16_t coded_val = RE_6_INVALID_TEMPERATURE;
+    re_6_encode_u16 (p_slot, val, RE_6_INVALID_PM, RE_6_PM_MIN, RE_6_PM_MAX,
+                     RE_6_PM_SCALE_FACTOR);
+}
+
+static re_float
+re_6_decode_pm (const uint8_t * const p_slot)
+{
+    return re_6_decode_u16 (p_slot, RE_6_INVALID_PM, RE_6_PM_MIN, RE_6_PM_SCALE_FACTOR);
+}
+
+static void
+re_6_encode_co2 (uint8_t * const p_slot, re_float val)
+{
+    re_6_encode_u16 (p_slot, val, RE_6_INVALID_CO2, RE_6_CO2_MIN, RE_6_CO2_MAX,
+                     RE_6_CO2_SCALE_FACTOR);
+}
+
+static re_float
+re_6_decode_co2 (const uint8_t * const p_slot)
+{
+    return re_6_decode_u16 (p_slot, RE_6_INVALID_CO2, RE_6_CO2_MIN, RE_6_CO2_SCALE_FACTOR);
+}
+
+static void
+re_6_encode_voc (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
+{
+    re_6_encode_u9 (
+        p_slot,
+        p_flags,
+        RE_6_VOC_BIT9_OFFSET,
+        val,
+        RE_6_INVALID_VOC,
+        RE_6_VOC_MIN,
+        RE_6_VOC_MAX,
+        RE_6_VOC_SCALE_FACTOR);
+}
+
+static re_float
+re_6_decode_voc (const uint8_t * const p_slot, const uint8_t * const p_flags)
+{
+    return re_6_decode_u9 (p_slot, p_flags, RE_6_VOC_BIT9_OFFSET, RE_6_INVALID_VOC,
+                           RE_6_VOC_MIN, RE_6_VOC_SCALE_FACTOR);
+}
+
+static void
+re_6_encode_nox (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
+{
+    re_6_encode_u9 (
+        p_slot,
+        p_flags,
+        RE_6_NOX_BIT9_OFFSET,
+        val,
+        RE_6_INVALID_NOX,
+        RE_6_NOX_MIN,
+        RE_6_NOX_MAX,
+        RE_6_NOX_SCALE_FACTOR);
+}
+
+static re_float
+re_6_decode_nox (const uint8_t * const p_slot, const uint8_t * const p_flags)
+{
+    return re_6_decode_u9 (p_slot, p_flags, RE_6_NOX_BIT9_OFFSET, RE_6_INVALID_NOX,
+                           RE_6_NOX_MIN, RE_6_NOX_SCALE_FACTOR);
+}
+
+static void
+re_6_encode_luminosity (uint8_t * const p_slot, re_float val)
+{
+    uint8_t coded_val = RE_6_INVALID_LUMINOSITY;
 
     if (!isnan (val))
     {
-        re_clip (&val, RE_6_TEMPERATURE_MIN, RE_6_TEMPERATURE_MAX);
-        coded_val = (uint16_t) lrintf (val * RE_6_TEMPERATURE_RATIO);
+        const re_float val_clipped = RE_CLIP (val, RE_6_LUMINOSITY_MIN, RE_6_LUMINOSITY_MAX);
+        coded_val                  = (uint8_t) (int) lrintf (logf (val_clipped + 1) *
+                                     RE_6_LUMINOSITY_SCALE_FACTOR);
     }
 
-    coded_val &= RE_6_OFFSET_TEMPERATURE_MASK;
-    coded_val <<= RE_6_OFFSET_TEMPERATURE_OFS;
-    p_slot[0] |= ( (uint32_t) coded_val >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    p_slot[1] |= (coded_val & RE_6_BYTE_MASK);
+    *p_slot = coded_val;
 }
 
-static re_float re_6_decode_temperature (const uint8_t * const p_slot)
+static re_float
+re_6_decode_luminosity (const uint8_t * const p_slot)
 {
-    uint16_t coded_val = 0;
-    coded_val |= p_slot[1] & RE_6_BYTE_MASK;
-    coded_val |= ( (uint16_t) p_slot[0] & RE_6_BYTE_MASK) << RE_6_BYTE_1_SHIFT;
-    coded_val >>= RE_6_OFFSET_TEMPERATURE_OFS;
-    coded_val &= RE_6_OFFSET_TEMPERATURE_MASK;
+    uint8_t coded_val = *p_slot;
 
-    if (RE_6_INVALID_TEMPERATURE == coded_val)
+    if (RE_6_INVALID_LUMINOSITY == coded_val)
     {
         return NAN;
     }
 
-    if (0 != (coded_val & ( (RE_6_OFFSET_TEMPERATURE_MASK + 1) >> 1U)))
-    {
-        // it's negative val, we need to set all most significant bits to '1'
-        coded_val |= ~RE_6_OFFSET_TEMPERATURE_MASK;
-    }
-
-    return (re_float) (int16_t) coded_val / RE_6_TEMPERATURE_RATIO;
+    return (re_float) (expf ( ( (re_float) coded_val / RE_6_LUMINOSITY_SCALE_FACTOR)) - 1);
 }
 
-static void re_6_encode_set_address (uint8_t * const p_buffer, const re_6_data_t * p_data)
+static void
+re_6_encode_sound_dba_avg (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
 {
-    // Address is 64 bits, skip 2 first bytes
-    uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;
-    uint64_t mac = p_data->address;
+    re_6_encode_u9 (
+        p_slot,
+        p_flags,
+        RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
+        val,
+        RE_6_INVALID_SOUND,
+        RE_6_SOUND_DBA_AVG_MIN,
+        RE_6_SOUND_DBA_AVG_MAX,
+        RE_6_SOUND_DBA_AVG_SCALE_FACTOR);
+}
 
-    if (RE_6_MAC_MAX < p_data->address)
+static re_float
+re_6_decode_sound_dba_avg (const uint8_t * const p_slot, const uint8_t * const p_flags)
+{
+    return re_6_decode_u9 (
+               p_slot,
+               p_flags,
+               RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
+               RE_6_INVALID_SOUND,
+               RE_6_SOUND_DBA_AVG_MIN,
+               RE_6_SOUND_DBA_AVG_SCALE_FACTOR);
+}
+
+static void
+re_6_encode_seq_cnt2 (uint8_t * const p_slot, const uint8_t seq_cnt2)
+{
+    *p_slot = seq_cnt2;
+}
+
+static uint8_t
+re_6_decode_seq_cnt2 (const uint8_t * const p_slot)
+{
+    return *p_slot;
+}
+
+static void
+re_6_encode_flags (uint8_t * const p_slot, const re_6_flags_t flags)
+{
+    if (flags.flag_calibration_in_progress)
     {
-        mac = RE_6_INVALID_MAC;
+        *p_slot |= RE_6_FLAGS_CALIBRATION_IN_PROGRESS;
     }
 
+    if (flags.flag_button_pressed)
+    {
+        *p_slot |= RE_6_FLAGS_BUTTON_PRESSED;
+    }
+
+    if (flags.flag_rtc_running_on_boot)
+    {
+        *p_slot |= RE_6_FLAGS_RTC_RUNNING_ON_BOOT;
+    }
+}
+
+static re_6_flags_t
+re_6_decode_flags (const uint8_t * const p_flags)
+{
+    re_6_flags_t flags = { .flag_calibration_in_progress = false,
+                           .flag_button_pressed          = false,
+                           .flag_rtc_running_on_boot     = false
+                         };
+
+    if (*p_flags & RE_6_FLAGS_CALIBRATION_IN_PROGRESS)
+    {
+        flags.flag_calibration_in_progress = true;
+    }
+
+    if (*p_flags & RE_6_FLAGS_BUTTON_PRESSED)
+    {
+        flags.flag_button_pressed = true;
+    }
+
+    if (*p_flags & RE_6_FLAGS_RTC_RUNNING_ON_BOOT)
+    {
+        flags.flag_rtc_running_on_boot = true;
+    }
+
+    return flags;
+}
+
+static void
+re_6_encode_address (uint8_t * const p_buffer, const re_6_mac_addr_24_t mac_addr)
+{
+    uint32_t mac_addr_u24 = ( ( (uint32_t) mac_addr.byte3) << RE_6_BYTE_2_SHIFT)
+                            | ( ( (uint32_t) mac_addr.byte4) << RE_6_BYTE_1_SHIFT)
+                            | ( ( (uint32_t) mac_addr.byte5) << RE_6_BYTE_0_SHIFT);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wtype-limits"
 
-    if (RE_6_MAC_MIN > p_data->address) // cppcheck-suppress unsignedLessThanZero
+    if (RE_6_MAC_MAX < mac_addr_u24)
     {
-        mac = RE_6_INVALID_MAC;
+        mac_addr_u24 = RE_6_INVALID_MAC;
+    }
+    else if (RE_6_MAC_MIN > mac_addr_u24) // cppcheck-suppress unsignedLessThanZero
+    {
+        mac_addr_u24 = RE_6_INVALID_MAC;
     }
 
 #pragma GCC diagnostic pop
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_5_SHIFT) & RE_6_BYTE_MASK;
-    addr_offset++;
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_4_SHIFT) & RE_6_BYTE_MASK;
-    addr_offset++;
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_3_SHIFT) & RE_6_BYTE_MASK;
-    addr_offset++;
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_2_SHIFT) & RE_6_BYTE_MASK;
-    addr_offset++;
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
-    addr_offset++;
-    p_buffer[addr_offset] = (mac >> RE_6_BYTE_0_SHIFT) & RE_6_BYTE_MASK;
+    p_buffer[RE_6_OFFSET_ADDR_3] = (mac_addr_u24 >> RE_6_BYTE_2_SHIFT) & RE_6_BYTE_MASK;
+    p_buffer[RE_6_OFFSET_ADDR_4] = (mac_addr_u24 >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK;
+    p_buffer[RE_6_OFFSET_ADDR_5] = (mac_addr_u24 >> RE_6_BYTE_0_SHIFT) & RE_6_BYTE_MASK;
 }
 
-static uint64_t re_6_decode_address (const uint8_t * const p_buffer)
+static re_6_mac_addr_24_t
+re_6_decode_address (const uint8_t * const p_buffer)
 {
-    // Address is 64 bits, skip 2 first bytes
-    uint8_t addr_offset = RE_6_OFFSET_ADDR_MSB;
-    uint64_t mac = 0;
-    mac |= p_buffer[addr_offset];
-    mac <<= RE_6_BYTE_1_SHIFT;
-    addr_offset++;
-    mac |= p_buffer[addr_offset];
-    mac <<= RE_6_BYTE_1_SHIFT;
-    addr_offset++;
-    mac |= p_buffer[addr_offset];
-    mac <<= RE_6_BYTE_1_SHIFT;
-    addr_offset++;
-    mac |= p_buffer[addr_offset];
-    mac <<= RE_6_BYTE_1_SHIFT;
-    addr_offset++;
-    mac |= p_buffer[addr_offset];
-    mac <<= RE_6_BYTE_1_SHIFT;
-    addr_offset++;
-    mac |= p_buffer[addr_offset];
-    return mac;
+    const re_6_mac_addr_24_t mac_addr = { .byte3 = p_buffer[RE_6_OFFSET_ADDR_3],
+                                          .byte4 = p_buffer[RE_6_OFFSET_ADDR_4],
+                                          .byte5 = p_buffer[RE_6_OFFSET_ADDR_5]
+                                        };
+    return mac_addr;
 }
 
-static void re_6_encode_sequence (uint8_t * const p_buffer,
-                                  const re_6_data_t * const p_data)
-{
-    uint16_t measurement_seq = RE_6_INVALID_SEQUENCE;
-
-    if (RE_6_SEQ_CTR_MAX >= p_data->measurement_count)
-    {
-        measurement_seq = p_data->measurement_count;
-    }
-
-    p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] = (measurement_seq >> RE_6_BYTE_1_SHIFT);
-    p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] = (measurement_seq & RE_6_BYTE_MASK);
-}
-
-static uint16_t re_6_decode_sequence (const uint8_t * const p_buffer)
-{
-    uint16_t measurement_seq = 0;
-    measurement_seq |= p_buffer[RE_6_OFFSET_SEQ_CTR_LSB] & RE_6_BYTE_MASK;
-    measurement_seq |= (p_buffer[RE_6_OFFSET_SEQ_CTR_MSB] & RE_6_BYTE_MASK) <<
-                       RE_6_BYTE_1_SHIFT;
-    return measurement_seq;
-}
-
-re_status_t re_6_encode (uint8_t * const p_buffer, const re_6_data_t * const p_data)
+re_status_t
+re_6_encode (uint8_t * const p_buffer, const re_6_data_t * const p_data)
 {
     re_status_t result = RE_SUCCESS;
 
@@ -343,60 +428,82 @@ re_status_t re_6_encode (uint8_t * const p_buffer, const re_6_data_t * const p_d
     {
         memset (p_buffer, 0, RE_6_DATA_LENGTH);
         p_buffer[RE_6_OFFSET_HEADER] = RE_6_DESTINATION;
-        re_6_encode_pm (&p_buffer[RE_6_OFFSET_PM_1_0_MSB], p_data->pm1p0_ppm,
-                        RE_6_OFFSET_PM_1_0_OFS);
-        re_6_encode_pm (&p_buffer[RE_6_OFFSET_PM_2_5_MSB], p_data->pm2p5_ppm,
-                        RE_6_OFFSET_PM_2_5_OFS);
-        re_6_encode_pm (&p_buffer[RE_6_OFFSET_PM_4_0_MSB], p_data->pm4p0_ppm,
-                        RE_6_OFFSET_PM_4_0_OFS);
-        re_6_encode_pm (&p_buffer[RE_6_OFFSET_PM_10_0_MSB], p_data->pm10p0_ppm,
-                        RE_6_OFFSET_PM_10_0_OFS);
-        re_6_encode_co2 (&p_buffer[RE_6_OFFSET_CO2_MSB], p_data->co2);
-        re_6_encode_humidity (&p_buffer[RE_6_OFFSET_HUMIDITY_MSB], p_data->humidity_rh);
-        re_6_encode_voc (&p_buffer[RE_6_OFFSET_VOC_INDEX_MSB], p_data->voc_index);
-        re_6_encode_nox (&p_buffer[RE_6_OFFSET_NOX_INDEX_MSB], p_data->nox_index);
         re_6_encode_temperature (&p_buffer[RE_6_OFFSET_TEMPERATURE_MSB], p_data->temperature_c);
-        re_6_encode_sequence (p_buffer, p_data);
-        re_6_encode_set_address (p_buffer, p_data);
+        re_6_encode_humidity (&p_buffer[RE_6_OFFSET_HUMIDITY_MSB], p_data->humidity_rh);
+        re_6_encode_pressure (&p_buffer[RE_6_OFFSET_PRESSURE_MSB], p_data->pressure_pa);
+        re_6_encode_pm (&p_buffer[RE_6_OFFSET_PM_2_5_MSB], p_data->pm2p5_ppm);
+        re_6_encode_co2 (&p_buffer[RE_6_OFFSET_CO2_MSB], p_data->co2);
+        re_6_encode_voc (&p_buffer[RE_6_OFFSET_VOC], &p_buffer[RE_6_OFFSET_FLAGS], p_data->voc);
+        re_6_encode_nox (&p_buffer[RE_6_OFFSET_NOX], &p_buffer[RE_6_OFFSET_FLAGS], p_data->nox);
+        re_6_encode_luminosity (&p_buffer[RE_6_OFFSET_LUMINOSITY], p_data->luminosity);
+        re_6_encode_sound_dba_avg (
+            &p_buffer[RE_6_OFFSET_SOUND_DBA_AVG],
+            &p_buffer[RE_6_OFFSET_FLAGS],
+            p_data->sound_dba_avg);
+        re_6_encode_seq_cnt2 (&p_buffer[RE_6_OFFSET_SEQ_CNT2], p_data->seq_cnt2);
+        re_6_encode_flags (&p_buffer[RE_6_OFFSET_FLAGS], p_data->flags);
+        re_6_encode_address (p_buffer, p_data->mac_addr_24);
     }
 
     return result;
 }
 
-bool re_6_check_format (const uint8_t * const p_buffer)
+bool
+re_6_check_format (const uint8_t * const p_buffer)
 {
     if (NULL == p_buffer)
     {
         return false;
     }
 
-    if (RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_VAL !=
-            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_LEN_OFFSET])
+    if (RE_6_RAW_PACKET_AD1_FLAGS_LEN_VAL != p_buffer[RE_6_RAW_PACKET_AD1_FLAGS_LEN_OFFSET])
     {
         return false;
     }
 
-    if (RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_VAL !=
-            p_buffer[RE_6_RAW_PACKET_ADV_DATA_TYPE_FLAG1_OFFSET])
+    if (RE_6_RAW_PACKET_AD1_FLAGS_AD_TYPE_VAL !=
+            p_buffer[RE_6_RAW_PACKET_AD1_FLAGS_AD_TYPE_OFFSET])
     {
         return false;
     }
 
-    if (RE_6_RAW_PACKET_LENGTH_VAL != p_buffer[RE_6_RAW_PACKET_LENGTH_OFFSET])
+    if (RE_6_RAW_PACKET_AD2_UUID_LEN_VAL != p_buffer[RE_6_RAW_PACKET_AD2_UUID_LEN_OFFSET])
     {
         return false;
     }
 
-    if (RE_6_RAW_PACKET_TYPE_VAL != p_buffer[RE_6_RAW_PACKET_TYPE_OFFSET])
+    if (RE_6_RAW_PACKET_AD2_UUID_AD_TYPE_VAL !=
+            p_buffer[RE_6_RAW_PACKET_AD2_UUID_AD_TYPE_OFFSET])
+    {
+        return false;
+    }
+
+    const uint16_t uuid = (uint16_t) ( (uint16_t)
+                                       p_buffer[RE_6_RAW_PACKET_AD2_UUID_AD_DATA2_OFFSET] << RE_6_BYTE_1_SHIFT)
+                          + p_buffer[RE_6_RAW_PACKET_AD2_UUID_AD_DATA1_OFFSET];
+
+    if (RE_6_RAW_PACKET_AD2_UUID_VAL != uuid)
+    {
+        return false;
+    }
+
+    if (RE_6_RAW_PACKET_AD3_MSD_LEN_VAL != p_buffer[RE_6_RAW_PACKET_AD3_MSD_LEN_OFFSET])
+    {
+        return false;
+    }
+
+    if (RE_6_RAW_PACKET_AD3_MSD_AD_TYPE_VAL !=
+            p_buffer[RE_6_RAW_PACKET_AD3_MSD_AD_TYPE_OFFSET])
     {
         return false;
     }
 
     const uint16_t manufacturer_id = (uint16_t) ( (uint16_t)
-                                     p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_HI] << RE_6_BYTE_1_SHIFT)
-                                     + p_buffer[RE_6_RAW_PACKET_MANUFACTURER_ID_OFFSET_LO];
+                                     p_buffer[RE_6_RAW_PACKET_AD3_MSD_MANUFACTURER_ID_OFFSET_HI]
+                                     << RE_6_BYTE_1_SHIFT)
+                                     + p_buffer[RE_6_RAW_PACKET_AD3_MSD_MANUFACTURER_ID_OFFSET_LO];
 
-    if (RE_6_RAW_PACKET_MANUFACTURER_ID_VAL != manufacturer_id)
+    if (RE_6_RAW_PACKET_AD3_MANUFACTURER_ID_VAL != manufacturer_id)
     {
         return false;
     }
@@ -409,10 +516,11 @@ bool re_6_check_format (const uint8_t * const p_buffer)
     return true;
 }
 
-re_status_t re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_data)
+re_status_t
+re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_data)
 {
     const uint8_t * const p_payload = &p_buffer[RE_6_OFFSET_PAYLOAD];
-    re_status_t result = RE_SUCCESS;
+    re_status_t          result    = RE_SUCCESS;
 
     if ( (NULL == p_payload) || (NULL == p_data))
     {
@@ -426,39 +534,50 @@ re_status_t re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_d
         return RE_ERROR_INVALID_PARAM;
     }
 
-    p_data->pm1p0_ppm = re_6_decode_pm (&p_payload[RE_6_OFFSET_PM_1_0_MSB],
-                                        RE_6_OFFSET_PM_1_0_OFS);
-    p_data->pm2p5_ppm = re_6_decode_pm (&p_payload[RE_6_OFFSET_PM_2_5_MSB],
-                                        RE_6_OFFSET_PM_2_5_OFS);
-    p_data->pm4p0_ppm = re_6_decode_pm (&p_payload[RE_6_OFFSET_PM_4_0_MSB],
-                                        RE_6_OFFSET_PM_4_0_OFS);
-    p_data->pm10p0_ppm = re_6_decode_pm (&p_payload[RE_6_OFFSET_PM_10_0_MSB],
-                                         RE_6_OFFSET_PM_10_0_OFS);
-    p_data->co2 = re_6_decode_co2 (&p_payload[RE_6_OFFSET_CO2_MSB]);
-    p_data->humidity_rh = re_6_decode_humidity (&p_payload[RE_6_OFFSET_HUMIDITY_MSB]);
-    p_data->voc_index = re_6_decode_voc (&p_payload[RE_6_OFFSET_VOC_INDEX_MSB]);
-    p_data->nox_index = re_6_decode_nox (&p_payload[RE_6_OFFSET_NOX_INDEX_MSB]);
     p_data->temperature_c = re_6_decode_temperature (&p_payload[RE_6_OFFSET_TEMPERATURE_MSB]);
-    p_data->measurement_count = re_6_decode_sequence (p_payload);
-    p_data->address = re_6_decode_address (p_payload);
+    p_data->humidity_rh   = re_6_decode_humidity (&p_payload[RE_6_OFFSET_HUMIDITY_MSB]);
+    p_data->pressure_pa   = re_6_decode_pressure (&p_payload[RE_6_OFFSET_PRESSURE_MSB]);
+    p_data->pm2p5_ppm     = re_6_decode_pm (&p_payload[RE_6_OFFSET_PM_2_5_MSB]);
+    p_data->co2           = re_6_decode_co2 (&p_payload[RE_6_OFFSET_CO2_MSB]);
+    p_data->voc           = re_6_decode_voc (&p_payload[RE_6_OFFSET_VOC],
+                            &p_payload[RE_6_OFFSET_FLAGS]);
+    p_data->nox           = re_6_decode_nox (&p_payload[RE_6_OFFSET_NOX],
+                            &p_payload[RE_6_OFFSET_FLAGS]);
+    p_data->luminosity    = re_6_decode_luminosity (&p_payload[RE_6_OFFSET_LUMINOSITY]);
+    p_data->sound_dba_avg = re_6_decode_sound_dba_avg (
+                                &p_payload[RE_6_OFFSET_SOUND_DBA_AVG],
+                                &p_payload[RE_6_OFFSET_FLAGS]);
+    p_data->seq_cnt2    = re_6_decode_seq_cnt2 (&p_payload[RE_6_OFFSET_SEQ_CNT2]);
+    p_data->flags       = re_6_decode_flags (&p_payload[RE_6_OFFSET_FLAGS]);
+    p_data->mac_addr_24 = re_6_decode_address (p_payload);
     return result;
 }
 
-re_6_data_t re_6_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
+re_6_data_t
+re_6_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
 {
+    const re_6_mac_addr_24_t mac_addr_24 = { .byte3 = (uint8_t) ( (radio_mac >> RE_6_BYTE_2_SHIFT) & RE_6_BYTE_MASK),
+                                             .byte4 = (uint8_t) ( (radio_mac >> RE_6_BYTE_1_SHIFT) & RE_6_BYTE_MASK),
+                                             .byte5 = (uint8_t) ( (radio_mac >> RE_6_BYTE_0_SHIFT) & RE_6_BYTE_MASK)
+                                           };
     const re_6_data_t data =
     {
-        .pm1p0_ppm         = NAN,
-        .pm2p5_ppm         = NAN,
-        .pm4p0_ppm         = NAN,
-        .pm10p0_ppm        = NAN,
-        .co2               = NAN,
-        .humidity_rh       = NAN,
-        .voc_index         = NAN,
-        .nox_index         = NAN,
         .temperature_c     = NAN,
-        .measurement_count = measurement_cnt,
-        .address           = radio_mac,
+        .humidity_rh       = NAN,
+        .pressure_pa       = NAN,
+        .pm2p5_ppm         = NAN,
+        .co2               = NAN,
+        .voc               = NAN,
+        .nox               = NAN,
+        .luminosity        = NAN,
+        .sound_dba_avg     = NAN,
+        .seq_cnt2          = measurement_cnt & RE_6_BYTE_MASK,
+        .flags             = {
+            .flag_calibration_in_progress = false,
+            .flag_button_pressed          = false,
+            .flag_rtc_running_on_boot     = false,
+        },
+        .mac_addr_24       = mac_addr_24,
     };
     return data;
 }

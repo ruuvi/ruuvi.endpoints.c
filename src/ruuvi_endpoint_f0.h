@@ -1,6 +1,7 @@
 /**
  * Ruuvi Endpoint 0xF0 helper.
  * Defines necessary data for creating a Ruuvi data format 0xF0 broadcast.
+ * Deprecated, replaced by format 6.
  *
  * License: BSD-3
  * Author: TheSomeMan

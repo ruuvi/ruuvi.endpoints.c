@@ -22,6 +22,9 @@
 #if !defined(RE_CA_ENABLED)
 #   define RE_CA_ENABLED (1U)
 #endif
+#if !defined(RE_F0_ENABLED)
+#   define RE_F0_ENABLED (1U)
+#endif
 #if !defined(RE_FA_ENABLED)
 #   define RE_FA_ENABLED (1U)
 #endif
@@ -255,6 +258,30 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
  * @param[in]  max Maximum value. Value pointer will be <= max.
  */
 void re_clip (float * const value, const float min, const float max);
+
+static inline int16_t re_clip_int16_t (const int16_t value, const int16_t min,
+                                       const int16_t max)
+{
+    return (value > max) ? max : ( (value < min) ? min : value);
+}
+
+static inline uint16_t re_clip_uint16_t (const uint16_t value, const uint16_t min,
+        const uint16_t max)
+{
+    return (value > max) ? max : ( (value < min) ? min : value);
+}
+
+static inline float re_clip_float (const float value, const float min, const float max)
+{
+    return (value > max) ? max : ( (value < min) ? min : value);
+}
+
+#define RE_CLIP(value, min, max) \
+  _Generic((value), /* type = result of (value) + (min) + (max) */ \
+    int16_t:  re_clip_int16_t,   \
+    uint16_t: re_clip_uint16_t,  \
+    float:    re_clip_float      \
+  )( (value), (min), (max) )
 
 /**
  * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07
