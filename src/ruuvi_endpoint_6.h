@@ -120,6 +120,7 @@
 #define RE_6_OFFSET_ADDR_4 (18U)
 #define RE_6_OFFSET_ADDR_5 (19U)
 
+/** @brief Description of flags field */
 typedef struct re_6_flags_t
 {
     bool flag_calibration_in_progress : 1; //!< Flag: Calibration in progress
@@ -127,11 +128,12 @@ typedef struct re_6_flags_t
     bool flag_rtc_running_on_boot : 1;     //!< Flag: RTC was running on boot
 } re_6_flags_t;
 
+/** @brief Least 24-bits of BLE MAC address. */
 typedef struct re_6_mac_addr_24_t
 {
-    uint8_t byte3;
-    uint8_t byte4;
-    uint8_t byte5;
+    uint8_t byte3; //!< Most significant byte of the least 24-bits of BLE MAC address.
+    uint8_t byte4; //!< Second most significant byte of the least 24-bits of BLE MAC address.
+    uint8_t byte5; //!< Least significant byte of the least 24-bits of BLE MAC address.
 } re_6_mac_addr_24_t;
 
 /** @brief All data required for Ruuvi dataformat 6 package. */
@@ -148,8 +150,8 @@ typedef struct
     re_float           luminosity;    //!< Luminosity.
     re_float           sound_dba_avg; //!< Sound dBA avg.
     uint8_t            seq_cnt2;      //!< Running counter of measurement.
-    re_6_flags_t       flags;         //!< Flags for additional information
-    re_6_mac_addr_24_t mac_addr_24;   //!< BLE address of device, most significant byte first.
+    re_6_flags_t       flags;         //!< Flags for additional information.
+    re_6_mac_addr_24_t mac_addr_24;   //!< Least 24-bits of BLE MAC address of device.
 } re_6_data_t;
 
 /**
