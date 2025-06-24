@@ -32,111 +32,154 @@
 #define RE_6_RAW_PACKET_AD3_MSD_MANUFACTURER_ID_OFFSET_HI (10U)
 #define RE_6_RAW_PACKET_AD3_MANUFACTURER_ID_VAL           (0x499U)
 
+const re_u9_coeffs_t re_6_coeffs_vox =
+{
+    .bit9_offset = RE_6_VOC_BIT9_OFFSET,
+    .invalid_val = RE_6_INVALID_VOC,
+    .min_val     = RE_6_VOC_MIN,
+    .max_val     = RE_6_VOC_MAX,
+    .ratio       = RE_6_VOC_RATIO,
+};
+
+const re_u9_coeffs_t re_6_coeffs_nox =
+{
+    .bit9_offset = RE_6_NOX_BIT9_OFFSET,
+    .invalid_val = RE_6_INVALID_NOX,
+    .min_val     = RE_6_NOX_MIN,
+    .max_val     = RE_6_NOX_MAX,
+    .ratio       = RE_6_NOX_RATIO,
+};
+
+const re_u9_coeffs_t re_6_coeffs_sound_dba_avg =
+{
+    .bit9_offset = RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
+    .invalid_val = RE_6_INVALID_SOUND,
+    .min_val     = RE_6_SOUND_DBA_MIN,
+    .max_val     = RE_6_SOUND_DBA_MAX,
+    .ratio       = RE_6_SOUND_DBA_RATIO,
+};
+
+const re_i16_coeffs_t re_6_coeffs_temperature =
+{
+    .invalid_val = RE_6_INVALID_TEMPERATURE,
+    .max_abs_val = RE_6_TEMPERATURE_MAX,
+    .ratio       = RE_6_TEMPERATURE_RATIO,
+};
+
+static const re_u16_coeffs_t re_6_coeffs_humidity =
+{
+    .invalid_val = RE_6_INVALID_HUMIDITY,
+    .min_val     = RE_6_HUMIDITY_MIN,
+    .max_val     = RE_6_HUMIDITY_MAX,
+    .ratio       = RE_6_HUMIDITY_RATIO,
+};
+
+static const re_u16_coeffs_t re_6_coeffs_pressure =
+{
+    .invalid_val = RE_6_INVALID_PRESSURE,
+    .min_val     = RE_6_PRESSURE_MIN,
+    .max_val     = RE_6_PRESSURE_MAX,
+    .ratio       = RE_6_PRESSURE_RATIO,
+};
+
+static const re_u16_coeffs_t re_6_coeffs_pm =
+{
+    .invalid_val = RE_6_INVALID_PM,
+    .min_val     = RE_6_PM_MIN,
+    .max_val     = RE_6_PM_MAX,
+    .ratio       = RE_6_PM_RATIO,
+};
+
+static const re_u16_coeffs_t re_6_coeffs_co2 =
+{
+    .invalid_val = RE_6_INVALID_CO2,
+    .min_val     = RE_6_CO2_MIN,
+    .max_val     = RE_6_CO2_MAX,
+    .ratio       = RE_6_CO2_RATIO,
+};
+
 static void
 re_6_encode_temperature (uint8_t * const p_slot, const re_float val)
 {
-    return re_encode_i16 (p_slot, val, RE_6_INVALID_TEMPERATURE, RE_6_TEMPERATURE_MAX,
-                          RE_6_TEMPERATURE_RATIO);
+    return re_encode_i16 (p_slot, &re_6_coeffs_temperature, val);
 }
 
 static re_float
 re_6_decode_temperature (const uint8_t * const p_slot)
 {
-    return re_decode_i16 (p_slot, RE_6_INVALID_TEMPERATURE, RE_6_TEMPERATURE_RATIO);
+    return re_decode_i16 (p_slot, &re_6_coeffs_temperature);
 }
 
 static void
 re_6_encode_humidity (uint8_t * const p_slot, const re_float val)
 {
-    re_encode_u16 (p_slot, val, RE_6_INVALID_HUMIDITY, RE_6_HUMIDITY_MIN, RE_6_HUMIDITY_MAX,
-                   RE_6_HUMIDITY_RATIO);
+    re_encode_u16 (p_slot, &re_6_coeffs_humidity, val);
 }
 
 static re_float
 re_6_decode_humidity (const uint8_t * const p_slot)
 {
-    return re_decode_u16 (p_slot, RE_6_INVALID_HUMIDITY, RE_6_HUMIDITY_MIN,
-                          RE_6_HUMIDITY_RATIO);
+    return re_decode_u16 (p_slot, &re_6_coeffs_humidity);
 }
 
 static void
 re_6_encode_pressure (uint8_t * const p_slot, const re_float val)
 {
-    re_encode_u16 (p_slot, val, RE_6_INVALID_PRESSURE, RE_6_PRESSURE_MIN, RE_6_PRESSURE_MAX,
-                   RE_6_PRESSURE_RATIO);
+    re_encode_u16 (p_slot, &re_6_coeffs_pressure, val);
 }
 
 static re_float
 re_6_decode_pressure (const uint8_t * const p_slot)
 {
-    return re_decode_u16 (p_slot, RE_6_INVALID_PRESSURE, RE_6_PRESSURE_MIN,
-                          RE_6_PRESSURE_RATIO);
+    return re_decode_u16 (p_slot, &re_6_coeffs_pressure);
 }
 
 static void
 re_6_encode_pm (uint8_t * const p_slot, const re_float val)
 {
-    re_encode_u16 (p_slot, val, RE_6_INVALID_PM, RE_6_PM_MIN, RE_6_PM_MAX, RE_6_PM_RATIO);
+    re_encode_u16 (p_slot, &re_6_coeffs_pm, val);
 }
 
 static re_float
 re_6_decode_pm (const uint8_t * const p_slot)
 {
-    return re_decode_u16 (p_slot, RE_6_INVALID_PM, RE_6_PM_MIN, RE_6_PM_RATIO);
+    return re_decode_u16 (p_slot, &re_6_coeffs_pm);
 }
 
 static void
-re_6_encode_co2 (uint8_t * const p_slot, re_float val)
+re_6_encode_co2 (uint8_t * const p_slot, const re_float val)
 {
-    re_encode_u16 (p_slot, val, RE_6_INVALID_CO2, RE_6_CO2_MIN, RE_6_CO2_MAX, RE_6_CO2_RATIO);
+    re_encode_u16 (p_slot, &re_6_coeffs_co2, val);
 }
 
 static re_float
 re_6_decode_co2 (const uint8_t * const p_slot)
 {
-    return re_decode_u16 (p_slot, RE_6_INVALID_CO2, RE_6_CO2_MIN, RE_6_CO2_RATIO);
+    return re_decode_u16 (p_slot, &re_6_coeffs_co2);
 }
 
 static void
-re_6_encode_voc (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
+re_6_encode_voc (uint8_t * const p_slot, uint8_t * const p_flags, const re_float val)
 {
-    re_encode_u9 (
-        p_slot,
-        p_flags,
-        RE_6_VOC_BIT9_OFFSET,
-        val,
-        RE_6_INVALID_VOC,
-        RE_6_VOC_MIN,
-        RE_6_VOC_MAX,
-        RE_6_VOC_RATIO);
+    re_encode_u9 (p_slot, p_flags, &re_6_coeffs_vox, val);
 }
 
 static re_float
 re_6_decode_voc (const uint8_t * const p_slot, const uint8_t * const p_flags)
 {
-    return re_decode_u9 (p_slot, p_flags, RE_6_VOC_BIT9_OFFSET, RE_6_INVALID_VOC,
-                         RE_6_VOC_MIN, RE_6_VOC_RATIO);
+    return re_decode_u9 (p_slot, p_flags, &re_6_coeffs_vox);
 }
 
 static void
-re_6_encode_nox (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
+re_6_encode_nox (uint8_t * const p_slot, uint8_t * const p_flags, const re_float val)
 {
-    re_encode_u9 (
-        p_slot,
-        p_flags,
-        RE_6_NOX_BIT9_OFFSET,
-        val,
-        RE_6_INVALID_NOX,
-        RE_6_NOX_MIN,
-        RE_6_NOX_MAX,
-        RE_6_NOX_RATIO);
+    re_encode_u9 (p_slot, p_flags, &re_6_coeffs_nox, val);
 }
 
 static re_float
 re_6_decode_nox (const uint8_t * const p_slot, const uint8_t * const p_flags)
 {
-    return re_decode_u9 (p_slot, p_flags, RE_6_NOX_BIT9_OFFSET, RE_6_INVALID_NOX,
-                         RE_6_NOX_MIN, RE_6_NOX_RATIO);
+    return re_decode_u9 (p_slot, p_flags, &re_6_coeffs_nox);
 }
 
 static void
@@ -147,7 +190,7 @@ re_6_encode_luminosity (uint8_t * const p_slot, re_float val)
     if (!isnan (val))
     {
         const re_float val_clipped = RE_CLIP (val, RE_6_LUMINOSITY_MIN, RE_6_LUMINOSITY_MAX);
-        coded_val                  = (uint8_t) (int) lrintf (logf (val_clipped + 1) *
+        coded_val                  = (uint8_t) lrintf (logf (val_clipped + 1) *
                                      RE_6_LUMINOSITY_RATIO);
     }
 
@@ -164,33 +207,19 @@ re_6_decode_luminosity (const uint8_t * const p_slot)
         return NAN;
     }
 
-    return (re_float) (expf ( ( (re_float) coded_val / RE_6_LUMINOSITY_RATIO)) - 1);
+    return (re_float) (expf ( (re_float) coded_val / RE_6_LUMINOSITY_RATIO) - 1.0f);
 }
 
 static void
 re_6_encode_sound_dba_avg (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
 {
-    re_encode_u9 (
-        p_slot,
-        p_flags,
-        RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
-        val,
-        RE_6_INVALID_SOUND,
-        RE_6_SOUND_DBA_AVG_MIN,
-        RE_6_SOUND_DBA_AVG_MAX,
-        RE_6_SOUND_DBA_AVG_RATIO);
+    re_encode_u9 (p_slot, p_flags, &re_6_coeffs_sound_dba_avg, val);
 }
 
 static re_float
 re_6_decode_sound_dba_avg (const uint8_t * const p_slot, const uint8_t * const p_flags)
 {
-    return re_decode_u9 (
-               p_slot,
-               p_flags,
-               RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
-               RE_6_INVALID_SOUND,
-               RE_6_SOUND_DBA_AVG_MIN,
-               RE_6_SOUND_DBA_AVG_RATIO);
+    return re_decode_u9 (p_slot, p_flags, &re_6_coeffs_sound_dba_avg);
 }
 
 static void
@@ -232,17 +261,17 @@ re_6_decode_flags (const uint8_t * const p_flags)
                            .flag_rtc_running_on_boot     = false
                          };
 
-    if (*p_flags & RE_6_FLAGS_CALIBRATION_IN_PROGRESS)
+    if (0 != (*p_flags & RE_6_FLAGS_CALIBRATION_IN_PROGRESS))
     {
         flags.flag_calibration_in_progress = true;
     }
 
-    if (*p_flags & RE_6_FLAGS_BUTTON_PRESSED)
+    if (0 != (*p_flags & RE_6_FLAGS_BUTTON_PRESSED))
     {
         flags.flag_button_pressed = true;
     }
 
-    if (*p_flags & RE_6_FLAGS_RTC_RUNNING_ON_BOOT)
+    if (0 != (*p_flags & RE_6_FLAGS_RTC_RUNNING_ON_BOOT))
     {
         flags.flag_rtc_running_on_boot = true;
     }
@@ -266,6 +295,10 @@ re_6_encode_address (uint8_t * const p_buffer, const re_6_mac_addr_24_t mac_addr
     else if (RE_6_MAC_MIN > mac_addr_u24) // cppcheck-suppress unsignedLessThanZero
     {
         mac_addr_u24 = RE_6_INVALID_MAC;
+    }
+    else
+    {
+        // MISRA C:2012, 15.7 - All if...else if constructs shall be terminated with an else statement
     }
 
 #pragma GCC diagnostic pop

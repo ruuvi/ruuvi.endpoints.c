@@ -4,9 +4,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "ruuvi_endpoint_6.h"
-#include "ruuvi_endpoint_ca_uart.h"
 
 #define RE_6_BLE_PACKET_HEADER 0x02, 0x01, 0x06, 0x03, 0x03, 0x98, 0xFC, 0x17, 0xFF, 0x99, 0x04
+
+#define RE_6_DATA_MAC_ADDR_INIT(mac_byte3, mac_byte4, mac_byte5) \
+    { \
+        .byte3 = mac_byte3, .byte4 = mac_byte4, .byte5 = mac_byte5 \
+    }
 
 void
 setUp (void)
@@ -26,30 +30,28 @@ tearDown (void)
 void
 test_ruuvi_endpoint_6_get_ok (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 29.5f,
-        .humidity_rh = 55.3f,
-        .pressure_pa = 101102.0f,
-        .pm2p5_ppm = 11.2f,
-        .co2 = 201,
-        .voc = 10,
-        .nox = 2,
-        .luminosity = 13027,
+        .humidity_rh   = 55.3f,
+        .pressure_pa   = 101102.0f,
+        .pm2p5_ppm     = 11.2f,
+        .co2           = 201,
+        .voc           = 10,
+        .nox           = 2,
+        .luminosity    = 13027,
         .sound_dba_avg = 56.6f,
-        .seq_cnt2 = 205,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 205,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x17, 0x0C, // Temperature
@@ -67,9 +69,9 @@ test_ruuvi_endpoint_6_get_ok (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -102,30 +104,28 @@ test_ruuvi_endpoint_6_get_ok (void)
 void
 test_ruuvi_endpoint_6_get_zeroes (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -143,9 +143,9 @@ test_ruuvi_endpoint_6_get_zeroes (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -178,30 +178,28 @@ test_ruuvi_endpoint_6_get_zeroes (void)
 void
 test_ruuvi_endpoint_6_get_temperature (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 25.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x13, 0x88, // Temperature
@@ -219,9 +217,9 @@ test_ruuvi_endpoint_6_get_temperature (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -254,30 +252,28 @@ test_ruuvi_endpoint_6_get_temperature (void)
 void
 test_ruuvi_endpoint_6_get_humidity (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 70.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 70.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -295,9 +291,9 @@ test_ruuvi_endpoint_6_get_humidity (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -330,30 +326,28 @@ test_ruuvi_endpoint_6_get_humidity (void)
 void
 test_ruuvi_endpoint_6_get_pressure (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 100000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 100000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -371,9 +365,9 @@ test_ruuvi_endpoint_6_get_pressure (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -406,30 +400,28 @@ test_ruuvi_endpoint_6_get_pressure (void)
 void
 test_ruuvi_endpoint_6_get_pm2p5 (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 700.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 700.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -447,9 +439,9 @@ test_ruuvi_endpoint_6_get_pm2p5 (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -482,30 +474,28 @@ test_ruuvi_endpoint_6_get_pm2p5 (void)
 void
 test_ruuvi_endpoint_6_get_co2 (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 35000,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 35000,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -523,9 +513,9 @@ test_ruuvi_endpoint_6_get_co2 (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -558,30 +548,28 @@ test_ruuvi_endpoint_6_get_co2 (void)
 void
 test_ruuvi_endpoint_6_get_voc (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 499,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 499,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -599,9 +587,9 @@ test_ruuvi_endpoint_6_get_voc (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -634,30 +622,28 @@ test_ruuvi_endpoint_6_get_voc (void)
 void
 test_ruuvi_endpoint_6_get_nox (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 498,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 498,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -675,9 +661,9 @@ test_ruuvi_endpoint_6_get_nox (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -710,30 +696,28 @@ test_ruuvi_endpoint_6_get_nox (void)
 void
 test_ruuvi_endpoint_6_get_luminosity (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 62735.0f,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 62735.0f,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -751,9 +735,9 @@ test_ruuvi_endpoint_6_get_luminosity (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -784,32 +768,30 @@ test_ruuvi_endpoint_6_get_luminosity (void)
 }
 
 void
-test_ruuvi_endpoint_6_get_sound_dba (void)
+test_ruuvi_endpoint_6_get_sound_dba_avg (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 110.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -827,9 +809,9 @@ test_ruuvi_endpoint_6_get_sound_dba (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -862,30 +844,28 @@ test_ruuvi_endpoint_6_get_sound_dba (void)
 void
 test_ruuvi_endpoint_6_get_seq_cnt (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 250,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 250,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -903,9 +883,9 @@ test_ruuvi_endpoint_6_get_seq_cnt (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -938,30 +918,28 @@ test_ruuvi_endpoint_6_get_seq_cnt (void)
 void
 test_ruuvi_endpoint_6_get_flag_calibration_in_progress (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = true,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = true,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -979,9 +957,9 @@ test_ruuvi_endpoint_6_get_flag_calibration_in_progress (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -1014,30 +992,28 @@ test_ruuvi_endpoint_6_get_flag_calibration_in_progress (void)
 void
 test_ruuvi_endpoint_6_get_flag_button_pressed (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = true,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = true,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -1055,9 +1031,9 @@ test_ruuvi_endpoint_6_get_flag_button_pressed (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -1090,30 +1066,28 @@ test_ruuvi_endpoint_6_get_flag_button_pressed (void)
 void
 test_ruuvi_endpoint_6_get_flag_rtc_running_on_boot (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = true,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 0.0f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27.0f,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = true,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
-    static const uint8_t valid_data[RE_6_DATA_LENGTH] =
+    static const uint8_t valid_data[] =
     {
         0x06,       // Data type
         0x00, 0x00, // Temperature
@@ -1131,9 +1105,9 @@ test_ruuvi_endpoint_6_get_flag_rtc_running_on_boot (void)
         0x88,       // MAC address byte 4
         0x4F        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (valid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (valid_data, p_payload, sizeof (valid_data));
     re_6_data_t decoded_data = { 0 };
@@ -1166,28 +1140,26 @@ test_ruuvi_endpoint_6_get_flag_rtc_running_on_boot (void)
 void
 test_ruuvi_endpoint_6_get_ok_max (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = true,
+        .flag_button_pressed          = true,
+        .flag_rtc_running_on_boot     = true,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = 163.835f,
-        .humidity_rh = 100.0f,
-        .pressure_pa = 115534.0f,
-        .pm2p5_ppm = 1000.0f,
-        .co2 = 40000,
-        .voc = 500,
-        .nox = 500,
-        .luminosity = 65535,
+        .humidity_rh   = 100.0f,
+        .pressure_pa   = 115534.0f,
+        .pm2p5_ppm     = 1000.0f,
+        .co2           = 40000,
+        .voc           = 500,
+        .nox           = 500,
+        .luminosity    = 65535,
         .sound_dba_avg = 129,
-        .seq_cnt2 = 255,
-        .flags = {
-            .flag_calibration_in_progress = true,
-            .flag_button_pressed = true,
-            .flag_rtc_running_on_boot = true,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0xFF,
-            .byte4 = 0xFF,
-            .byte5 = 0xFF,
-        }
+        .seq_cnt2      = 255,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
     };
     static const uint8_t max_data[] =
     {
@@ -1207,9 +1179,9 @@ test_ruuvi_endpoint_6_get_ok_max (void)
         0xFF,       // MAC address byte 4
         0xFF        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (max_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (max_data, p_payload, sizeof (max_data));
     re_6_data_t decoded_data = { 0 };
@@ -1242,28 +1214,26 @@ test_ruuvi_endpoint_6_get_ok_max (void)
 void
 test_ruuvi_endpoint_6_get_ok_min (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = -163.835f,
-        .humidity_rh = 0.0f,
-        .pressure_pa = 50000.0f,
-        .pm2p5_ppm = 0.0f,
-        .co2 = 0,
-        .voc = 0,
-        .nox = 0,
-        .luminosity = 0,
+        .humidity_rh   = 0.0f,
+        .pressure_pa   = 50000.0f,
+        .pm2p5_ppm     = 0.0f,
+        .co2           = 0,
+        .voc           = 0,
+        .nox           = 0,
+        .luminosity    = 0,
         .sound_dba_avg = 27,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x00,
-            .byte4 = 0x00,
-            .byte5 = 0x00,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x00, 0x00, 0x00),
     };
     static const uint8_t min_data[] =
     {
@@ -1283,9 +1253,9 @@ test_ruuvi_endpoint_6_get_ok_min (void)
         0x00,       // MAC address byte 4
         0x00        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (min_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (min_data, p_payload, sizeof (min_data));
     re_6_data_t decoded_data = { 0 };
@@ -1323,28 +1293,26 @@ test_ruuvi_endpoint_6_get_ok_min (void)
 void
 test_ruuvi_endpoint_6_get_error_null_buffer (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t m_re_6_data_ok =
     {
         .temperature_c = 29.5f,
-        .humidity_rh = 55.3f,
-        .pressure_pa = 101102.0f,
-        .pm2p5_ppm = 11.2f,
-        .co2 = 201,
-        .voc = 10,
-        .nox = 2,
-        .luminosity = 13027,
+        .humidity_rh   = 55.3f,
+        .pressure_pa   = 101102.0f,
+        .pm2p5_ppm     = 11.2f,
+        .co2           = 201,
+        .voc           = 10,
+        .nox           = 2,
+        .luminosity    = 13027,
         .sound_dba_avg = 56.6f,
-        .seq_cnt2 = 205,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x4C,
-            .byte4 = 0x88,
-            .byte5 = 0x4F,
-        }
+        .seq_cnt2      = 205,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
     };
     uint8_t * const p_test_buffer = NULL;
     TEST_ASSERT_EQUAL (RE_ERROR_NULL, re_6_encode (p_test_buffer, &m_re_6_data_ok));
@@ -1373,28 +1341,26 @@ test_ruuvi_endpoint_6_get_error_null_data (void)
 void
 test_ruuvi_endpoint_6_get_invalid_data (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = NAN,
-        .humidity_rh = NAN,
-        .pressure_pa = NAN,
-        .pm2p5_ppm = NAN,
-        .co2 = NAN,
-        .voc = NAN,
-        .nox = NAN,
-        .luminosity = NAN,
+        .humidity_rh   = NAN,
+        .pressure_pa   = NAN,
+        .pm2p5_ppm     = NAN,
+        .co2           = NAN,
+        .voc           = NAN,
+        .nox           = NAN,
+        .luminosity    = NAN,
         .sound_dba_avg = NAN,
-        .seq_cnt2 = 255,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0xFF,
-            .byte4 = 0xFF,
-            .byte5 = 0xFF,
-        }
+        .seq_cnt2      = 255,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
     };
     static const uint8_t invalid_data[] =
     {
@@ -1414,9 +1380,9 @@ test_ruuvi_endpoint_6_get_invalid_data (void)
         0xFF,       // MAC address byte 4
         0xFF        // MAC address byte 5
     };
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER };
-    _Static_assert (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH == RE_CA_UART_ADV_BYTES);
-    uint8_t * const p_payload = &raw_buf[RE_6_OFFSET_PAYLOAD];
+    _Static_assert (sizeof (invalid_data) == RE_6_DATA_LENGTH);
+    uint8_t        raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER };
+    uint8_t * const p_payload                  = &raw_buf[RE_6_OFFSET_PAYLOAD];
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (p_payload, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (invalid_data, p_payload, sizeof (invalid_data));
     re_6_data_t decoded_data = { 0 };
@@ -1449,28 +1415,26 @@ test_ruuvi_endpoint_6_get_invalid_data (void)
 void
 test_ruuvi_endpoint_6_underflow (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = false,
+        .flag_button_pressed          = false,
+        .flag_rtc_running_on_boot     = false,
+    };
     static const re_6_data_t data =
     {
         .temperature_c = -164,
-        .humidity_rh = -1,
-        .pressure_pa = 49999,
-        .pm2p5_ppm = -1,
-        .co2 = -1,
-        .voc = -1,
-        .nox = -1,
-        .luminosity = -1,
+        .humidity_rh   = -1,
+        .pressure_pa   = 49999,
+        .pm2p5_ppm     = -1,
+        .co2           = -1,
+        .voc           = -1,
+        .nox           = -1,
+        .luminosity    = -1,
         .sound_dba_avg = 26,
-        .seq_cnt2 = 0,
-        .flags = {
-            .flag_calibration_in_progress = false,
-            .flag_button_pressed = false,
-            .flag_rtc_running_on_boot = false,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0x00,
-            .byte4 = 0x00,
-            .byte5 = 0x00,
-        }
+        .seq_cnt2      = 0,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x00, 0x00, 0x00),
     };
     static const uint8_t min_data[] =
     {
@@ -1490,6 +1454,7 @@ test_ruuvi_endpoint_6_underflow (void)
         0x00,       // MAC address byte 4
         0x00        // MAC address byte 5
     };
+    _Static_assert (sizeof (min_data) == RE_6_DATA_LENGTH);
     uint8_t test_buffer[RE_6_DATA_LENGTH] = { 0 };
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (test_buffer, &data));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (min_data, test_buffer, sizeof (min_data));
@@ -1498,28 +1463,26 @@ test_ruuvi_endpoint_6_underflow (void)
 void
 test_ruuvi_endpoint_6_overflow (void)
 {
+    static const re_6_flags_t flags =
+    {
+        .flag_calibration_in_progress = true,
+        .flag_button_pressed          = true,
+        .flag_rtc_running_on_boot     = true,
+    };
     static const re_6_data_t m_re_6_data_overflow =
     {
         .temperature_c = 163.9f,
-        .humidity_rh = 100.1f,
-        .pressure_pa = 115535.0f,
-        .pm2p5_ppm = 1000.1f,
-        .co2 = 40001,
-        .voc = 501,
-        .nox = 501,
-        .luminosity = 65536,
+        .humidity_rh   = 100.1f,
+        .pressure_pa   = 115535.0f,
+        .pm2p5_ppm     = 1000.1f,
+        .co2           = 40001,
+        .voc           = 501,
+        .nox           = 501,
+        .luminosity    = 65536,
         .sound_dba_avg = 130,
-        .seq_cnt2 = 255,
-        .flags = {
-            .flag_calibration_in_progress = true,
-            .flag_button_pressed = true,
-            .flag_rtc_running_on_boot = true,
-        },
-        .mac_addr_24 = {
-            .byte3 = 0xFF,
-            .byte4 = 0xFF,
-            .byte5 = 0xFF,
-        }
+        .seq_cnt2      = 255,
+        .flags         = flags,
+        .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
     };
     static const uint8_t max_data[] =
     {
@@ -1539,6 +1502,7 @@ test_ruuvi_endpoint_6_overflow (void)
         0xFF,       // MAC address byte 4
         0xFF        // MAC address byte 5
     };
+    _Static_assert (sizeof (max_data) == RE_6_DATA_LENGTH);
     uint8_t test_buffer[RE_6_DATA_LENGTH] = { 0 };
     TEST_ASSERT_EQUAL (RE_SUCCESS, re_6_encode (test_buffer, &m_re_6_data_overflow));
     TEST_ASSERT_EQUAL_HEX8_ARRAY (max_data, test_buffer, sizeof (max_data));
@@ -1547,7 +1511,7 @@ test_ruuvi_endpoint_6_overflow (void)
 void
 test_ruuvi_endpoint_6_check_format_ok (void)
 {
-    uint8_t raw_buf[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+    uint8_t raw_buf[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
     TEST_ASSERT_TRUE (re_6_check_format (raw_buf));
 }
 
@@ -1555,57 +1519,57 @@ void
 test_ruuvi_endpoint_6_check_format_fail (void)
 {
     {
-        uint8_t raw_buf_byte0[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte0[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte0[0] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte0));
     }
     {
-        uint8_t raw_buf_byte1[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte1[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte1[1] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte1));
     }
     {
-        uint8_t raw_buf_byte3[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte3[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte3[1] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte3));
     }
     {
-        uint8_t raw_buf_byte4[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte4[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte4[4] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte4));
     }
     {
-        uint8_t raw_buf_byte5[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte5[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte5[5] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte5));
     }
     {
-        uint8_t raw_buf_byte6[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_byte6[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_byte6[6] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_byte6));
     }
     {
-        uint8_t raw_buf_len[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_len[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_len[7] -= 1; // Length byte
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_len));
     }
     {
-        uint8_t raw_buf_type[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_type[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_type[8] -= 1; // Payload type byte
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_type));
     }
     {
-        uint8_t raw_buf_manufacturer_id_2[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_manufacturer_id_2[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_manufacturer_id_2[9] += 1; // Manufacturer ID byte 1
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_manufacturer_id_2));
     }
     {
-        uint8_t raw_buf_manufacturer_id_1[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_manufacturer_id_1[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_manufacturer_id_1[10] += 1; // Manufacturer ID byte 0
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_manufacturer_id_1));
     }
     {
-        uint8_t raw_buf_wrong_payload_format[RE_CA_UART_ADV_BYTES] = { RE_6_BLE_PACKET_HEADER, 0x06 };
+        uint8_t raw_buf_wrong_payload_format[RE_6_RAW_BUF_SIZE] = { RE_6_BLE_PACKET_HEADER, 0x06 };
         raw_buf_wrong_payload_format[11] += 1;
         TEST_ASSERT_FALSE (re_6_check_format (raw_buf_wrong_payload_format));
     }

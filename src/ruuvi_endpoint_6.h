@@ -57,9 +57,9 @@
 #define RE_6_LUMINOSITY_MAX   (65535.0f)
 #define RE_6_LUMINOSITY_RATIO (254.0f / logf(RE_6_LUMINOSITY_MAX + 1))
 
-#define RE_6_SOUND_DBA_AVG_MIN   (27.0f)
-#define RE_6_SOUND_DBA_AVG_MAX   (129.0f)
-#define RE_6_SOUND_DBA_AVG_RATIO (5.0f)
+#define RE_6_SOUND_DBA_MIN   (27.0f)
+#define RE_6_SOUND_DBA_MAX   (129.0f)
+#define RE_6_SOUND_DBA_RATIO (5.0f)
 
 #define RE_6_MAC_MIN (0UL)
 #define RE_6_MAC_MAX (0xFFFFFFUL)
@@ -79,6 +79,8 @@
 #define RE_6_FLAGS_NOX_B9                  (1U << RE_6_NOX_BIT9_OFFSET)
 
 #define RE_6_OFFSET_PAYLOAD (11U)
+
+#define RE_6_RAW_BUF_SIZE (RE_6_OFFSET_PAYLOAD + RE_6_DATA_LENGTH)
 
 #define RE_6_OFFSET_HEADER (0U)
 

@@ -274,18 +274,49 @@ void re_clip (float * const value, const float min, const float max);
 static inline int16_t re_clip_int16_t (const int16_t value, const int16_t min,
                                        const int16_t max)
 {
-    return (value > max) ? max : ( (value < min) ? min : value);
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
 }
 
 static inline uint16_t re_clip_uint16_t (const uint16_t value, const uint16_t min,
         const uint16_t max)
 {
-    return (value > max) ? max : ( (value < min) ? min : value);
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
 }
 
-static inline float re_clip_float (const float value, const float min, const float max)
+static inline re_float re_clip_float (const re_float value, const re_float min,
+                                      const re_float max)
 {
-    return (value > max) ? max : ( (value < min) ? min : value);
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
 }
 
 #define RE_CLIP(value, min, max) \
