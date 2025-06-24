@@ -57,8 +57,8 @@
 #define RE_6_LUMINOSITY_MAX   (65535.0f)
 #define RE_6_LUMINOSITY_RATIO (254.0f / logf(RE_6_LUMINOSITY_MAX + 1))
 
-#define RE_6_SOUND_DBA_MIN   (27.0f)
-#define RE_6_SOUND_DBA_MAX   (129.0f)
+#define RE_6_SOUND_DBA_MIN   (18.0f)
+#define RE_6_SOUND_DBA_MAX   (120.0f)
 #define RE_6_SOUND_DBA_RATIO (5.0f)
 
 #define RE_6_MAC_MIN (0UL)
