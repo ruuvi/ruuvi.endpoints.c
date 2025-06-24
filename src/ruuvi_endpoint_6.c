@@ -207,7 +207,7 @@ re_6_decode_luminosity (const uint8_t * const p_slot)
         return NAN;
     }
 
-    return (re_float) (expf ( (re_float) coded_val / RE_6_LUMINOSITY_RATIO) - 1.0f);
+    return (expf ( (re_float) coded_val / RE_6_LUMINOSITY_RATIO) - 1.0f);
 }
 
 static void

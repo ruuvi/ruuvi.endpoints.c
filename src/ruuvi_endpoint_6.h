@@ -114,7 +114,7 @@
 #define RE_6_OFFSET_ADDR_4 (18U)
 #define RE_6_OFFSET_ADDR_5 (19U)
 
-/** @brief Description of flags field */
+/** @brief Description of the flags field */
 typedef struct re_6_flags_t
 {
     bool flag_calibration_in_progress : 1; //!< Flag: Calibration in progress
@@ -125,9 +125,9 @@ typedef struct re_6_flags_t
 /** @brief Least 24-bits of BLE MAC address. */
 typedef struct re_6_mac_addr_24_t
 {
-    uint8_t byte3; //!< Most significant byte of the least 24-bits of BLE MAC address.
-    uint8_t byte4; //!< Second most significant byte of the least 24-bits of BLE MAC address.
-    uint8_t byte5; //!< Least significant byte of the least 24-bits of BLE MAC address.
+    uint8_t byte3; //!< The most significant byte of the lower 24-bits of BLE MAC address.
+    uint8_t byte4; //!< Second most significant byte of the lower 24-bits of BLE MAC address.
+    uint8_t byte5; //!< The least significant byte of the lower 24-bits of BLE MAC address.
 } re_6_mac_addr_24_t;
 
 /** @brief All data required for Ruuvi dataformat 6 package. */
@@ -145,17 +145,17 @@ typedef struct
     re_float           sound_dba_avg; //!< Sound dBA avg.
     uint8_t            seq_cnt2;      //!< Running counter of measurement.
     re_6_flags_t       flags;         //!< Flags for additional information.
-    re_6_mac_addr_24_t mac_addr_24;   //!< Least 24-bits of BLE MAC address of device.
+    re_6_mac_addr_24_t mac_addr_24;   //!< Lower 24-bits of BLE MAC address of the device.
 } re_6_data_t;
 
 /**
- * @brief Encode given data to given buffer in Ruuvi DF6.
+ * @brief Encode given data to the given buffer in Ruuvi DF6.
  *
  * NAN can be used as a placeholder for invalid / not available values.
  *
- * @param[out] buffer uint8_t array with length of 24 bytes.
+ * @param[out] buffer uint8_t array with the length of 24 bytes.
  * @param[in] data Struct containing all necessary information
- *            for encoding the data into buffer.
+ *            for encoding the data into the buffer.
  * @retval RE_SUCCESS if data was encoded successfully.
  */
 re_status_t
@@ -167,7 +167,7 @@ re_6_encode (uint8_t * const buffer, const re_6_data_t * data);
  * This function examines the input buffer to determine if its content
  * represents data in the Ruuvi DF6 format.
  *
- * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes to be checked.
+ * @param[in] p_buffer Pointer to an uint8_t input array with a length of 31 bytes to be checked.
  * @return Returns 'true' if the buffer format is Ruuvi DF6, 'false' otherwise.
  */
 bool
@@ -178,7 +178,7 @@ re_6_check_format (const uint8_t * const p_buffer);
  *
  * Ruuvi DF6 is a data format used by the Ruuvi AirQ environmental sensor.
  *
- * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes
+ * @param[in] p_buffer Pointer to an uint8_t input array with a length of 31 bytes
  *  representing a Bluetooth frame with Ruuvi DF6 formatted payload.
  * @param[out] p_data Pointer to a re_6_data_t struct.
  *  After the function executes, this struct will contain the data decoded from the input buffer.

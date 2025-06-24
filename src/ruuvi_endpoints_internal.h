@@ -12,41 +12,41 @@
 #include <math.h>
 #include "ruuvi_endpoints.h"
 
-/*
+/**
  * @brief Coefficients for encoding/decoding signed 16-bit values.
  */
 typedef struct re_i16_coeffs_t
 {
-    const int16_t
-    invalid_val; //!< Invalid value, if a coded value is equal to this, return NAN.
+    const int16_t invalid_val;  /*!< Invalid value, if a coded value is equal to this,
+                                     return NAN. */
     const re_float max_abs_val; //!< Maximum absolute value, used for clipping.
     const re_float ratio;       //!< Scale factor, used for scaling the value.
 } re_i16_coeffs_t;
 
-/*
+/**
  * @brief Coefficients for encoding/decoding unsigned 16-bit values.
  */
 typedef struct re_u16_coeffs_t
 {
-    const uint16_t
-    invalid_val; //!< Invalid value, if a coded value is equal to this, return NAN.
+    const uint16_t invalid_val; /*!< Invalid value, if a coded value is equal to this,
+                                     return NAN. */
     const re_float min_val;     //!< Minimum value, used for clipping.
     const re_float max_val;     //!< Minimum value, used for clipping.
     const re_float ratio;       //!< Scale factor, used for scaling the value.
 } re_u16_coeffs_t;
 
-/*
+/**
  * @brief Coefficients for encoding/decoding unsigned 9-bit values.
  */
 typedef struct re_u9_coeffs_t
 {
-    const re_bit_offset_t
-    bit9_offset; //!< Bit offset for the 9th bit which is stored in a separate flags byte.
-    const uint16_t
-    invalid_val; //!< Invalid value, if a coded value is equal to this, return NAN.
-    const re_float        min_val;     //!< Minimum value, used for clipping.
-    const re_float        max_val;     //!< Minimum value, used for clipping.
-    const re_float        ratio;       //!< Scale factor, used for scaling the value.
+    const re_bit_offset_t bit9_offset; /*!< Bit offset for the 9th bit
+                                            which is stored in a separate flags byte. */
+    const uint16_t invalid_val;        /*!< Invalid value, if a coded value is equal to this,
+                                            return NAN. */
+    const re_float min_val;            //!< Minimum value, used for clipping.
+    const re_float max_val;            //!< Minimum value, used for clipping.
+    const re_float ratio;              //!< Scale factor, used for scaling the value.
 } re_u9_coeffs_t;
 
 static inline uint8_t
