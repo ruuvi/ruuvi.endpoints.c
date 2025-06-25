@@ -223,6 +223,7 @@ SOURCES=\
 	src/ruuvi_endpoint_6.c \
 	src/ruuvi_endpoint_c5.c \
 	src/ruuvi_endpoint_e0.c \
+	src/ruuvi_endpoint_e1.c \
 	src/ruuvi_endpoint_f0.c \
 	src/ruuvi_endpoint_ibeacon.c
 
@@ -259,6 +260,7 @@ all: test_ruuvi_endpoint_3 \
 	test_ruuvi_endpoint_c5 \
 	test_ruuvi_endpoint_ca_uart \
 	test_ruuvi_endpoint_e0 \
+	test_ruuvi_endpoint_e1 \
 	test_ruuvi_endpoint_f0 \
 	test_ruuvi_endpoint_fa \
 	test_ruuvi_endpoint_ibeacon \

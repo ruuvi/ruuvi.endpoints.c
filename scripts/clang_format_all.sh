@@ -12,5 +12,7 @@ CLANG_FORMAT=/usr/bin/clang-format-18
 	./src/ruuvi_endpoints_internal.h \
 	./src/ruuvi_endpoint_6.c \
 	./src/ruuvi_endpoint_6.h \
-	./test/test_ruuvi_endpoint_6.c
-
+	./test/test_ruuvi_endpoint_6.c \
+	./src/ruuvi_endpoint_e1.c \
+	./src/ruuvi_endpoint_e1.h \
+	./test/test_ruuvi_endpoint_e1.c
