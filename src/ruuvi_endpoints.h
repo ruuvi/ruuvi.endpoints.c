@@ -28,6 +28,12 @@
 #if !defined(RE_FA_ENABLED)
 #   define RE_FA_ENABLED (1U)
 #endif
+#if !defined(RE_E0_ENABLED)
+#   define RE_E0_ENABLED (1U)
+#endif
+#if !defined(RE_E1_ENABLED)
+#   define RE_E1_ENABLED (1U)
+#endif
 #if !defined(RE_IBEACON_ENABLED)
 #   define RE_IBEACON_ENABLED (1U)
 #endif
