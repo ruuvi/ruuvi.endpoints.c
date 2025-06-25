@@ -4,8 +4,6 @@
 #include <string.h>
 #include <math.h>
 
-#define RE_E0_ENABLED 1
-
 #if RE_E0_ENABLED
 
 #define RE_E0_MAC_MAX (0xFFFFFFFFFFFFU)
