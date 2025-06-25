@@ -22,6 +22,12 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v4
 
+    # Install clang-format-18
+    - name: Install clang-format-18
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format-18 make
+
     # Install Artistic Style
     - name: Install Astyle
       run: |
@@ -37,8 +43,8 @@ jobs:
 
     # Run Artistic Style
     - name: Run Astyle
-      run: astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
-        
+      run: make astyle
+
     # Check output
     - name: Check formatting
       run: git diff --exit-code --diff-filter=d --color

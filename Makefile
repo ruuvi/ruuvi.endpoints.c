@@ -274,6 +274,7 @@ $(ANALYSIS): %.a: %.c
 	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
 
 astyle:
+	./scripts/clang_format_all.sh
 	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
 
 clean:

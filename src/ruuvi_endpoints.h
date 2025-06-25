@@ -22,6 +22,9 @@
 #if !defined(RE_CA_ENABLED)
 #   define RE_CA_ENABLED (1U)
 #endif
+#if !defined(RE_F0_ENABLED)
+#   define RE_F0_ENABLED (1U)
+#endif
 #if !defined(RE_FA_ENABLED)
 #   define RE_FA_ENABLED (1U)
 #endif
@@ -48,8 +51,20 @@
 #define RE_ERROR_DECODING_CMD       (1U << 19U) //!< Data decoding cmd failed.
 #define RE_ERROR_NOT_IMPLEMENTED    (1U << 24U) //!< Not implemented yet.
 
+#define RE_BYTE_0_SHIFT (0U)
+#define RE_BYTE_1_SHIFT (8U)
+#define RE_BYTE_2_SHIFT (16U)
+#define RE_BYTE_3_SHIFT (24U)
+#define RE_BYTE_4_SHIFT (32U)
+#define RE_BYTE_5_SHIFT (40U)
+#define RE_BYTE_MASK    (0xFFU)
+#define RE_BIT1_MASK    (0x01U)
+
 typedef uint32_t re_status_t;                   //!< Status code
 typedef float    re_float;                      //!< Ruuvi endpoint float type
+
+typedef uint8_t re_bit_offset_t;                //!< Bit offset type, used for bit fields.
+
 
 /**
  *  Ruuvi Standard Message consists of 11 bytes: 3 are a header, 8 are payload.
@@ -255,6 +270,61 @@ re_status_t re_log_write_data (uint8_t * const buffer, const re_float data,
  * @param[in]  max Maximum value. Value pointer will be <= max.
  */
 void re_clip (float * const value, const float min, const float max);
+
+static inline int16_t re_clip_int16_t (const int16_t value, const int16_t min,
+                                       const int16_t max)
+{
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
+}
+
+static inline uint16_t re_clip_uint16_t (const uint16_t value, const uint16_t min,
+        const uint16_t max)
+{
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
+}
+
+static inline re_float re_clip_float (const re_float value, const re_float min,
+                                      const re_float max)
+{
+    if (value > max)
+    {
+        return max;
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+
+    return value;
+}
+
+#define RE_CLIP(value, min, max) \
+  _Generic((value), /* type = result of (value) + (min) + (max) */ \
+    int16_t:  re_clip_int16_t,   \
+    uint16_t: re_clip_uint16_t,  \
+    float:    re_clip_float      \
+  )( (value), (min), (max) )
 
 /**
  * @brief Calculate CRC8 checksum of a data array. CRC polynomial is 0x07
