@@ -143,22 +143,30 @@ typedef uint8_t re_bit_offset_t;                //!< Bit offset type, used for b
 #define RE_LOG_WRITE_MULTI_PAYLOAD_IDX         (5U)    //!< Start of payload.
 
 #define RE_LOG_WRITE_AIRQ_TIMESTAMP_MSB_OFS     (0U)    //!< MSB offset of timestamp.
-#define RE_LOG_WRITE_AIRQ_TEMPERATURE_MSB_OFS   (4U)    //!< MSB offset of temperature.
-#define RE_LOG_WRITE_AIRQ_HUMIDITY_MSB_OFS      (6U)    //!< MSB offset of humidity.
-#define RE_LOG_WRITE_AIRQ_PRESSURE_MSB_OFS      (8U)    //!< MSB offset of pressure.
-#define RE_LOG_WRITE_AIRQ_PM1P0_MSB_OFS         (10U)   //!< MSB offset of pm1p0.
-#define RE_LOG_WRITE_AIRQ_PM2P5_MSB_OFS         (12U)   //!< MSB offset of pm2p5.
-#define RE_LOG_WRITE_AIRQ_PM4P0_MSB_OFS         (14U)   //!< MSB offset of pm4p0.
-#define RE_LOG_WRITE_AIRQ_PM10P0_MSB_OFS        (16U)   //!< MSB offset of pm10p0.
-#define RE_LOG_WRITE_AIRQ_CO2_MSB_OFS           (18U)   //!< MSB offset of CO2.
-#define RE_LOG_WRITE_AIRQ_VOC_MSB_OFS           (20U)   //!< MSB offset of VOC index.
-#define RE_LOG_WRITE_AIRQ_NOX_MSB_OFS           (22U)   //!< MSB offset of NOx index.
-#define RE_LOG_WRITE_AIRQ_LUMINOSITY_MSB_OFS    (24U)   //!< MSB offset of luminosity.
-#define RE_LOG_WRITE_AIRQ_SOUND_DBA_AVG_OFS     (26U)   //!< MSB offset of sound_dba_avg.
-#define RE_LOG_WRITE_AIRQ_SOUND_DBA_PEAK_OFS    (27U)   //!< MSB offset of sound_dba_peak.
-#define RE_LOG_WRITE_AIRQ_VOLTAGE_MSB_OFS       (28U)   //!< MSB offset of voltage.
-#define RE_LOG_WRITE_AIRQ_FLAGS_MSB_OFS         (30U)   //!< MSB offset of flags.
-#define RE_LOG_WRITE_AIRQ_RECORD_LEN            (32U)   //!< Length of record.
+#define RE_LOG_WRITE_AIRQ_PAYLOAD_OFS           (4U)    //!< Offset of payload.
+#define RE_LOG_WRITE_AIRQ_DATA_FORMAT_OFS       (4U)    //!< Offset of data format.
+#define RE_LOG_WRITE_AIRQ_TEMPERATURE_MSB_OFS   (5U)    //!< MSB offset of temperature.
+#define RE_LOG_WRITE_AIRQ_HUMIDITY_MSB_OFS      (7U)    //!< MSB offset of humidity.
+#define RE_LOG_WRITE_AIRQ_PRESSURE_MSB_OFS      (9U)    //!< MSB offset of pressure.
+#define RE_LOG_WRITE_AIRQ_PM1P0_MSB_OFS         (11U)   //!< MSB offset of pm1p0.
+#define RE_LOG_WRITE_AIRQ_PM2P5_MSB_OFS         (13U)   //!< MSB offset of pm2p5.
+#define RE_LOG_WRITE_AIRQ_PM4P0_MSB_OFS         (15U)   //!< MSB offset of pm4p0.
+#define RE_LOG_WRITE_AIRQ_PM10P0_MSB_OFS        (17U)   //!< MSB offset of pm10p0.
+#define RE_LOG_WRITE_AIRQ_CO2_MSB_OFS           (19U)   //!< MSB offset of CO2.
+#define RE_LOG_WRITE_AIRQ_VOC_MSB_OFS           (21U)   //!< Offset of VOC index.
+#define RE_LOG_WRITE_AIRQ_NOX_MSB_OFS           (22U)   //!< Offset of NOx index.
+#define RE_LOG_WRITE_AIRQ_LUMINOSITY_MSB_OFS    (23U)   //!< MSB offset of luminosity.
+#define RE_LOG_WRITE_AIRQ_SOUND_DBA_INST_OFS    (26U)   //!< Offset of sound_dba_avg.
+#define RE_LOG_WRITE_AIRQ_SOUND_DBA_AVG_OFS     (27U)   //!< Offset of sound_dba_avg.
+#define RE_LOG_WRITE_AIRQ_SOUND_DBA_PEAK_OFS    (28U)   //!< Offset of sound_dba_peak.
+#define RE_LOG_WRITE_AIRQ_SEQ_CNT_MSB_OFS       (29U)   //!< Offset of sound_dba_peak.
+#define RE_LOG_WRITE_AIRQ_FLAGS_OFS             (32U)   //!< Offset of flags.
+#define RE_LOG_WRITE_AIRQ_FW_VER_OFS            (33U)   //!< Offset of fw version.
+#define RE_LOG_WRITE_AIRQ_RESERVED1_OFS         (34U)   //!< Reserved for future use.
+#define RE_LOG_WRITE_AIRQ_RESERVED2_OFS         (32U)   //!< Reserved for future use.
+#define RE_LOG_WRITE_AIRQ_RESERVED3_OFS         (33U)   //!< Reserved for future use.
+#define RE_LOG_WRITE_AIRQ_RESERVED4_OFS         (33U)   //!< Reserved for future use.
+#define RE_LOG_WRITE_AIRQ_RECORD_LEN            (38U)   //!< Length of record.
 
 
 #define RE_STANDARD_DESTINATION_ACCELERATION   (0x4AU) //!< XYZ acceleration combined
