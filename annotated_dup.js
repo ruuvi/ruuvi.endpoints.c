@@ -3,6 +3,8 @@ var annotated_dup =
     [ "re_3_data_t", "structre__3__data__t.html", "structre__3__data__t" ],
     [ "re_5_data_t", "structre__5__data__t.html", "structre__5__data__t" ],
     [ "re_6_data_t", "structre__6__data__t.html", "structre__6__data__t" ],
+    [ "re_6_flags_t", "structre__6__flags__t.html", "structre__6__flags__t" ],
+    [ "re_6_mac_addr_24_t", "structre__6__mac__addr__24__t.html", "structre__6__mac__addr__24__t" ],
     [ "re_8_data_t", "structre__8__data__t.html", "structre__8__data__t" ],
     [ "re_c5_data_t", "structre__c5__data__t.html", "structre__c5__data__t" ],
     [ "re_ca_uart_ble_ack_t", "structre__ca__uart__ble__ack__t.html", "structre__ca__uart__ble__ack__t" ],
@@ -25,5 +27,8 @@ var annotated_dup =
     [ "re_e0_data_t", "structre__e0__data__t.html", "structre__e0__data__t" ],
     [ "re_f0_data_t", "structre__f0__data__t.html", "structre__f0__data__t" ],
     [ "re_fa_data_t", "structre__fa__data__t.html", "structre__fa__data__t" ],
-    [ "re_ibeacon_data_t", "structre__ibeacon__data__t.html", "structre__ibeacon__data__t" ]
+    [ "re_i16_coeffs_t", "structre__i16__coeffs__t.html", "structre__i16__coeffs__t" ],
+    [ "re_ibeacon_data_t", "structre__ibeacon__data__t.html", "structre__ibeacon__data__t" ],
+    [ "re_u16_coeffs_t", "structre__u16__coeffs__t.html", "structre__u16__coeffs__t" ],
+    [ "re_u9_coeffs_t", "structre__u9__coeffs__t.html", "structre__u9__coeffs__t" ]
 ];
