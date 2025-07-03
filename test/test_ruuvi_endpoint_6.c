@@ -9,7 +9,9 @@
 
 #define RE_6_DATA_MAC_ADDR_INIT(mac_byte3, mac_byte4, mac_byte5) \
     { \
-        .byte3 = mac_byte3, .byte4 = mac_byte4, .byte5 = mac_byte5 \
+        .byte3 = mac_byte3, \
+        .byte4 = mac_byte4, \
+        .byte5 = mac_byte5, \
     }
 
 void
@@ -46,7 +48,7 @@ test_ruuvi_endpoint_6_get_ok (void)
         .voc           = 10,
         .nox           = 2,
         .luminosity    = 13027,
-        .sound_dba_avg = 47.6f,
+        .sound_avg_dba = 47.6f,
         .seq_cnt2      = 205,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -59,10 +61,10 @@ test_ruuvi_endpoint_6_get_ok (void)
         0xC7, 0x9E, // Pressure
         0x00, 0x70, // PM2.5
         0x00, 0xC9, // CO2
-        0x0A,       // VOC
-        0x02,       // NOX
+        0x05,       // VOC
+        0x01,       // NOX
         0xD9,       // Luminosity
-        0x94,       // Sound dBA avg
+        0x4A,       // Sound dBA avg
         0xCD,       // Seq cnt2
         0x00,       // Flags
         0x4C,       // MAC address byte 3
@@ -87,8 +89,8 @@ test_ruuvi_endpoint_6_get_ok (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -120,7 +122,7 @@ test_ruuvi_endpoint_6_get_zeroes (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -161,8 +163,8 @@ test_ruuvi_endpoint_6_get_zeroes (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -194,7 +196,7 @@ test_ruuvi_endpoint_6_get_temperature (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -235,8 +237,8 @@ test_ruuvi_endpoint_6_get_temperature (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -268,7 +270,7 @@ test_ruuvi_endpoint_6_get_humidity (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -309,8 +311,8 @@ test_ruuvi_endpoint_6_get_humidity (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -342,7 +344,7 @@ test_ruuvi_endpoint_6_get_pressure (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -383,8 +385,8 @@ test_ruuvi_endpoint_6_get_pressure (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -416,7 +418,7 @@ test_ruuvi_endpoint_6_get_pm2p5 (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -457,8 +459,8 @@ test_ruuvi_endpoint_6_get_pm2p5 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -490,7 +492,7 @@ test_ruuvi_endpoint_6_get_co2 (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -531,8 +533,8 @@ test_ruuvi_endpoint_6_get_co2 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -564,7 +566,7 @@ test_ruuvi_endpoint_6_get_voc (void)
         .voc           = 499,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -577,7 +579,7 @@ test_ruuvi_endpoint_6_get_voc (void)
         0x00, 0x00, // Pressure
         0x00, 0x00, // PM2.5
         0x00, 0x00, // CO2
-        0xF3,       // VOC
+        0xF9,       // VOC
         0x00,       // NOX
         0x00,       // Luminosity
         0x00,       // Sound dBA avg
@@ -605,8 +607,8 @@ test_ruuvi_endpoint_6_get_voc (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -636,9 +638,9 @@ test_ruuvi_endpoint_6_get_nox (void)
         .pm2p5_ppm     = 0.0f,
         .co2           = 0,
         .voc           = 0,
-        .nox           = 498,
+        .nox           = 497,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -652,7 +654,7 @@ test_ruuvi_endpoint_6_get_nox (void)
         0x00, 0x00, // PM2.5
         0x00, 0x00, // CO2
         0x00,       // VOC
-        0xF2,       // NOX
+        0xF8,       // NOX
         0x00,       // Luminosity
         0x00,       // Sound dBA avg
         0x00,       // Seq cnt2
@@ -679,8 +681,8 @@ test_ruuvi_endpoint_6_get_nox (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -712,7 +714,7 @@ test_ruuvi_endpoint_6_get_luminosity (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 62735.0f,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -753,8 +755,8 @@ test_ruuvi_endpoint_6_get_luminosity (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -768,7 +770,7 @@ test_ruuvi_endpoint_6_get_luminosity (void)
 }
 
 void
-test_ruuvi_endpoint_6_get_sound_dba_avg (void)
+test_ruuvi_endpoint_6_get_sound_avg_dba (void)
 {
     static const re_6_flags_t flags =
     {
@@ -786,7 +788,7 @@ test_ruuvi_endpoint_6_get_sound_dba_avg (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 101.0f,
+        .sound_avg_dba = 101.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -802,7 +804,7 @@ test_ruuvi_endpoint_6_get_sound_dba_avg (void)
         0x00,       // VOC
         0x00,       // NOX
         0x00,       // Luminosity
-        0x9F,       // Sound dBA avg
+        0xCF,       // Sound dBA avg
         0x00,       // Seq cnt2
         0x10,       // Flags
         0x4C,       // MAC address byte 3
@@ -827,8 +829,8 @@ test_ruuvi_endpoint_6_get_sound_dba_avg (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -860,7 +862,7 @@ test_ruuvi_endpoint_6_get_seq_cnt (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 250,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -901,8 +903,8 @@ test_ruuvi_endpoint_6_get_seq_cnt (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -934,7 +936,7 @@ test_ruuvi_endpoint_6_get_flag_calibration_in_progress (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -975,8 +977,8 @@ test_ruuvi_endpoint_6_get_flag_calibration_in_progress (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1008,7 +1010,7 @@ test_ruuvi_endpoint_6_get_flag_button_pressed (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -1049,8 +1051,8 @@ test_ruuvi_endpoint_6_get_flag_button_pressed (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1082,7 +1084,7 @@ test_ruuvi_endpoint_6_get_flag_rtc_running_on_boot (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18.0f,
+        .sound_avg_dba = 18.0f,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -1123,8 +1125,8 @@ test_ruuvi_endpoint_6_get_flag_rtc_running_on_boot (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1156,7 +1158,7 @@ test_ruuvi_endpoint_6_get_ok_max (void)
         .voc           = 500,
         .nox           = 500,
         .luminosity    = 65535,
-        .sound_dba_avg = 120,
+        .sound_avg_dba = 120,
         .seq_cnt2      = 255,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
@@ -1169,12 +1171,12 @@ test_ruuvi_endpoint_6_get_ok_max (void)
         0xFF, 0xFE, // Pressure
         0x27, 0x10, // PM2.5
         0x9C, 0x40, // CO2
-        0xF4,       // VOC
-        0xF4,       // NOX
+        0xFA,       // VOC
+        0xFA,       // NOX
         0xFE,       // Luminosity
-        0xFE,       // Sound dBA avg
+        0xFF,       // Sound dBA avg
         0xFF,       // Seq cnt2
-        0xD7,       // Flags
+        0x07,       // Flags
         0xFF,       // MAC address byte 3
         0xFF,       // MAC address byte 4
         0xFF        // MAC address byte 5
@@ -1197,8 +1199,8 @@ test_ruuvi_endpoint_6_get_ok_max (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1230,7 +1232,7 @@ test_ruuvi_endpoint_6_get_ok_min (void)
         .voc           = 0,
         .nox           = 0,
         .luminosity    = 0,
-        .sound_dba_avg = 18,
+        .sound_avg_dba = 18,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x00, 0x00, 0x00),
@@ -1271,8 +1273,8 @@ test_ruuvi_endpoint_6_get_ok_min (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1309,7 +1311,7 @@ test_ruuvi_endpoint_6_get_error_null_buffer (void)
         .voc           = 10,
         .nox           = 2,
         .luminosity    = 13027,
-        .sound_dba_avg = 56.6f,
+        .sound_avg_dba = 56.6f,
         .seq_cnt2      = 205,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x4C, 0x88, 0x4F),
@@ -1326,7 +1328,6 @@ test_ruuvi_endpoint_6_get_error_null_buffer (void)
 void
 test_ruuvi_endpoint_6_get_error_null_data (void)
 {
-    re_status_t        err_code                      = RE_ERROR_NULL;
     uint8_t            test_buffer[RE_6_DATA_LENGTH] = { 0 };
     const re_6_data_t * p_re_6_data                   = NULL;
     TEST_ASSERT_EQUAL (RE_ERROR_NULL, re_6_encode ( (uint8_t * const) &test_buffer,
@@ -1357,7 +1358,7 @@ test_ruuvi_endpoint_6_get_invalid_data (void)
         .voc           = NAN,
         .nox           = NAN,
         .luminosity    = NAN,
-        .sound_dba_avg = NAN,
+        .sound_avg_dba = NAN,
         .seq_cnt2      = 255,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
@@ -1398,8 +1399,8 @@ test_ruuvi_endpoint_6_get_invalid_data (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt2, decoded_data.seq_cnt2);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1431,7 +1432,7 @@ test_ruuvi_endpoint_6_underflow (void)
         .voc           = -1,
         .nox           = -1,
         .luminosity    = -1,
-        .sound_dba_avg = 17,
+        .sound_avg_dba = 17,
         .seq_cnt2      = 0,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0x00, 0x00, 0x00),
@@ -1479,7 +1480,7 @@ test_ruuvi_endpoint_6_overflow (void)
         .voc           = 501,
         .nox           = 501,
         .luminosity    = 65536,
-        .sound_dba_avg = 121,
+        .sound_avg_dba = 121,
         .seq_cnt2      = 255,
         .flags         = flags,
         .mac_addr_24   = RE_6_DATA_MAC_ADDR_INIT (0xFF, 0xFF, 0xFF),
@@ -1492,12 +1493,12 @@ test_ruuvi_endpoint_6_overflow (void)
         0xFF, 0xFE, // Pressure
         0x27, 0x10, // PM2.5
         0x9C, 0x40, // CO2
-        0xF4,       // VOC
-        0xF4,       // NOX
+        0xFA,       // VOC
+        0xFA,       // NOX
         0xFE,       // Luminosity
-        0xFE,       // Sound dBA avg
+        0xFF,       // Sound dBA avg
         0xFF,       // Seq cnt2
-        0xD7,       // Flags
+        0x07,       // Flags
         0xFF,       // MAC address byte 3
         0xFF,       // MAC address byte 4
         0xFF        // MAC address byte 5
@@ -1589,7 +1590,7 @@ test_re_6_data_invalid (void)
     TEST_ASSERT_TRUE (isnan (data.voc));
     TEST_ASSERT_TRUE (isnan (data.nox));
     TEST_ASSERT_TRUE (isnan (data.luminosity));
-    TEST_ASSERT_TRUE (isnan (data.sound_dba_avg));
+    TEST_ASSERT_TRUE (isnan (data.sound_avg_dba));
     TEST_ASSERT_EQUAL (data.seq_cnt2, measurement_cnt & 0xFF);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress, false);
     TEST_ASSERT_EQUAL (data.flags.flag_button_pressed, false);

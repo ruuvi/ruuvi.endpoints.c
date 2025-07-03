@@ -32,8 +32,8 @@ void test_ruuvi_endpoint_e0_get_ok (void)
         .voc_index = 11,
         .nox_index = 12,
         .luminosity = 15123,
-        .sound_dba_avg = 20.5f,
-        .sound_dba_peak = 21.0f,
+        .sound_avg_dba = 20.5f,
+        .sound_peak_spl_db = 21.0f,
         .measurement_count = 65533,
         .voltage = 3.2f,
         .flag_usb_on = true,
@@ -97,10 +97,10 @@ void test_ruuvi_endpoint_e0_get_ok (void)
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.voc_index), lrintf (decoded_data.voc_index));
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.nox_index), lrintf (decoded_data.nox_index));
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (m_re_e0_data_ok.measurement_count, decoded_data.measurement_count);
     TEST_ASSERT_EQUAL (321 /* 3.20 */, lrintf (decoded_data.voltage * 100.0f));
     TEST_ASSERT_EQUAL (m_re_e0_data_ok.flag_usb_on, decoded_data.flag_usb_on);
@@ -126,8 +126,8 @@ void test_ruuvi_endpoint_e0_get_ok_max (void)
         .voc_index = 500,
         .nox_index = 500,
         .luminosity = 65534,
-        .sound_dba_avg = 127.0f,
-        .sound_dba_peak = 127.0f,
+        .sound_avg_dba = 127.0f,
+        .sound_peak_spl_db = 127.0f,
         .measurement_count = 65534,
         .voltage = 7.62f,
         .flag_usb_on = true,
@@ -194,10 +194,10 @@ void test_ruuvi_endpoint_e0_get_ok_max (void)
                        lrintf (decoded_data.nox_index));
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.luminosity),
                        lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (m_re_e0_data_ok_max.measurement_count, decoded_data.measurement_count);
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_max.voltage * 100.0f),
                        lrintf (decoded_data.voltage * 100.0f));
@@ -224,8 +224,8 @@ void test_ruuvi_endpoint_e0_get_ok_min (void)
         .voc_index = 1,
         .nox_index = 1,
         .luminosity = 0,
-        .sound_dba_avg = 0,
-        .sound_dba_peak = 0,
+        .sound_avg_dba = 0,
+        .sound_peak_spl_db = 0,
         .measurement_count = 0,
         .voltage = 0.0f,
         .flag_usb_on = false,
@@ -292,10 +292,10 @@ void test_ruuvi_endpoint_e0_get_ok_min (void)
                        lrintf (decoded_data.nox_index));
     TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_min.luminosity),
                        lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_min.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_min.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_min.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (m_re_e0_data_ok_min.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (m_re_e0_data_ok_min.measurement_count, decoded_data.measurement_count);
     TEST_ASSERT_EQUAL (0.0f, lrintf (decoded_data.voltage * 100.0f));
     TEST_ASSERT_EQUAL (m_re_e0_data_ok_min.flag_usb_on, decoded_data.flag_usb_on);
@@ -326,8 +326,8 @@ void test_ruuvi_endpoint_e0_get_error_null_buffer (void)
         .voc_index = 11,
         .nox_index = 12,
         .luminosity = 15123,
-        .sound_dba_avg = 20.5f,
-        .sound_dba_peak = 21.0f,
+        .sound_avg_dba = 20.5f,
+        .sound_peak_spl_db = 21.0f,
         .measurement_count = 65533,
         .voltage = 3.2f,
         .flag_usb_on = true,
@@ -376,8 +376,8 @@ void test_ruuvi_endpoint_e0_get_invalid_data (void)
         .voc_index = NAN,
         .nox_index = NAN,
         .luminosity = NAN,
-        .sound_dba_avg = NAN,
-        .sound_dba_peak = NAN,
+        .sound_avg_dba = NAN,
+        .sound_peak_spl_db = NAN,
         .measurement_count = RE_E0_INVALID_SEQUENCE,
         .voltage = NAN,
         .flag_usb_on = false,
@@ -433,8 +433,8 @@ void test_ruuvi_endpoint_e0_get_invalid_data (void)
     TEST_ASSERT (isnan (decoded_data.voc_index));
     TEST_ASSERT (isnan (decoded_data.nox_index));
     TEST_ASSERT (isnan (decoded_data.luminosity));
-    TEST_ASSERT (isnan (decoded_data.sound_dba_avg));
-    TEST_ASSERT (isnan (decoded_data.sound_dba_peak));
+    TEST_ASSERT (isnan (decoded_data.sound_avg_dba));
+    TEST_ASSERT (isnan (decoded_data.sound_peak_spl_db));
     TEST_ASSERT_EQUAL (m_re_e0_data_invalid.measurement_count,
                        decoded_data.measurement_count);
     TEST_ASSERT (isnan (decoded_data.voltage));
@@ -461,8 +461,8 @@ void test_ruuvi_endpoint_e0_underflow (void)
         .voc_index = 0,
         .nox_index = 0,
         .luminosity = -1,
-        .sound_dba_avg = -1,
-        .sound_dba_peak = -1,
+        .sound_avg_dba = -1,
+        .sound_peak_spl_db = -1,
         .measurement_count = 0,
         .voltage = -0.1f,
         .flag_usb_on = false,
@@ -516,8 +516,8 @@ void test_ruuvi_endpoint_e0_overflow (void)
         .voc_index = 501,
         .nox_index = 501,
         .luminosity = 65535,
-        .sound_dba_avg = 127.1f,
-        .sound_dba_peak = 127.1f,
+        .sound_avg_dba = 127.1f,
+        .sound_peak_spl_db = 127.1f,
         .measurement_count = 65534,
         .voltage = 7.63f,
         .flag_usb_on = true,
@@ -596,8 +596,8 @@ void test_re_6_data_invalid (void)
     TEST_ASSERT (isnan (data.voc_index));
     TEST_ASSERT (isnan (data.nox_index));
     TEST_ASSERT (isnan (data.luminosity));
-    TEST_ASSERT (isnan (data.sound_dba_avg));
-    TEST_ASSERT (isnan (data.sound_dba_peak));
+    TEST_ASSERT (isnan (data.sound_avg_dba));
+    TEST_ASSERT (isnan (data.sound_peak_spl_db));
     TEST_ASSERT (isnan (data.voltage));
     TEST_ASSERT_EQUAL (false, data.flag_usb_on);
     TEST_ASSERT_EQUAL (false, data.flag_low_battery);

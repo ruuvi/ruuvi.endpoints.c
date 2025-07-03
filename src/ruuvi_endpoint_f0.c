@@ -407,7 +407,7 @@ re_f0_encode (uint8_t * const p_buffer, const re_f0_data_t * const p_data)
         re_f0_encode_voc (&p_buffer[RE_F0_OFFSET_VOC_INDEX], p_data->voc_index);
         re_f0_encode_nox (&p_buffer[RE_F0_OFFSET_NOX_INDEX], p_data->nox_index);
         re_f0_encode_luminosity (&p_buffer[RE_F0_OFFSET_LUMINOSITY], p_data->luminosity);
-        re_f0_encode_sound (&p_buffer[RE_F0_OFFSET_SOUND], p_data->sound_dba_avg);
+        re_f0_encode_sound (&p_buffer[RE_F0_OFFSET_SOUND], p_data->sound_avg_dba);
         re_f0_encode_flags (&p_buffer[RE_F0_OFFSET_FLAGS], p_data);
         re_f0_encode_set_address (p_buffer, p_data);
     }
@@ -512,7 +512,7 @@ re_status_t re_f0_decode (const uint8_t * const p_buffer, re_f0_data_t * const p
     p_data->voc_index = re_f0_decode_voc (&p_payload[RE_F0_OFFSET_VOC_INDEX]);
     p_data->nox_index = re_f0_decode_nox (&p_payload[RE_F0_OFFSET_NOX_INDEX]);
     p_data->luminosity = re_f0_decode_luminosity (&p_payload[RE_F0_OFFSET_LUMINOSITY]);
-    p_data->sound_dba_avg = re_f0_decode_sound (&p_payload[RE_F0_OFFSET_SOUND]);
+    p_data->sound_avg_dba = re_f0_decode_sound (&p_payload[RE_F0_OFFSET_SOUND]);
     re_f0_decode_flags (&p_payload[RE_F0_OFFSET_FLAGS], p_data);
     p_data->address = re_f0_decode_address (&p_payload[RE_F0_OFFSET_ADDR_MSB]);
     return result;
@@ -534,7 +534,7 @@ re_f0_data_invalid (const uint8_t measurement_cnt, const uint64_t radio_mac)
         .voc_index     = NAN,
         .nox_index     = NAN,
         .luminosity    = NAN,
-        .sound_dba_avg = NAN,
+        .sound_avg_dba = NAN,
         .flag_seq_cnt  = measurement_cnt & RE_F0_FLAGS_SEQ_MASK,
         .flag_usb_on   = false,
         .flag_low_battery = false,

@@ -103,7 +103,7 @@ typedef struct
     re_float voc_index;     //!< VOC index points.
     re_float nox_index;     //!< NOx index points.
     re_float luminosity;    //!< Luminosity.
-    re_float sound_dba_avg; //!< Sound dBA avg.
+    re_float sound_avg_dba; //!< Sound dBA avg.
 
     bool  flag_usb_on : 1;                  //!< Flag: USB ON
     bool  flag_low_battery : 1;             //!< Flag: LOW BATTERY

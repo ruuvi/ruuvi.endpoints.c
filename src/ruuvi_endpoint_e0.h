@@ -23,7 +23,7 @@
 #define RE_E0_INVALID_VOC_INDEX   (511)
 #define RE_E0_INVALID_NOX_INDEX   (511)
 #define RE_E0_INVALID_LUMINOSITY  (0xFFFFU)
-#define RE_E0_INVALID_SOUND_DBA   (0xFFU)
+#define RE_E0_INVALID_SOUND       (0xFFU)
 #define RE_E0_INVALID_VOLTAGE     (0xFFU)
 #define RE_E0_INVALID_SEQUENCE    (0xFFFFU)
 #define RE_E0_INVALID_MAC         (0xFFFFFFFFFFFFU)
@@ -63,9 +63,9 @@
 #define RE_E0_LUMINOSITY_MIN (0.0f)
 #define RE_E0_LUMINOSITY_MAX (65534.0f)
 
-#define RE_E0_SOUND_DBA_MIN   (0.0f)
-#define RE_E0_SOUND_DBA_MAX   (127.0f)
-#define RE_E0_SOUND_DBA_RATIO (2.0f)
+#define RE_E0_SOUND_MIN   (0.0f)
+#define RE_E0_SOUND_MAX   (127.0f)
+#define RE_E0_SOUND_RATIO (2.0f)
 
 #define RE_E0_VOLTAGE_MIN   (0.0f)
 #define RE_E0_VOLTAGE_MAX   (7.62f)
@@ -108,8 +108,8 @@
 #define RE_E0_OFFSET_LUMINOSITY_MSB (21U)
 #define RE_E0_OFFSET_LUMINOSITY_LSB (22U)
 
-#define RE_E0_OFFSET_SOUND_DBA_AVG  (23U)
-#define RE_E0_OFFSET_SOUND_DBA_PEAK (24U)
+#define RE_E0_OFFSET_SOUND_AVG_DBA  (23U)
+#define RE_E0_OFFSET_SOUND_PEAK_SPL_DB (24U)
 
 #define RE_E0_OFFSET_SEQ_CTR_MSB (25U)
 #define RE_E0_OFFSET_SEQ_CTR_LSB (26U)
@@ -136,8 +136,8 @@ typedef struct
     re_float voc_index;         //!< VOC index points.
     re_float nox_index;         //!< NOx index points.
     re_float luminosity;        //!< Luminosity.
-    re_float sound_dba_avg;     //!< Sound dBA avg.
-    re_float sound_dba_peak;    //!< Sound dBA peak.
+    re_float sound_avg_dba;     //!< Sound dBA avg.
+    re_float sound_peak_spl_db;    //!< Sound dBA peak.
     uint16_t measurement_count; //!< Running counter of measurement.
     re_float voltage;           //!< Voltage in volts.
 

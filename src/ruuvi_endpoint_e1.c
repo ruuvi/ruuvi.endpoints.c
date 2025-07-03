@@ -36,31 +36,31 @@ const re_u9_coeffs_t re_e1_coeffs_nox =
     .ratio       = RE_E1_NOX_RATIO,
 };
 
-const re_u9_coeffs_t re_e1_coeffs_sound_dba_inst =
+const re_u9_coeffs_t re_e1_coeffs_sound_inst_dba =
 {
-    .bit9_offset = RE_E1_SOUND_DBA_INST_BIT9_OFFSET,
-    .invalid_val = RE_E1_INVALID_SOUND_DBA,
-    .min_val     = RE_E1_SOUND_DBA_MIN,
-    .max_val     = RE_E1_SOUND_DBA_MAX,
-    .ratio       = RE_E1_SOUND_DBA_RATIO,
+    .bit9_offset = RE_E1_SOUND_INST_DBA_BIT9_OFFSET,
+    .invalid_val = RE_E1_INVALID_SOUND,
+    .min_val     = RE_E1_SOUND_MIN,
+    .max_val     = RE_E1_SOUND_MAX,
+    .ratio       = RE_E1_SOUND_RATIO,
 };
 
-const re_u9_coeffs_t re_e1_coeffs_sound_dba_avg =
+const re_u9_coeffs_t re_e1_coeffs_sound_avg_dba =
 {
-    .bit9_offset = RE_E1_SOUND_DBA_AVG_BIT9_OFFSET,
-    .invalid_val = RE_E1_INVALID_SOUND_DBA,
-    .min_val     = RE_E1_SOUND_DBA_MIN,
-    .max_val     = RE_E1_SOUND_DBA_MAX,
-    .ratio       = RE_E1_SOUND_DBA_RATIO,
+    .bit9_offset = RE_E1_SOUND_AVG_DBA_BIT9_OFFSET,
+    .invalid_val = RE_E1_INVALID_SOUND,
+    .min_val     = RE_E1_SOUND_MIN,
+    .max_val     = RE_E1_SOUND_MAX,
+    .ratio       = RE_E1_SOUND_RATIO,
 };
 
-const re_u9_coeffs_t re_e1_coeffs_sound_dba_peak =
+const re_u9_coeffs_t re_e1_coeffs_sound_peak_spl_db =
 {
-    .bit9_offset = RE_E1_SOUND_DBA_PEAK_BIT9_OFFSET,
-    .invalid_val = RE_E1_INVALID_SOUND_DBA,
-    .min_val     = RE_E1_SOUND_DBA_MIN,
-    .max_val     = RE_E1_SOUND_DBA_MAX,
-    .ratio       = RE_E1_SOUND_DBA_RATIO,
+    .bit9_offset = RE_E1_SOUND_PEAK_SPL_DB_BIT9_OFFSET,
+    .invalid_val = RE_E1_INVALID_SOUND,
+    .min_val     = RE_E1_SOUND_MIN,
+    .max_val     = RE_E1_SOUND_MAX,
+    .ratio       = RE_E1_SOUND_RATIO,
 };
 
 const re_i16_coeffs_t re_e1_coeffs_temperature =
@@ -266,7 +266,7 @@ re_e1_decode_luminosity (const uint8_t * const p_slot)
 }
 
 static void
-re_e1_encode_sound_dba (
+re_e1_encode_sound (
     uint8_t * const              p_slot,
     uint8_t * const              p_flags,
     const re_u9_coeffs_t * const p_coeffs,
@@ -276,8 +276,8 @@ re_e1_encode_sound_dba (
 }
 
 static re_float
-re_e1_decode_sound_dba (const uint8_t * const p_slot, const uint8_t * const p_flags,
-                        const re_u9_coeffs_t * const p_coeffs)
+re_e1_decode_sound (const uint8_t * const p_slot, const uint8_t * const p_flags,
+                    const re_u9_coeffs_t * const p_coeffs)
 {
     return re_decode_u9 (p_slot, p_flags, p_coeffs);
 }
@@ -432,21 +432,21 @@ re_e1_encode (uint8_t * const p_buffer, const re_e1_data_t * const p_data)
         re_e1_encode_nox (&p_buffer[RE_E1_OFFSET_NOX], &p_buffer[RE_E1_OFFSET_FLAGS],
                           p_data->nox);
         re_e1_encode_luminosity (&p_buffer[RE_E1_OFFSET_LUMINOSITY_MSB], p_data->luminosity);
-        re_e1_encode_sound_dba (
-            &p_buffer[RE_E1_OFFSET_SOUND_DBA_INST],
+        re_e1_encode_sound (
+            &p_buffer[RE_E1_OFFSET_SOUND_INST_DBA],
             &p_buffer[RE_E1_OFFSET_FLAGS],
-            &re_e1_coeffs_sound_dba_inst,
-            p_data->sound_dba_inst);
-        re_e1_encode_sound_dba (
-            &p_buffer[RE_E1_OFFSET_SOUND_DBA_AVG],
+            &re_e1_coeffs_sound_inst_dba,
+            p_data->sound_inst_dba);
+        re_e1_encode_sound (
+            &p_buffer[RE_E1_OFFSET_SOUND_AVG_DBA],
             &p_buffer[RE_E1_OFFSET_FLAGS],
-            &re_e1_coeffs_sound_dba_avg,
-            p_data->sound_dba_avg);
-        re_e1_encode_sound_dba (
-            &p_buffer[RE_E1_OFFSET_SOUND_DBA_PEAK],
+            &re_e1_coeffs_sound_avg_dba,
+            p_data->sound_avg_dba);
+        re_e1_encode_sound (
+            &p_buffer[RE_E1_OFFSET_SOUND_PEAK_SPL_DB],
             &p_buffer[RE_E1_OFFSET_FLAGS],
-            &re_e1_coeffs_sound_dba_peak,
-            p_data->sound_dba_peak);
+            &re_e1_coeffs_sound_peak_spl_db,
+            p_data->sound_peak_spl_db);
         re_e1_encode_sequence (&p_buffer[RE_E1_OFFSET_SEQ_CNT_MSB], p_data->seq_cnt);
         re_e1_encode_flags (&p_buffer[RE_E1_OFFSET_FLAGS], p_data->flags);
         p_buffer[RE_E1_OFFSET_RESERVED + 0] = 0xFFU;
@@ -530,18 +530,18 @@ re_e1_decode (const uint8_t * const p_buffer, re_e1_data_t * const p_data)
                              &p_payload[RE_E1_OFFSET_FLAGS]);
     p_data->luminosity     = re_e1_decode_luminosity (
                                  &p_payload[RE_E1_OFFSET_LUMINOSITY_MSB]);
-    p_data->sound_dba_inst = re_e1_decode_sound_dba (
-                                 &p_payload[RE_E1_OFFSET_SOUND_DBA_INST],
+    p_data->sound_inst_dba = re_e1_decode_sound (
+                                 &p_payload[RE_E1_OFFSET_SOUND_INST_DBA],
                                  &p_payload[RE_E1_OFFSET_FLAGS],
-                                 &re_e1_coeffs_sound_dba_inst);
-    p_data->sound_dba_avg = re_e1_decode_sound_dba (
-                                &p_payload[RE_E1_OFFSET_SOUND_DBA_AVG],
+                                 &re_e1_coeffs_sound_inst_dba);
+    p_data->sound_avg_dba = re_e1_decode_sound (
+                                &p_payload[RE_E1_OFFSET_SOUND_AVG_DBA],
                                 &p_payload[RE_E1_OFFSET_FLAGS],
-                                &re_e1_coeffs_sound_dba_avg);
-    p_data->sound_dba_peak = re_e1_decode_sound_dba (
-                                 &p_payload[RE_E1_OFFSET_SOUND_DBA_PEAK],
-                                 &p_payload[RE_E1_OFFSET_FLAGS],
-                                 &re_e1_coeffs_sound_dba_peak);
+                                &re_e1_coeffs_sound_avg_dba);
+    p_data->sound_peak_spl_db = re_e1_decode_sound (
+                                    &p_payload[RE_E1_OFFSET_SOUND_PEAK_SPL_DB],
+                                    &p_payload[RE_E1_OFFSET_FLAGS],
+                                    &re_e1_coeffs_sound_peak_spl_db);
     p_data->seq_cnt = re_e1_decode_sequence (&p_payload[RE_E1_OFFSET_SEQ_CNT_MSB]);
     p_data->flags   = re_e1_decode_flags (&p_payload[RE_E1_OFFSET_FLAGS]);
     p_data->address = re_e1_decode_address (&p_payload[RE_E1_OFFSET_ADDR_MSB]);
@@ -564,9 +564,9 @@ re_e1_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
         .voc         = NAN,
         .nox         = NAN,
         .luminosity        = NAN,
-        .sound_dba_inst     = NAN,
-        .sound_dba_avg     = NAN,
-        .sound_dba_peak    = NAN,
+        .sound_inst_dba     = NAN,
+        .sound_avg_dba     = NAN,
+        .sound_peak_spl_db    = NAN,
         .seq_cnt = measurement_cnt,
 
         .flags = {

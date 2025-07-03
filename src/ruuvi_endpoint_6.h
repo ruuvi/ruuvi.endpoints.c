@@ -57,9 +57,9 @@
 #define RE_6_LUMINOSITY_MAX   (65535.0f)
 #define RE_6_LUMINOSITY_RATIO (254.0f / logf(RE_6_LUMINOSITY_MAX + 1))
 
-#define RE_6_SOUND_DBA_MIN   (18.0f)
-#define RE_6_SOUND_DBA_MAX   (120.0f)
-#define RE_6_SOUND_DBA_RATIO (5.0f)
+#define RE_6_SOUND_MIN   (18.0f)
+#define RE_6_SOUND_MAX   (120.0f)
+#define RE_6_SOUND_RATIO (5.0f)
 
 #define RE_6_MAC_MIN (0UL)
 #define RE_6_MAC_MAX (0xFFFFFFUL)
@@ -67,14 +67,14 @@
 #define RE_6_FLAG_CALIBRATION_IN_PROGRESS_BIT_OFFSET (0U)
 #define RE_6_FLAG_BUTTON_PRESSED_BIT_OFFSET          (1U)
 #define RE_6_FLAG_RTC_RUNNING_ON_BOOT_BIT_OFFSET     (2U)
-#define RE_6_SOUND_DBA_AVG_BIT9_OFFSET               (4U)
+#define RE_6_SOUND_AVG_DBA_BIT9_OFFSET               (4U)
 #define RE_6_VOC_BIT9_OFFSET                         (6U)
 #define RE_6_NOX_BIT9_OFFSET                         (7U)
 
 #define RE_6_FLAGS_CALIBRATION_IN_PROGRESS (1U << RE_6_FLAG_CALIBRATION_IN_PROGRESS_BIT_OFFSET)
 #define RE_6_FLAGS_BUTTON_PRESSED          (1U << RE_6_FLAG_BUTTON_PRESSED_BIT_OFFSET)
 #define RE_6_FLAGS_RTC_RUNNING_ON_BOOT     (1U << RE_6_FLAG_RTC_RUNNING_ON_BOOT_BIT_OFFSET)
-#define RE_6_FLAGS_SOUND_DBA_AVG_B9        (1U << RE_6_SOUND_DBA_AVG_BIT9_OFFSET)
+#define RE_6_FLAGS_SOUND_AVG_DBA_B9        (1U << RE_6_SOUND_AVG_DBA_BIT9_OFFSET)
 #define RE_6_FLAGS_VOC_B9                  (1U << RE_6_VOC_BIT9_OFFSET)
 #define RE_6_FLAGS_NOX_B9                  (1U << RE_6_NOX_BIT9_OFFSET)
 
@@ -104,7 +104,7 @@
 
 #define RE_6_OFFSET_LUMINOSITY (13U)
 
-#define RE_6_OFFSET_SOUND_DBA_AVG (14U)
+#define RE_6_OFFSET_SOUND_AVG_DBA (14U)
 
 #define RE_6_OFFSET_SEQ_CNT2 (15U)
 
@@ -142,7 +142,7 @@ typedef struct
     re_float           voc;           //!< VOC index points.
     re_float           nox;           //!< NOx index points.
     re_float           luminosity;    //!< Luminosity.
-    re_float           sound_dba_avg; //!< Sound dBA avg.
+    re_float           sound_avg_dba; //!< Sound dBA avg.
     uint8_t            seq_cnt2;      //!< Running counter of measurement.
     re_6_flags_t       flags;         //!< Flags for additional information.
     re_6_mac_addr_24_t mac_addr_24;   //!< Lower 24-bits of BLE MAC address of the device.

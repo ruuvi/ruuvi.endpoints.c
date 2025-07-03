@@ -22,7 +22,7 @@
 #define RE_E1_INVALID_VOC         (0x1FFU)
 #define RE_E1_INVALID_NOX         (0x1FFU)
 #define RE_E1_INVALID_LUMINOSITY  (0xFFFFFFU)
-#define RE_E1_INVALID_SOUND_DBA   (0x1FFU)
+#define RE_E1_INVALID_SOUND       (0x1FFU)
 #define RE_E1_INVALID_SEQUENCE    (0xFFFFFFU)
 #define RE_E1_INVALID_MAC         (0xFFFFFFFFFFFFU)
 
@@ -59,25 +59,25 @@
 #define RE_E1_LUMINOSITY_MAX   (144284.0f)
 #define RE_E1_LUMINOSITY_RATIO (100.0f)
 
-#define RE_E1_SOUND_DBA_MIN   (18.0f)
-#define RE_E1_SOUND_DBA_MAX   (120.0f)
-#define RE_E1_SOUND_DBA_RATIO (5.0f)
+#define RE_E1_SOUND_MIN   (18.0f)
+#define RE_E1_SOUND_MAX   (120.0f)
+#define RE_E1_SOUND_RATIO (5.0f)
 
 #define RE_E1_FLAG_CALIBRATION_IN_PROGRESS_BIT_OFFSET (0U)
 #define RE_E1_FLAG_BUTTON_PRESSED_BIT_OFFSET          (1U)
 #define RE_E1_FLAG_RTC_RUNNING_ON_BOOT_BIT_OFFSET     (2U)
-#define RE_E1_SOUND_DBA_INST_BIT9_OFFSET              (3U)
-#define RE_E1_SOUND_DBA_AVG_BIT9_OFFSET               (4U)
-#define RE_E1_SOUND_DBA_PEAK_BIT9_OFFSET              (5U)
+#define RE_E1_SOUND_INST_DBA_BIT9_OFFSET              (3U)
+#define RE_E1_SOUND_AVG_DBA_BIT9_OFFSET               (4U)
+#define RE_E1_SOUND_PEAK_SPL_DB_BIT9_OFFSET           (5U)
 #define RE_E1_VOC_BIT9_OFFSET                         (6U)
 #define RE_E1_NOX_BIT9_OFFSET                         (7U)
 
 #define RE_E1_FLAGS_CALIBRATION_IN_PROGRESS (1U << RE_E1_FLAG_CALIBRATION_IN_PROGRESS_BIT_OFFSET)
 #define RE_E1_FLAGS_BUTTON_PRESSED          (1U << RE_E1_FLAG_BUTTON_PRESSED_BIT_OFFSET)
 #define RE_E1_FLAGS_RTC_RUNNING_ON_BOOT     (1U << RE_E1_FLAG_RTC_RUNNING_ON_BOOT_BIT_OFFSET)
-#define RE_E1_FLAGS_SOUND_DBA_INST_B9       (1U << RE_E1_SOUND_DBA_INST_BIT9_OFFSET)
-#define RE_E1_FLAGS_SOUND_DBA_AVG_B9        (1U << RE_E1_SOUND_DBA_AVG_BIT9_OFFSET)
-#define RE_E1_FLAGS_SOUND_DBA_PEAK_B9       (1U << RE_E1_SOUND_DBA_PEAK_BIT9_OFFSET)
+#define RE_E1_FLAGS_SOUND_INST_DBA_B9       (1U << RE_E1_SOUND_INST_DBA_BIT9_OFFSET)
+#define RE_E1_FLAGS_SOUND_AVG_DBA_B9        (1U << RE_E1_SOUND_AVG_DBA_BIT9_OFFSET)
+#define RE_E1_FLAGS_SOUND_PEAK_SPL_DB_B9    (1U << RE_E1_SOUND_PEAK_SPL_DB_BIT9_OFFSET)
 #define RE_E1_FLAGS_VOC_B9                  (1U << RE_E1_VOC_BIT9_OFFSET)
 #define RE_E1_FLAGS_NOX_B9                  (1U << RE_E1_NOX_BIT9_OFFSET)
 
@@ -119,9 +119,9 @@
 #define RE_E1_OFFSET_LUMINOSITY_MID (20U)
 #define RE_E1_OFFSET_LUMINOSITY_LSB (21U)
 
-#define RE_E1_OFFSET_SOUND_DBA_INST (22U)
-#define RE_E1_OFFSET_SOUND_DBA_AVG  (23U)
-#define RE_E1_OFFSET_SOUND_DBA_PEAK (24U)
+#define RE_E1_OFFSET_SOUND_INST_DBA    (22U)
+#define RE_E1_OFFSET_SOUND_AVG_DBA     (23U)
+#define RE_E1_OFFSET_SOUND_PEAK_SPL_DB (24U)
 
 #define RE_E1_OFFSET_SEQ_CNT_MSB (25U)
 #define RE_E1_OFFSET_SEQ_CNT_MID (26U)
@@ -144,27 +144,27 @@ typedef struct re_e1_flags_t
 /** @brief All data required for Ruuvi dataformat 0xE1 package. */
 typedef struct
 {
-    re_float temperature_c;       //!< Temperature in degrees Celsius.
-    re_float humidity_rh;         //!< Humidity in relative humidity percentage.
-    re_float pressure_pa;         //!< Humidity in relative humidity percentage.
-    re_float pm1p0_ppm;           /*!< Particulate matter mass concentration PM1.0
-                                    in micrograms/m3. */
-    re_float pm2p5_ppm;           /*!< Particulate matter mass concentration PM2.5
-                                    in micrograms/m3. */
-    re_float pm4p0_ppm;           /*!< Particulate matter mass concentration PM4.0
-                                    in micrograms/m3. */
-    re_float pm10p0_ppm;          /*!< Particulate matter mass concentration PM10.0
-                                    in micrograms/m3. */
-    re_float      co2;            //!< CO2 concentration in ppm
-    re_float      voc;            //!< VOC index points.
-    re_float      nox;            //!< NOx index points.
-    re_float      luminosity;     //!< Luminosity.
-    re_float      sound_dba_inst; //!< Sound dBA instant.
-    re_float      sound_dba_avg;  //!< Sound dBA average.
-    re_float      sound_dba_peak; //!< Sound dBA peak.
-    uint32_t      seq_cnt;        //!< Running counter of measurement.
-    re_e1_flags_t flags;          //!< Flags for additional information.
-    uint64_t      address;        //!< BLE address of device, most significant byte first.
+    re_float temperature_c;          //!< Temperature in degrees Celsius.
+    re_float humidity_rh;            //!< Humidity in relative humidity percentage.
+    re_float pressure_pa;            //!< Humidity in relative humidity percentage.
+    re_float pm1p0_ppm;              /*!< Particulate matter mass concentration PM1.0
+                                       in micrograms/m3. */
+    re_float pm2p5_ppm;              /*!< Particulate matter mass concentration PM2.5
+                                       in micrograms/m3. */
+    re_float pm4p0_ppm;              /*!< Particulate matter mass concentration PM4.0
+                                       in micrograms/m3. */
+    re_float pm10p0_ppm;             /*!< Particulate matter mass concentration PM10.0
+                                       in micrograms/m3. */
+    re_float      co2;               //!< CO2 concentration in ppm
+    re_float      voc;               //!< VOC index points.
+    re_float      nox;               //!< NOx index points.
+    re_float      luminosity;        //!< Luminosity.
+    re_float      sound_inst_dba;    //!< Sound dBA instant.
+    re_float      sound_avg_dba;     //!< Sound dBA average.
+    re_float      sound_peak_spl_db; //!< Sound dBA peak.
+    uint32_t      seq_cnt;           //!< Running counter of measurement.
+    re_e1_flags_t flags;             //!< Flags for additional information.
+    uint64_t      address;           //!< BLE address of device, most significant byte first.
 } re_e1_data_t;
 
 /**
