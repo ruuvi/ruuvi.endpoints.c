@@ -158,10 +158,10 @@ typedef uint8_t re_bit_offset_t;                //!< Bit offset type, used for b
 #define RE_LOG_WRITE_AIRQ_VOC_MSB_OFS           (21U)   //!< Offset of VOC index.
 #define RE_LOG_WRITE_AIRQ_NOX_MSB_OFS           (22U)   //!< Offset of NOx index.
 #define RE_LOG_WRITE_AIRQ_LUMINOSITY_MSB_OFS    (23U)   //!< MSB offset of luminosity.
-#define RE_LOG_WRITE_AIRQ_SOUND_DBA_INST_OFS    (26U)   //!< Offset of sound_dba_avg.
-#define RE_LOG_WRITE_AIRQ_SOUND_DBA_AVG_OFS     (27U)   //!< Offset of sound_dba_avg.
-#define RE_LOG_WRITE_AIRQ_SOUND_DBA_PEAK_OFS    (28U)   //!< Offset of sound_dba_peak.
-#define RE_LOG_WRITE_AIRQ_SEQ_CNT_MSB_OFS       (29U)   //!< Offset of sound_dba_peak.
+#define RE_LOG_WRITE_AIRQ_SOUND_INST_DBA_OFS    (26U)   //!< Offset of sound_inst_dba.
+#define RE_LOG_WRITE_AIRQ_SOUND_AVG_DBA_OFS     (27U)   //!< Offset of sound_avg_dba.
+#define RE_LOG_WRITE_AIRQ_SOUND_PEAK_SPL_DB_OFS (28U)   //!< Offset of sound_peak_spl_db.
+#define RE_LOG_WRITE_AIRQ_SEQ_CNT_MSB_OFS       (29U)   //!< Offset of measurement sequence counter.
 #define RE_LOG_WRITE_AIRQ_FLAGS_OFS             (32U)   //!< Offset of flags.
 #define RE_LOG_WRITE_AIRQ_FW_VER_OFS            (33U)   //!< Offset of fw version.
 #define RE_LOG_WRITE_AIRQ_RESERVED1_OFS         (34U)   //!< Reserved for future use.

@@ -283,30 +283,30 @@ re_e0_decode_luminosity (const uint8_t * const p_slot)
 }
 
 static void
-re_e0_encode_sound_dba (uint8_t * const p_slot, re_float val)
+re_e0_encode_sound (uint8_t * const p_slot, re_float val)
 {
-    uint8_t coded_val = RE_E0_INVALID_SOUND_DBA;
+    uint8_t coded_val = RE_E0_INVALID_SOUND;
 
     if (!isnan (val))
     {
-        re_clip (&val, RE_E0_SOUND_DBA_MIN, RE_E0_SOUND_DBA_MAX);
-        coded_val = (uint16_t) lrintf (val * RE_E0_SOUND_DBA_RATIO);
+        re_clip (&val, RE_E0_SOUND_MIN, RE_E0_SOUND_MAX);
+        coded_val = (uint16_t) lrintf (val * RE_E0_SOUND_RATIO);
     }
 
     p_slot[0] |= coded_val;
 }
 
 static re_float
-re_e0_decode_sound_dba (const uint8_t * const p_slot)
+re_e0_decode_sound (const uint8_t * const p_slot)
 {
     uint8_t coded_val = p_slot[0];
 
-    if (RE_E0_INVALID_SOUND_DBA == coded_val)
+    if (RE_E0_INVALID_SOUND == coded_val)
     {
         return NAN;
     }
 
-    return (re_float) coded_val / RE_E0_SOUND_DBA_RATIO;
+    return (re_float) coded_val / RE_E0_SOUND_RATIO;
 }
 
 static void
@@ -458,8 +458,8 @@ re_e0_encode (uint8_t * const p_buffer, const re_e0_data_t * const p_data)
         re_e0_encode_voc (&p_buffer[RE_E0_OFFSET_VOC_INDEX_MSB], p_data->voc_index);
         re_e0_encode_nox (&p_buffer[RE_E0_OFFSET_NOX_INDEX_MSB], p_data->nox_index);
         re_e0_encode_luminosity (&p_buffer[RE_E0_OFFSET_LUMINOSITY_MSB], p_data->luminosity);
-        re_e0_encode_sound_dba (&p_buffer[RE_E0_OFFSET_SOUND_DBA_AVG], p_data->sound_dba_avg);
-        re_e0_encode_sound_dba (&p_buffer[RE_E0_OFFSET_SOUND_DBA_PEAK], p_data->sound_dba_peak);
+        re_e0_encode_sound (&p_buffer[RE_E0_OFFSET_SOUND_AVG_DBA], p_data->sound_avg_dba);
+        re_e0_encode_sound (&p_buffer[RE_E0_OFFSET_SOUND_PEAK_SPL_DB], p_data->sound_peak_spl_db);
         re_e0_encode_sequence (&p_buffer[RE_E0_OFFSET_SEQ_CTR_MSB], p_data->measurement_count);
         re_e0_encode_voltage (&p_buffer[RE_E0_OFFSET_VOLTAGE], p_data->voltage);
         re_e0_encode_flags (&p_buffer[RE_E0_OFFSET_FLAGS], p_data);
@@ -538,8 +538,9 @@ re_status_t re_e0_decode (const uint8_t * const p_buffer, re_e0_data_t * const p
     p_data->voc_index = re_e0_decode_voc (&p_payload[RE_E0_OFFSET_VOC_INDEX_MSB]);
     p_data->nox_index = re_e0_decode_nox (&p_payload[RE_E0_OFFSET_NOX_INDEX_MSB]);
     p_data->luminosity = re_e0_decode_luminosity (&p_payload[RE_E0_OFFSET_LUMINOSITY_MSB]);
-    p_data->sound_dba_avg = re_e0_decode_sound_dba (&p_payload[RE_E0_OFFSET_SOUND_DBA_AVG]);
-    p_data->sound_dba_peak = re_e0_decode_sound_dba (&p_payload[RE_E0_OFFSET_SOUND_DBA_PEAK]);
+    p_data->sound_avg_dba = re_e0_decode_sound (&p_payload[RE_E0_OFFSET_SOUND_AVG_DBA]);
+    p_data->sound_peak_spl_db = re_e0_decode_sound (
+                                    &p_payload[RE_E0_OFFSET_SOUND_PEAK_SPL_DB]);
     p_data->measurement_count = re_e0_decode_sequence (&p_payload[RE_E0_OFFSET_SEQ_CTR_MSB]);
     p_data->voltage = re_e0_decode_voltage (&p_payload[RE_E0_OFFSET_VOLTAGE]);
     re_e0_decode_flags (&p_payload[RE_E0_OFFSET_FLAGS], p_data);
@@ -563,8 +564,8 @@ re_e0_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
         .voc_index         = NAN,
         .nox_index         = NAN,
         .luminosity        = NAN,
-        .sound_dba_avg     = NAN,
-        .sound_dba_peak    = NAN,
+        .sound_avg_dba     = NAN,
+        .sound_peak_spl_db    = NAN,
         .measurement_count = measurement_cnt,
         .voltage           = NAN,
 

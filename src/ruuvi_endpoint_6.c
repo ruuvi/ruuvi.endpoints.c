@@ -50,13 +50,13 @@ const re_u9_coeffs_t re_6_coeffs_nox =
     .ratio       = RE_6_NOX_RATIO,
 };
 
-const re_u9_coeffs_t re_6_coeffs_sound_dba_avg =
+const re_u9_coeffs_t re_6_coeffs_sound_avg_dba =
 {
-    .bit9_offset = RE_6_SOUND_DBA_AVG_BIT9_OFFSET,
+    .bit9_offset = RE_6_SOUND_AVG_DBA_BIT9_OFFSET,
     .invalid_val = RE_6_INVALID_SOUND,
-    .min_val     = RE_6_SOUND_DBA_MIN,
-    .max_val     = RE_6_SOUND_DBA_MAX,
-    .ratio       = RE_6_SOUND_DBA_RATIO,
+    .min_val     = RE_6_SOUND_MIN,
+    .max_val     = RE_6_SOUND_MAX,
+    .ratio       = RE_6_SOUND_RATIO,
 };
 
 const re_i16_coeffs_t re_6_coeffs_temperature =
@@ -211,15 +211,15 @@ re_6_decode_luminosity (const uint8_t * const p_slot)
 }
 
 static void
-re_6_encode_sound_dba_avg (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
+re_6_encode_sound_avg_dba (uint8_t * const p_slot, uint8_t * const p_flags, re_float val)
 {
-    re_encode_u9 (p_slot, p_flags, &re_6_coeffs_sound_dba_avg, val);
+    re_encode_u9 (p_slot, p_flags, &re_6_coeffs_sound_avg_dba, val);
 }
 
 static re_float
-re_6_decode_sound_dba_avg (const uint8_t * const p_slot, const uint8_t * const p_flags)
+re_6_decode_sound_avg_dba (const uint8_t * const p_slot, const uint8_t * const p_flags)
 {
-    return re_decode_u9 (p_slot, p_flags, &re_6_coeffs_sound_dba_avg);
+    return re_decode_u9 (p_slot, p_flags, &re_6_coeffs_sound_avg_dba);
 }
 
 static void
@@ -338,10 +338,10 @@ re_6_encode (uint8_t * const p_buffer, const re_6_data_t * const p_data)
         re_6_encode_voc (&p_buffer[RE_6_OFFSET_VOC], &p_buffer[RE_6_OFFSET_FLAGS], p_data->voc);
         re_6_encode_nox (&p_buffer[RE_6_OFFSET_NOX], &p_buffer[RE_6_OFFSET_FLAGS], p_data->nox);
         re_6_encode_luminosity (&p_buffer[RE_6_OFFSET_LUMINOSITY], p_data->luminosity);
-        re_6_encode_sound_dba_avg (
-            &p_buffer[RE_6_OFFSET_SOUND_DBA_AVG],
+        re_6_encode_sound_avg_dba (
+            &p_buffer[RE_6_OFFSET_SOUND_AVG_DBA],
             &p_buffer[RE_6_OFFSET_FLAGS],
-            p_data->sound_dba_avg);
+            p_data->sound_avg_dba);
         re_6_encode_seq_cnt2 (&p_buffer[RE_6_OFFSET_SEQ_CNT2], p_data->seq_cnt2);
         re_6_encode_flags (&p_buffer[RE_6_OFFSET_FLAGS], p_data->flags);
         re_6_encode_address (p_buffer, p_data->mac_addr_24);
@@ -446,8 +446,8 @@ re_6_decode (const uint8_t * const p_buffer, re_6_data_t * const p_data)
     p_data->nox           = re_6_decode_nox (&p_payload[RE_6_OFFSET_NOX],
                             &p_payload[RE_6_OFFSET_FLAGS]);
     p_data->luminosity    = re_6_decode_luminosity (&p_payload[RE_6_OFFSET_LUMINOSITY]);
-    p_data->sound_dba_avg = re_6_decode_sound_dba_avg (
-                                &p_payload[RE_6_OFFSET_SOUND_DBA_AVG],
+    p_data->sound_avg_dba = re_6_decode_sound_avg_dba (
+                                &p_payload[RE_6_OFFSET_SOUND_AVG_DBA],
                                 &p_payload[RE_6_OFFSET_FLAGS]);
     p_data->seq_cnt2    = re_6_decode_seq_cnt2 (&p_payload[RE_6_OFFSET_SEQ_CNT2]);
     p_data->flags       = re_6_decode_flags (&p_payload[RE_6_OFFSET_FLAGS]);
@@ -472,7 +472,7 @@ re_6_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
         .voc               = NAN,
         .nox               = NAN,
         .luminosity        = NAN,
-        .sound_dba_avg     = NAN,
+        .sound_avg_dba     = NAN,
         .seq_cnt2          = measurement_cnt & RE_BYTE_MASK,
         .flags             = {
             .flag_calibration_in_progress = false,

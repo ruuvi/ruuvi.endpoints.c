@@ -32,23 +32,23 @@ test_ruuvi_endpoint_e1_get_ok (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 29.5f,
-        .humidity_rh    = 55.3f,
-        .pressure_pa    = 101102.0f,
-        .pm1p0_ppm      = 10.1f,
-        .pm2p5_ppm      = 11.2f,
-        .pm4p0_ppm      = 121.3f,
-        .pm10p0_ppm     = 455.4f,
-        .co2            = 201,
-        .voc            = 10,
-        .nox            = 2,
-        .luminosity     = 13027,
-        .sound_dba_inst = 42.4f,
-        .sound_dba_avg  = 47.6f,
-        .sound_dba_peak = 80.4f,
-        .seq_cnt        = 0xDECDEE,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 29.5f,
+        .humidity_rh       = 55.3f,
+        .pressure_pa       = 101102.0f,
+        .pm1p0_ppm         = 10.1f,
+        .pm2p5_ppm         = 11.2f,
+        .pm4p0_ppm         = 121.3f,
+        .pm10p0_ppm        = 455.4f,
+        .co2               = 201,
+        .voc               = 10,
+        .nox               = 2,
+        .luminosity        = 13027,
+        .sound_inst_dba    = 42.4f,
+        .sound_avg_dba     = 47.6f,
+        .sound_peak_spl_db = 80.4f,
+        .seq_cnt           = 0xDECDEE,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -61,14 +61,14 @@ test_ruuvi_endpoint_e1_get_ok (void)
         0x04, 0xBD,                        // PM4.0
         0x11, 0xCA,                        // PM10.0
         0x00, 0xC9,                        // CO2
-        0x0A,                              // VOX
-        0x02,                              // NOX
+        0x05,                              // VOX
+        0x01,                              // NOX
         0x13, 0xE0, 0xAC,                  // Luminosity
-        0x7A,                              // Sound inst
-        0x94,                              // Sound avg
-        0x38,                              // Sound peak
+        0x3D,                              // Sound inst
+        0x4A,                              // Sound avg
+        0x9C,                              // Sound peak
         0xDE, 0xCD, 0xEE,                  // Seq cnt
-        0x20,                              // Flags
+        0x00,                              // Flags
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      // Reserved
         0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F // MAC address
     };
@@ -97,12 +97,12 @@ test_ruuvi_endpoint_e1_get_ok (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -124,23 +124,23 @@ test_ruuvi_endpoint_e1_get_zeroes (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -189,12 +189,12 @@ test_ruuvi_endpoint_e1_get_zeroes (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -216,23 +216,23 @@ test_ruuvi_endpoint_e1_get_temperature (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 25.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 25.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -281,12 +281,12 @@ test_ruuvi_endpoint_e1_get_temperature (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -308,23 +308,23 @@ test_ruuvi_endpoint_e1_get_humidity (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 70.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 70.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -373,12 +373,12 @@ test_ruuvi_endpoint_e1_get_humidity (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -400,23 +400,23 @@ test_ruuvi_endpoint_e1_get_pressure (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 100000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 100000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -465,12 +465,12 @@ test_ruuvi_endpoint_e1_get_pressure (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -492,23 +492,23 @@ test_ruuvi_endpoint_e1_get_pm1m0 (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 700.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 700.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -557,12 +557,12 @@ test_ruuvi_endpoint_e1_get_pm1m0 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -584,23 +584,23 @@ test_ruuvi_endpoint_e1_get_pm2m5 (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 700.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 700.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -649,12 +649,12 @@ test_ruuvi_endpoint_e1_get_pm2m5 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -676,23 +676,23 @@ test_ruuvi_endpoint_e1_get_pm4m0 (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 700.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 700.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -741,12 +741,12 @@ test_ruuvi_endpoint_e1_get_pm4m0 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -768,23 +768,23 @@ test_ruuvi_endpoint_e1_get_pm10m0 (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 700.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 700.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -833,12 +833,12 @@ test_ruuvi_endpoint_e1_get_pm10m0 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -860,23 +860,23 @@ test_ruuvi_endpoint_e1_get_co2 (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 35000,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 35000,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -925,12 +925,12 @@ test_ruuvi_endpoint_e1_get_co2 (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -952,23 +952,23 @@ test_ruuvi_endpoint_e1_get_voc (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 499,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 499,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -981,7 +981,7 @@ test_ruuvi_endpoint_e1_get_voc (void)
         0x00, 0x00,                        // PM4.0
         0x00, 0x00,                        // PM10.0
         0x00, 0x00,                        // CO2
-        0xF3,                              // VOX
+        0xF9,                              // VOX
         0x00,                              // NOX
         0x00, 0x00, 0x00,                  // Luminosity
         0x00,                              // Sound inst
@@ -1017,12 +1017,12 @@ test_ruuvi_endpoint_e1_get_voc (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1044,23 +1044,23 @@ test_ruuvi_endpoint_e1_get_nox (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 498,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 497,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1074,7 +1074,7 @@ test_ruuvi_endpoint_e1_get_nox (void)
         0x00, 0x00,                        // PM10.0
         0x00, 0x00,                        // CO2
         0x00,                              // VOX
-        0xF2,                              // NOX
+        0xF8,                              // NOX
         0x00, 0x00, 0x00,                  // Luminosity
         0x00,                              // Sound inst
         0x00,                              // Sound avg
@@ -1109,12 +1109,12 @@ test_ruuvi_endpoint_e1_get_nox (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1136,23 +1136,23 @@ test_ruuvi_endpoint_e1_get_luminosity (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 144000.02f,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 144000.02f,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1201,12 +1201,12 @@ test_ruuvi_endpoint_e1_get_luminosity (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1218,7 +1218,7 @@ test_ruuvi_endpoint_e1_get_luminosity (void)
 }
 
 void
-test_ruuvi_endpoint_e1_get_sound_dba_inst (void)
+test_ruuvi_endpoint_e1_get_sound_inst_dba (void)
 {
     static const re_e1_flags_t flags =
     {
@@ -1228,23 +1228,23 @@ test_ruuvi_endpoint_e1_get_sound_dba_inst (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 101.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 101.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1260,7 +1260,7 @@ test_ruuvi_endpoint_e1_get_sound_dba_inst (void)
         0x00,                              // VOX
         0x00,                              // NOX
         0x00, 0x00, 0x00,                  // Luminosity
-        0x9F,                              // Sound inst
+        0xCF,                              // Sound inst
         0x00,                              // Sound avg
         0x00,                              // Sound peak
         0x00, 0x00, 0x00,                  // Seq cnt
@@ -1293,12 +1293,12 @@ test_ruuvi_endpoint_e1_get_sound_dba_inst (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1310,7 +1310,7 @@ test_ruuvi_endpoint_e1_get_sound_dba_inst (void)
 }
 
 void
-test_ruuvi_endpoint_e1_get_sound_dba_avg (void)
+test_ruuvi_endpoint_e1_get_sound_avg_dba (void)
 {
     static const re_e1_flags_t flags =
     {
@@ -1320,23 +1320,23 @@ test_ruuvi_endpoint_e1_get_sound_dba_avg (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 101.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 101.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1353,7 +1353,7 @@ test_ruuvi_endpoint_e1_get_sound_dba_avg (void)
         0x00,                              // NOX
         0x00, 0x00, 0x00,                  // Luminosity
         0x00,                              // Sound inst
-        0x9F,                              // Sound avg
+        0xCF,                              // Sound avg
         0x00,                              // Sound peak
         0x00, 0x00, 0x00,                  // Seq cnt
         0x10,                              // Flags
@@ -1385,12 +1385,12 @@ test_ruuvi_endpoint_e1_get_sound_dba_avg (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1402,7 +1402,7 @@ test_ruuvi_endpoint_e1_get_sound_dba_avg (void)
 }
 
 void
-test_ruuvi_endpoint_e1_get_sound_dba_peak (void)
+test_ruuvi_endpoint_e1_get_sound_peak_spl_db (void)
 {
     static const re_e1_flags_t flags =
     {
@@ -1412,23 +1412,23 @@ test_ruuvi_endpoint_e1_get_sound_dba_peak (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 101.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 101.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1446,7 +1446,7 @@ test_ruuvi_endpoint_e1_get_sound_dba_peak (void)
         0x00, 0x00, 0x00,                  // Luminosity
         0x00,                              // Sound inst
         0x00,                              // Sound avg
-        0x9F,                              // Sound peak
+        0xCF,                              // Sound peak
         0x00, 0x00, 0x00,                  // Seq cnt
         0x20,                              // Flags
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      // Reserved
@@ -1477,12 +1477,12 @@ test_ruuvi_endpoint_e1_get_sound_dba_peak (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1504,23 +1504,23 @@ test_ruuvi_endpoint_e1_get_seq_cnt (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0xABCDEF,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0xABCDEF,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1569,12 +1569,12 @@ test_ruuvi_endpoint_e1_get_seq_cnt (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1596,23 +1596,23 @@ test_ruuvi_endpoint_e1_get_flag_calibration_in_progress (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1661,12 +1661,12 @@ test_ruuvi_endpoint_e1_get_flag_calibration_in_progress (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1688,23 +1688,23 @@ test_ruuvi_endpoint_e1_get_flag_button_pressed (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1753,12 +1753,12 @@ test_ruuvi_endpoint_e1_get_flag_button_pressed (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1780,23 +1780,23 @@ test_ruuvi_endpoint_e1_get_flag_rtc_running_on_boot (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 0.0f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18.0f,
-        .sound_dba_avg  = 18.0f,
-        .sound_dba_peak = 18.0f,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 0.0f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18.0f,
+        .sound_avg_dba     = 18.0f,
+        .sound_peak_spl_db = 18.0f,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t valid_data[] =
     {
@@ -1845,12 +1845,12 @@ test_ruuvi_endpoint_e1_get_flag_rtc_running_on_boot (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1872,23 +1872,23 @@ test_ruuvi_endpoint_e1_get_ok_max (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 163.835f,
-        .humidity_rh    = 100.0f,
-        .pressure_pa    = 115534.0f,
-        .pm1p0_ppm      = 1000.0f,
-        .pm2p5_ppm      = 1000.0f,
-        .pm4p0_ppm      = 1000.0f,
-        .pm10p0_ppm     = 1000.0f,
-        .co2            = 40000,
-        .voc            = 500,
-        .nox            = 500,
-        .luminosity     = 144284.00f,
-        .sound_dba_inst = 120,
-        .sound_dba_avg  = 120,
-        .sound_dba_peak = 120,
-        .seq_cnt        = 0xFFFFFE,
-        .flags          = flags,
-        .address        = 0xFFFFFFFFFFFF,
+        .temperature_c     = 163.835f,
+        .humidity_rh       = 100.0f,
+        .pressure_pa       = 115534.0f,
+        .pm1p0_ppm         = 1000.0f,
+        .pm2p5_ppm         = 1000.0f,
+        .pm4p0_ppm         = 1000.0f,
+        .pm10p0_ppm        = 1000.0f,
+        .co2               = 40000,
+        .voc               = 500,
+        .nox               = 500,
+        .luminosity        = 144284.00f,
+        .sound_inst_dba    = 120,
+        .sound_avg_dba     = 120,
+        .sound_peak_spl_db = 120,
+        .seq_cnt           = 0xFFFFFE,
+        .flags             = flags,
+        .address           = 0xFFFFFFFFFFFF,
     };
     static const uint8_t max_data[] =
     {
@@ -1901,14 +1901,14 @@ test_ruuvi_endpoint_e1_get_ok_max (void)
         0x27, 0x10,                        // PM4.0
         0x27, 0x10,                        // PM10.0
         0x9C, 0x40,                        // CO2
-        0xF4,                              // VOC
-        0xF4,                              // NOX
+        0xFA,                              // VOC
+        0xFA,                              // NOX
         0xDC, 0x28, 0xF0,                  // Luminosity
-        0xFE,                              // Sound inst
-        0xFE,                              // Sound avg
-        0xFE,                              // Sound peak
+        0xFF,                              // Sound inst
+        0xFF,                              // Sound avg
+        0xFF,                              // Sound peak
         0xFF, 0xFF, 0xFE,                  // Seq cnt
-        0xFF,                              // Flags
+        0x07,                              // Flags
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      // Reserved
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF // MAC address
     };
@@ -1937,12 +1937,12 @@ test_ruuvi_endpoint_e1_get_ok_max (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -1964,23 +1964,23 @@ test_ruuvi_endpoint_e1_get_ok_min (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = -163.835f,
-        .humidity_rh    = 0.0f,
-        .pressure_pa    = 50000.0f,
-        .pm1p0_ppm      = 0.0f,
-        .pm2p5_ppm      = 0.0f,
-        .pm4p0_ppm      = 0.0f,
-        .pm10p0_ppm     = 0.0f,
-        .co2            = 0,
-        .voc            = 0,
-        .nox            = 0,
-        .luminosity     = 0,
-        .sound_dba_inst = 18,
-        .sound_dba_avg  = 18,
-        .sound_dba_peak = 18,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = -163.835f,
+        .humidity_rh       = 0.0f,
+        .pressure_pa       = 50000.0f,
+        .pm1p0_ppm         = 0.0f,
+        .pm2p5_ppm         = 0.0f,
+        .pm4p0_ppm         = 0.0f,
+        .pm10p0_ppm        = 0.0f,
+        .co2               = 0,
+        .voc               = 0,
+        .nox               = 0,
+        .luminosity        = 0,
+        .sound_inst_dba    = 18,
+        .sound_avg_dba     = 18,
+        .sound_peak_spl_db = 18,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     static const uint8_t min_data[] =
     {
@@ -2029,12 +2029,12 @@ test_ruuvi_endpoint_e1_get_ok_min (void)
     TEST_ASSERT_EQUAL (lrintf (data.voc), lrintf (decoded_data.voc));
     TEST_ASSERT_EQUAL (lrintf (data.nox), lrintf (decoded_data.nox));
     TEST_ASSERT_EQUAL (lrintf (data.luminosity), lrintf (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -2061,23 +2061,23 @@ test_ruuvi_endpoint_e1_get_error_null_buffer (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 29.5f,
-        .humidity_rh    = 55.3f,
-        .pressure_pa    = 101102.0f,
-        .pm1p0_ppm      = 10.1f,
-        .pm2p5_ppm      = 11.2f,
-        .pm4p0_ppm      = 121.3f,
-        .pm10p0_ppm     = 455.4f,
-        .co2            = 201,
-        .voc            = 10,
-        .nox            = 2,
-        .luminosity     = 13027,
-        .sound_dba_inst = 42.4f,
-        .sound_dba_avg  = 47.6f,
-        .sound_dba_peak = 80.4f,
-        .seq_cnt        = 0xDECDEE,
-        .flags          = flags,
-        .address        = 0xCBB8334C884F,
+        .temperature_c     = 29.5f,
+        .humidity_rh       = 55.3f,
+        .pressure_pa       = 101102.0f,
+        .pm1p0_ppm         = 10.1f,
+        .pm2p5_ppm         = 11.2f,
+        .pm4p0_ppm         = 121.3f,
+        .pm10p0_ppm        = 455.4f,
+        .co2               = 201,
+        .voc               = 10,
+        .nox               = 2,
+        .luminosity        = 13027,
+        .sound_inst_dba    = 42.4f,
+        .sound_avg_dba     = 47.6f,
+        .sound_peak_spl_db = 80.4f,
+        .seq_cnt           = 0xDECDEE,
+        .flags             = flags,
+        .address           = 0xCBB8334C884F,
     };
     uint8_t * const p_test_buffer = NULL;
     TEST_ASSERT_EQUAL (RE_ERROR_NULL, re_e1_encode (p_test_buffer, &data));
@@ -2113,23 +2113,23 @@ test_ruuvi_endpoint_e1_get_invalid_data (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = NAN,
-        .humidity_rh    = NAN,
-        .pressure_pa    = NAN,
-        .pm1p0_ppm      = NAN,
-        .pm2p5_ppm      = NAN,
-        .pm4p0_ppm      = NAN,
-        .pm10p0_ppm     = NAN,
-        .co2            = NAN,
-        .voc            = NAN,
-        .nox            = NAN,
-        .luminosity     = NAN,
-        .sound_dba_inst = NAN,
-        .sound_dba_avg  = NAN,
-        .sound_dba_peak = NAN,
-        .seq_cnt        = RE_E1_INVALID_SEQUENCE,
-        .flags          = flags,
-        .address        = 0xFFFFFFFFFFFF,
+        .temperature_c     = NAN,
+        .humidity_rh       = NAN,
+        .pressure_pa       = NAN,
+        .pm1p0_ppm         = NAN,
+        .pm2p5_ppm         = NAN,
+        .pm4p0_ppm         = NAN,
+        .pm10p0_ppm        = NAN,
+        .co2               = NAN,
+        .voc               = NAN,
+        .nox               = NAN,
+        .luminosity        = NAN,
+        .sound_inst_dba    = NAN,
+        .sound_avg_dba     = NAN,
+        .sound_peak_spl_db = NAN,
+        .seq_cnt           = RE_E1_INVALID_SEQUENCE,
+        .flags             = flags,
+        .address           = 0xFFFFFFFFFFFF,
     };
     static const uint8_t invalid_data[] =
     {
@@ -2178,12 +2178,12 @@ test_ruuvi_endpoint_e1_get_invalid_data (void)
     TEST_ASSERT (isnan (decoded_data.voc));
     TEST_ASSERT (isnan (decoded_data.nox));
     TEST_ASSERT (isnan (decoded_data.luminosity));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_inst * 10.0f),
-                       lrintf (decoded_data.sound_dba_inst * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_avg * 10.0f),
-                       lrintf (decoded_data.sound_dba_avg * 10.0f));
-    TEST_ASSERT_EQUAL (lrintf (data.sound_dba_peak * 10.0f),
-                       lrintf (decoded_data.sound_dba_peak * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_inst_dba * 10.0f),
+                       lrintf (decoded_data.sound_inst_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_avg_dba * 10.0f),
+                       lrintf (decoded_data.sound_avg_dba * 10.0f));
+    TEST_ASSERT_EQUAL (lrintf (data.sound_peak_spl_db * 10.0f),
+                       lrintf (decoded_data.sound_peak_spl_db * 10.0f));
     TEST_ASSERT_EQUAL (data.seq_cnt, decoded_data.seq_cnt);
     TEST_ASSERT_EQUAL (data.flags.flag_calibration_in_progress,
                        decoded_data.flags.flag_calibration_in_progress);
@@ -2205,23 +2205,23 @@ test_ruuvi_endpoint_e1_underflow (void)
     };
     static const re_e1_data_t m_re_fe_data_underflow =
     {
-        .temperature_c  = -164,
-        .humidity_rh    = -1,
-        .pressure_pa    = 49999,
-        .pm1p0_ppm      = -1,
-        .pm2p5_ppm      = -1,
-        .pm4p0_ppm      = -1,
-        .pm10p0_ppm     = -1,
-        .co2            = -1,
-        .voc            = -1,
-        .nox            = -1,
-        .luminosity     = -1,
-        .sound_dba_inst = -1,
-        .sound_dba_avg  = -1,
-        .sound_dba_peak = -1,
-        .seq_cnt        = 0,
-        .flags          = flags,
-        .address        = 0x000000000000,
+        .temperature_c     = -164,
+        .humidity_rh       = -1,
+        .pressure_pa       = 49999,
+        .pm1p0_ppm         = -1,
+        .pm2p5_ppm         = -1,
+        .pm4p0_ppm         = -1,
+        .pm10p0_ppm        = -1,
+        .co2               = -1,
+        .voc               = -1,
+        .nox               = -1,
+        .luminosity        = -1,
+        .sound_inst_dba    = -1,
+        .sound_avg_dba     = -1,
+        .sound_peak_spl_db = -1,
+        .seq_cnt           = 0,
+        .flags             = flags,
+        .address           = 0x000000000000,
     };
     static const uint8_t min_data[] =
     {
@@ -2262,23 +2262,23 @@ test_ruuvi_endpoint_e1_overflow (void)
     };
     static const re_e1_data_t data =
     {
-        .temperature_c  = 163.9f,
-        .humidity_rh    = 100.1f,
-        .pressure_pa    = 115535.0f,
-        .pm1p0_ppm      = 1000.1,
-        .pm2p5_ppm      = 1000.1,
-        .pm4p0_ppm      = 1000.1,
-        .pm10p0_ppm     = 1000.1,
-        .co2            = 40001,
-        .voc            = 501,
-        .nox            = 501,
-        .luminosity     = 144285.00f,
-        .sound_dba_inst = 130,
-        .sound_dba_avg  = 130,
-        .sound_dba_peak = 130,
-        .seq_cnt        = 0xFFFFFF,
-        .flags          = flags,
-        .address        = 0xFFFFFFFFFFFF,
+        .temperature_c     = 163.9f,
+        .humidity_rh       = 100.1f,
+        .pressure_pa       = 115535.0f,
+        .pm1p0_ppm         = 1000.1,
+        .pm2p5_ppm         = 1000.1,
+        .pm4p0_ppm         = 1000.1,
+        .pm10p0_ppm        = 1000.1,
+        .co2               = 40001,
+        .voc               = 501,
+        .nox               = 501,
+        .luminosity        = 144285.00f,
+        .sound_inst_dba    = 130,
+        .sound_avg_dba     = 130,
+        .sound_peak_spl_db = 130,
+        .seq_cnt           = 0xFFFFFF,
+        .flags             = flags,
+        .address           = 0xFFFFFFFFFFFF,
     };
     static const uint8_t max_data[] =
     {
@@ -2291,14 +2291,14 @@ test_ruuvi_endpoint_e1_overflow (void)
         0x27, 0x10,                        // PM4.0
         0x27, 0x10,                        // PM10.0
         0x9C, 0x40,                        // CO2
-        0xF4,                              // VOC
-        0xF4,                              // NOX
+        0xFA,                              // VOC
+        0xFA,                              // NOX
         0xDC, 0x28, 0xF0,                  // Luminosity
-        0xFE,                              // Sound inst
-        0xFE,                              // Sound avg
-        0xFE,                              // Sound peak
+        0xFF,                              // Sound inst
+        0xFF,                              // Sound avg
+        0xFF,                              // Sound peak
         0xFF, 0xFF, 0xFF,                  // Seq cnt
-        0xFF,                              // Flags
+        0x07,                              // Flags
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF,      // Reserved
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF // MAC address
     };
@@ -2351,9 +2351,9 @@ test_ruuvi_endpoint_e1_data_invalid (void)
     TEST_ASSERT (isnan (data.voc));
     TEST_ASSERT (isnan (data.nox));
     TEST_ASSERT (isnan (data.luminosity));
-    TEST_ASSERT (isnan (data.sound_dba_inst));
-    TEST_ASSERT (isnan (data.sound_dba_avg));
-    TEST_ASSERT (isnan (data.sound_dba_peak));
+    TEST_ASSERT (isnan (data.sound_inst_dba));
+    TEST_ASSERT (isnan (data.sound_avg_dba));
+    TEST_ASSERT (isnan (data.sound_peak_spl_db));
     TEST_ASSERT_EQUAL (data.seq_cnt, measurement_cnt);
     TEST_ASSERT_EQUAL (false, data.flags.flag_calibration_in_progress);
     TEST_ASSERT_EQUAL (false, data.flags.flag_button_pressed);
