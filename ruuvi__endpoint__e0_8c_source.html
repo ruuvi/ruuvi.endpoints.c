@@ -383,30 +383,30 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__e0_8c_source.html',''
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>}</div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="keyword">static</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>re_e0_encode_sound_dba (uint8_t * <span class="keyword">const</span> p_slot, re_float val)</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>re_e0_encode_sound (uint8_t * <span class="keyword">const</span> p_slot, re_float val)</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>{</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    uint8_t coded_val = RE_E0_INVALID_SOUND_DBA;</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    uint8_t coded_val = RE_E0_INVALID_SOUND;</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordflow">if</span> (!isnan (val))</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    {</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        re_clip (&amp;val, RE_E0_SOUND_DBA_MIN, RE_E0_SOUND_DBA_MAX);</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        coded_val = (uint16_t) lrintf (val * RE_E0_SOUND_DBA_RATIO);</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        re_clip (&amp;val, RE_E0_SOUND_MIN, RE_E0_SOUND_MAX);</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        coded_val = (uint16_t) lrintf (val * RE_E0_SOUND_RATIO);</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    }</div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span> </div>
 <div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    p_slot[0] |= coded_val;</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>}</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="keyword">static</span> re_float</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>re_e0_decode_sound_dba (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_slot)</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>re_e0_decode_sound (<span class="keyword">const</span> uint8_t * <span class="keyword">const</span> p_slot)</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>{</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    uint8_t coded_val = p_slot[0];</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="keywordflow">if</span> (RE_E0_INVALID_SOUND_DBA == coded_val)</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="keywordflow">if</span> (RE_E0_INVALID_SOUND == coded_val)</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    {</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>        <span class="keywordflow">return</span> NAN;</div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    }</div>
 <div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keywordflow">return</span> (re_float) coded_val / RE_E0_SOUND_DBA_RATIO;</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keywordflow">return</span> (re_float) coded_val / RE_E0_SOUND_RATIO;</div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>}</div>
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
 <div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="keyword">static</span> <span class="keywordtype">void</span></div>
@@ -558,8 +558,8 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__e0_8c_source.html',''
 <div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        re_e0_encode_voc (&amp;p_buffer[RE_E0_OFFSET_VOC_INDEX_MSB], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a>);</div>
 <div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        re_e0_encode_nox (&amp;p_buffer[RE_E0_OFFSET_NOX_INDEX_MSB], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a>);</div>
 <div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        re_e0_encode_luminosity (&amp;p_buffer[RE_E0_OFFSET_LUMINOSITY_MSB], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a7e288b2bce5bfba7957966c3d610aaa2">luminosity</a>);</div>
-<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        re_e0_encode_sound_dba (&amp;p_buffer[RE_E0_OFFSET_SOUND_DBA_AVG], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ab916d436253c3f8463a4b17908ef330c">sound_dba_avg</a>);</div>
-<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        re_e0_encode_sound_dba (&amp;p_buffer[RE_E0_OFFSET_SOUND_DBA_PEAK], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#aff5255574c5c1880ffa666e84f14fcec">sound_dba_peak</a>);</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        re_e0_encode_sound (&amp;p_buffer[RE_E0_OFFSET_SOUND_AVG_DBA], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a7142b41c3c630b61471b3d0868fdf5f0">sound_avg_dba</a>);</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        re_e0_encode_sound (&amp;p_buffer[RE_E0_OFFSET_SOUND_PEAK_SPL_DB], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a08d218f4d8fab6801bce998468545675">sound_peak_spl_db</a>);</div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>        re_e0_encode_sequence (&amp;p_buffer[RE_E0_OFFSET_SEQ_CTR_MSB], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a>);</div>
 <div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span>        re_e0_encode_voltage (&amp;p_buffer[RE_E0_OFFSET_VOLTAGE], p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a4e72c7f011d6ce6db0be70e178d66b34">voltage</a>);</div>
 <div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>        re_e0_encode_flags (&amp;p_buffer[RE_E0_OFFSET_FLAGS], p_data);</div>
@@ -638,48 +638,50 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__e0_8c_source.html',''
 <div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">voc_index</a> = re_e0_decode_voc (&amp;p_payload[RE_E0_OFFSET_VOC_INDEX_MSB]);</div>
 <div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">nox_index</a> = re_e0_decode_nox (&amp;p_payload[RE_E0_OFFSET_NOX_INDEX_MSB]);</div>
 <div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a7e288b2bce5bfba7957966c3d610aaa2">luminosity</a> = re_e0_decode_luminosity (&amp;p_payload[RE_E0_OFFSET_LUMINOSITY_MSB]);</div>
-<div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ab916d436253c3f8463a4b17908ef330c">sound_dba_avg</a> = re_e0_decode_sound_dba (&amp;p_payload[RE_E0_OFFSET_SOUND_DBA_AVG]);</div>
-<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#aff5255574c5c1880ffa666e84f14fcec">sound_dba_peak</a> = re_e0_decode_sound_dba (&amp;p_payload[RE_E0_OFFSET_SOUND_DBA_PEAK]);</div>
-<div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a> = re_e0_decode_sequence (&amp;p_payload[RE_E0_OFFSET_SEQ_CTR_MSB]);</div>
-<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a4e72c7f011d6ce6db0be70e178d66b34">voltage</a> = re_e0_decode_voltage (&amp;p_payload[RE_E0_OFFSET_VOLTAGE]);</div>
-<div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span>    re_e0_decode_flags (&amp;p_payload[RE_E0_OFFSET_FLAGS], p_data);</div>
-<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a> = re_e0_decode_address (&amp;p_payload[RE_E0_OFFSET_ADDR_MSB]);</div>
-<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>}</div>
-<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span> </div>
-<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span><a class="code hl_struct" href="structre__e0__data__t.html">re_e0_data_t</a></div>
-<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>re_e0_data_invalid (<span class="keyword">const</span> uint16_t measurement_cnt, <span class="keyword">const</span> uint64_t radio_mac)</div>
-<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>{</div>
-<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structre__e0__data__t.html">re_e0_data_t</a> data =</div>
-<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>    {</div>
-<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>        .<a class="code hl_variable" href="structre__e0__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>     = NAN,</div>
-<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>        .humidity_rh       = NAN,</div>
-<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>        .pressure_pa       = NAN,</div>
-<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>        .pm1p0_ppm         = NAN,</div>
-<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>        .pm2p5_ppm         = NAN,</div>
-<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>        .pm4p0_ppm         = NAN,</div>
-<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>        .pm10p0_ppm        = NAN,</div>
-<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>        .co2               = NAN,</div>
-<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>        .voc_index         = NAN,</div>
-<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        .nox_index         = NAN,</div>
-<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>        .luminosity        = NAN,</div>
-<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>        .sound_dba_avg     = NAN,</div>
-<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        .sound_dba_peak    = NAN,</div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        .measurement_count = measurement_cnt,</div>
-<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>        .voltage           = NAN,</div>
-<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span> </div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>        .flag_usb_on                  = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>        .flag_low_battery             = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>        .flag_calibration_in_progress = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>        .flag_boost_mode              = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span> </div>
-<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>        .address = radio_mac,</div>
-<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>    };</div>
-<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>    <span class="keywordflow">return</span> data;</div>
-<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>}</div>
-<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span> </div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a7142b41c3c630b61471b3d0868fdf5f0">sound_avg_dba</a> = re_e0_decode_sound (&amp;p_payload[RE_E0_OFFSET_SOUND_AVG_DBA]);</div>
+<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a08d218f4d8fab6801bce998468545675">sound_peak_spl_db</a> = re_e0_decode_sound (</div>
+<div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>                                    &amp;p_payload[RE_E0_OFFSET_SOUND_PEAK_SPL_DB]);</div>
+<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a8ddbd55435635e488691c0093c35dde9">measurement_count</a> = re_e0_decode_sequence (&amp;p_payload[RE_E0_OFFSET_SEQ_CTR_MSB]);</div>
+<div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#a4e72c7f011d6ce6db0be70e178d66b34">voltage</a> = re_e0_decode_voltage (&amp;p_payload[RE_E0_OFFSET_VOLTAGE]);</div>
+<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>    re_e0_decode_flags (&amp;p_payload[RE_E0_OFFSET_FLAGS], p_data);</div>
+<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>    p_data-&gt;<a class="code hl_variable" href="structre__e0__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">address</a> = re_e0_decode_address (&amp;p_payload[RE_E0_OFFSET_ADDR_MSB]);</div>
+<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>}</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span> </div>
+<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span><a class="code hl_struct" href="structre__e0__data__t.html">re_e0_data_t</a></div>
+<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>re_e0_data_invalid (<span class="keyword">const</span> uint16_t measurement_cnt, <span class="keyword">const</span> uint64_t radio_mac)</div>
+<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>{</div>
+<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structre__e0__data__t.html">re_e0_data_t</a> data =</div>
+<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>    {</div>
+<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>        .<a class="code hl_variable" href="structre__e0__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">temperature_c</a>     = NAN,</div>
+<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>        .humidity_rh       = NAN,</div>
+<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>        .pressure_pa       = NAN,</div>
+<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>        .pm1p0_ppm         = NAN,</div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>        .pm2p5_ppm         = NAN,</div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>        .pm4p0_ppm         = NAN,</div>
+<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>        .pm10p0_ppm        = NAN,</div>
+<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>        .co2               = NAN,</div>
+<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        .voc_index         = NAN,</div>
+<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>        .nox_index         = NAN,</div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>        .luminosity        = NAN,</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        .sound_avg_dba     = NAN,</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>        .sound_peak_spl_db    = NAN,</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>        .measurement_count = measurement_cnt,</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>        .voltage           = NAN,</div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span> </div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>        .flag_usb_on                  = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>        .flag_low_battery             = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>        .flag_calibration_in_progress = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>        .flag_boost_mode              = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span> </div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>        .address = radio_mac,</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>    };</div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>    <span class="keywordflow">return</span> data;</div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>}</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span> </div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="astructre__e0__data__t_html"><div class="ttname"><a href="structre__e0__data__t.html">re_e0_data_t</a></div><div class="ttdoc">All data required for Ruuvi dataformat 0xE0 package.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00126">ruuvi_endpoint_e0.h:127</a></div></div>
+<div class="ttc" id="astructre__e0__data__t_html_a08d218f4d8fab6801bce998468545675"><div class="ttname"><a href="structre__e0__data__t.html#a08d218f4d8fab6801bce998468545675">re_e0_data_t::sound_peak_spl_db</a></div><div class="ttdeci">re_float sound_peak_spl_db</div><div class="ttdoc">Sound dBA peak.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00140">ruuvi_endpoint_e0.h:140</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a1d85b356a066532685061c3d31cc53c1"><div class="ttname"><a href="structre__e0__data__t.html#a1d85b356a066532685061c3d31cc53c1">re_e0_data_t::flag_low_battery</a></div><div class="ttdeci">bool flag_low_battery</div><div class="ttdoc">Flag: LOW BATTERY.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00145">ruuvi_endpoint_e0.h:145</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a2cc7e9dc3b18ec085d487b3e3f0deaab"><div class="ttname"><a href="structre__e0__data__t.html#a2cc7e9dc3b18ec085d487b3e3f0deaab">re_e0_data_t::pm10p0_ppm</a></div><div class="ttdeci">re_float pm10p0_ppm</div><div class="ttdoc">Particulate matter mass concentration PM10.0 in micrograms/m3.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00134">ruuvi_endpoint_e0.h:134</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a3e8b1bce5679a8bbe095f0a7327358f4"><div class="ttname"><a href="structre__e0__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4">re_e0_data_t::temperature_c</a></div><div class="ttdeci">re_float temperature_c</div><div class="ttdoc">Temperature in degrees Celsius.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00128">ruuvi_endpoint_e0.h:128</a></div></div>
@@ -689,17 +691,16 @@ $(document).ready(function(){initNavTree('ruuvi__endpoint__e0_8c_source.html',''
 <div class="ttc" id="astructre__e0__data__t_html_a65901ef6029bb2f76c110ebd1d67de85"><div class="ttname"><a href="structre__e0__data__t.html#a65901ef6029bb2f76c110ebd1d67de85">re_e0_data_t::flag_boost_mode</a></div><div class="ttdeci">bool flag_boost_mode</div><div class="ttdoc">Flag: Boost mode.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00147">ruuvi_endpoint_e0.h:147</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a6b53561bef0bcf81442f6ee13f077a17"><div class="ttname"><a href="structre__e0__data__t.html#a6b53561bef0bcf81442f6ee13f077a17">re_e0_data_t::pressure_pa</a></div><div class="ttdeci">re_float pressure_pa</div><div class="ttdoc">Humidity in relative humidity percentage.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00130">ruuvi_endpoint_e0.h:130</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a6f1666df0ba488041b5c68a93f2153b3"><div class="ttname"><a href="structre__e0__data__t.html#a6f1666df0ba488041b5c68a93f2153b3">re_e0_data_t::pm4p0_ppm</a></div><div class="ttdeci">re_float pm4p0_ppm</div><div class="ttdoc">Particulate matter mass concentration PM4.0 in micrograms/m3.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00133">ruuvi_endpoint_e0.h:133</a></div></div>
+<div class="ttc" id="astructre__e0__data__t_html_a7142b41c3c630b61471b3d0868fdf5f0"><div class="ttname"><a href="structre__e0__data__t.html#a7142b41c3c630b61471b3d0868fdf5f0">re_e0_data_t::sound_avg_dba</a></div><div class="ttdeci">re_float sound_avg_dba</div><div class="ttdoc">Sound dBA avg.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00139">ruuvi_endpoint_e0.h:139</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a7e288b2bce5bfba7957966c3d610aaa2"><div class="ttname"><a href="structre__e0__data__t.html#a7e288b2bce5bfba7957966c3d610aaa2">re_e0_data_t::luminosity</a></div><div class="ttdeci">re_float luminosity</div><div class="ttdoc">Luminosity.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00138">ruuvi_endpoint_e0.h:138</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a83f97f1f70325e8019a795c7b8730549"><div class="ttname"><a href="structre__e0__data__t.html#a83f97f1f70325e8019a795c7b8730549">re_e0_data_t::pm2p5_ppm</a></div><div class="ttdeci">re_float pm2p5_ppm</div><div class="ttdoc">Particulate matter mass concentration PM2.5 in micrograms/m3.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00132">ruuvi_endpoint_e0.h:132</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_a8ddbd55435635e488691c0093c35dde9"><div class="ttname"><a href="structre__e0__data__t.html#a8ddbd55435635e488691c0093c35dde9">re_e0_data_t::measurement_count</a></div><div class="ttdeci">uint16_t measurement_count</div><div class="ttdoc">Running counter of measurement.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00141">ruuvi_endpoint_e0.h:141</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_aa76a88ffa6beb92370dbce5123f07e01"><div class="ttname"><a href="structre__e0__data__t.html#aa76a88ffa6beb92370dbce5123f07e01">re_e0_data_t::pm1p0_ppm</a></div><div class="ttdeci">re_float pm1p0_ppm</div><div class="ttdoc">Particulate matter mass concentration PM1.0 in micrograms/m3.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00131">ruuvi_endpoint_e0.h:131</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_ab161ba36f321635098ac0b7df611b76a"><div class="ttname"><a href="structre__e0__data__t.html#ab161ba36f321635098ac0b7df611b76a">re_e0_data_t::flag_calibration_in_progress</a></div><div class="ttdeci">bool flag_calibration_in_progress</div><div class="ttdoc">Flag: Calibration in progress.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00146">ruuvi_endpoint_e0.h:146</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_ab6b52376c1b9d81e6ea6f95a1225f832"><div class="ttname"><a href="structre__e0__data__t.html#ab6b52376c1b9d81e6ea6f95a1225f832">re_e0_data_t::address</a></div><div class="ttdeci">uint64_t address</div><div class="ttdoc">BLE address of device, most significant byte first.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00149">ruuvi_endpoint_e0.h:149</a></div></div>
-<div class="ttc" id="astructre__e0__data__t_html_ab916d436253c3f8463a4b17908ef330c"><div class="ttname"><a href="structre__e0__data__t.html#ab916d436253c3f8463a4b17908ef330c">re_e0_data_t::sound_dba_avg</a></div><div class="ttdeci">re_float sound_dba_avg</div><div class="ttdoc">Sound dBA avg.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00139">ruuvi_endpoint_e0.h:139</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_ae6e835fec8248ceeb8fad3fde4f5cf05"><div class="ttname"><a href="structre__e0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05">re_e0_data_t::voc_index</a></div><div class="ttdeci">re_float voc_index</div><div class="ttdoc">VOC index points.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00136">ruuvi_endpoint_e0.h:136</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_aef2b8ea6d2dd2dcfd612771ecdd801a4"><div class="ttname"><a href="structre__e0__data__t.html#aef2b8ea6d2dd2dcfd612771ecdd801a4">re_e0_data_t::flag_usb_on</a></div><div class="ttdeci">bool flag_usb_on</div><div class="ttdoc">Flag: USB ON.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00144">ruuvi_endpoint_e0.h:144</a></div></div>
 <div class="ttc" id="astructre__e0__data__t_html_af3a90cd7c112bc5c4f84fd3171bb9f0d"><div class="ttname"><a href="structre__e0__data__t.html#af3a90cd7c112bc5c4f84fd3171bb9f0d">re_e0_data_t::nox_index</a></div><div class="ttdeci">re_float nox_index</div><div class="ttdoc">NOx index points.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00137">ruuvi_endpoint_e0.h:137</a></div></div>
-<div class="ttc" id="astructre__e0__data__t_html_aff5255574c5c1880ffa666e84f14fcec"><div class="ttname"><a href="structre__e0__data__t.html#aff5255574c5c1880ffa666e84f14fcec">re_e0_data_t::sound_dba_peak</a></div><div class="ttdeci">re_float sound_dba_peak</div><div class="ttdoc">Sound dBA peak.</div><div class="ttdef"><b>Definition</b> <a href="ruuvi__endpoint__e0_8h_source.html#l00140">ruuvi_endpoint_e0.h:140</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

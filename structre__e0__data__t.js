@@ -15,8 +15,8 @@ var structre__e0__data__t =
     [ "pm2p5_ppm", "structre__e0__data__t.html#a83f97f1f70325e8019a795c7b8730549", null ],
     [ "pm4p0_ppm", "structre__e0__data__t.html#a6f1666df0ba488041b5c68a93f2153b3", null ],
     [ "pressure_pa", "structre__e0__data__t.html#a6b53561bef0bcf81442f6ee13f077a17", null ],
-    [ "sound_dba_avg", "structre__e0__data__t.html#ab916d436253c3f8463a4b17908ef330c", null ],
-    [ "sound_dba_peak", "structre__e0__data__t.html#aff5255574c5c1880ffa666e84f14fcec", null ],
+    [ "sound_avg_dba", "structre__e0__data__t.html#a7142b41c3c630b61471b3d0868fdf5f0", null ],
+    [ "sound_peak_spl_db", "structre__e0__data__t.html#a08d218f4d8fab6801bce998468545675", null ],
     [ "temperature_c", "structre__e0__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4", null ],
     [ "voc_index", "structre__e0__data__t.html#ae6e835fec8248ceeb8fad3fde4f5cf05", null ],
     [ "voltage", "structre__e0__data__t.html#a4e72c7f011d6ce6db0be70e178d66b34", null ]

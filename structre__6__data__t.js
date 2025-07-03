@@ -9,7 +9,7 @@ var structre__6__data__t =
     [ "pm2p5_ppm", "structre__6__data__t.html#a83f97f1f70325e8019a795c7b8730549", null ],
     [ "pressure_pa", "structre__6__data__t.html#a6b53561bef0bcf81442f6ee13f077a17", null ],
     [ "seq_cnt2", "structre__6__data__t.html#a5e178010a98f4efe90d85fb95c7197d6", null ],
-    [ "sound_dba_avg", "structre__6__data__t.html#ab916d436253c3f8463a4b17908ef330c", null ],
+    [ "sound_avg_dba", "structre__6__data__t.html#a7142b41c3c630b61471b3d0868fdf5f0", null ],
     [ "temperature_c", "structre__6__data__t.html#a3e8b1bce5679a8bbe095f0a7327358f4", null ],
     [ "voc", "structre__6__data__t.html#aafe2e232d854593f8cc170dcacc3e14a", null ]
 ];
