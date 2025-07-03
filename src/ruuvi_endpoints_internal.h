@@ -139,9 +139,9 @@ re_encode_u9 (uint8_t * const p_slot, uint8_t * const p_flags,
                                      p_coeffs->ratio);
     }
 
-    *p_slot |= re_be16_get_low_byte (coded_val);
+    *p_slot |= (coded_val >> RE_BIT_1_SHIFT) & RE_BYTE_MASK;
 
-    if (0 != (re_be16_get_high_byte (coded_val) & RE_BIT1_MASK))
+    if (0 != (coded_val & RE_BIT1_MASK))
     {
         *p_flags |= (uint8_t) (1U << p_coeffs->bit9_offset);
     }
@@ -152,10 +152,11 @@ re_decode_u9 (const uint8_t * const p_slot, const uint8_t * const p_flags,
               const re_u9_coeffs_t * const p_coeffs)
 {
     uint16_t coded_val = (uint16_t) * p_slot;
+    coded_val <<= RE_BIT_1_SHIFT;
 
     if (0 != ( (*p_flags >> p_coeffs->bit9_offset) & RE_BIT1_MASK))
     {
-        coded_val |= (uint16_t) (1U << RE_BYTE_1_SHIFT);
+        coded_val |= 1U;
     }
 
     if (p_coeffs->invalid_val == coded_val)

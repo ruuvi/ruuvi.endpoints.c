@@ -66,6 +66,8 @@
 #define RE_BYTE_MASK    (0xFFU)
 #define RE_BIT1_MASK    (0x01U)
 
+#define RE_BIT_1_SHIFT (1U)
+
 typedef uint32_t re_status_t;                   //!< Status code
 typedef float    re_float;                      //!< Ruuvi endpoint float type
 
