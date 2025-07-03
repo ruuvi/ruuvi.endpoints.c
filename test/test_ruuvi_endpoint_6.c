@@ -8,11 +8,7 @@
 #define RE_6_BLE_PACKET_HEADER 0x02, 0x01, 0x06, 0x03, 0x03, 0x98, 0xFC, 0x17, 0xFF, 0x99, 0x04
 
 #define RE_6_DATA_MAC_ADDR_INIT(mac_byte3, mac_byte4, mac_byte5) \
-    { \
-        .byte3 = mac_byte3, \
-        .byte4 = mac_byte4, \
-        .byte5 = mac_byte5, \
-    }
+    { .byte3 = mac_byte3, .byte4 = mac_byte4, .byte5 = mac_byte5 }
 
 void
 setUp (void)
