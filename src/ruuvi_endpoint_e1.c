@@ -454,7 +454,6 @@ re_e1_encode (uint8_t * const p_buffer, const re_e1_data_t * const p_data)
         p_buffer[RE_E1_OFFSET_RESERVED + 2] = 0xFFU;
         p_buffer[RE_E1_OFFSET_RESERVED + 3] = 0xFFU;
         p_buffer[RE_E1_OFFSET_RESERVED + 4] = 0xFFU;
-        p_buffer[RE_E1_OFFSET_RESERVED + 5] = 0xFFU;
         re_e1_encode_address (p_buffer, p_data->address);
     }
 
