@@ -2337,9 +2337,9 @@ test_ruuvi_endpoint_e1_check_format_fail (void)
 void
 test_ruuvi_endpoint_e1_data_invalid (void)
 {
-    const uint16_t     measurement_cnt = 123;
-    const uint64_t     radio_mac       = 0xCBB8334C884FULL;
-    const re_e1_data_t data            = re_e1_data_invalid (measurement_cnt, radio_mac);
+    const re_e1_seq_cnt_t  measurement_cnt = 0x123456;
+    const re_e1_mac_addr_t radio_mac       = 0xCBB8334C884FULL;
+    const re_e1_data_t     data            = re_e1_data_invalid (measurement_cnt, radio_mac);
     TEST_ASSERT (isnan (data.temperature_c));
     TEST_ASSERT (isnan (data.humidity_rh));
     TEST_ASSERT (isnan (data.pressure_pa));
