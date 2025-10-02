@@ -133,6 +133,9 @@
 
 #define RE_E1_OFFSET_ADDR_MSB (34U)
 
+typedef uint32_t re_e1_seq_cnt_t;  //<! Measurement sequence counter.
+typedef uint64_t re_e1_mac_addr_t; //<! MAC address, most significant byte first.
+
 /** @brief Description of flags field */
 typedef struct re_e1_flags_t
 {
@@ -144,27 +147,28 @@ typedef struct re_e1_flags_t
 /** @brief All data required for Ruuvi dataformat 0xE1 package. */
 typedef struct
 {
-    re_float temperature_c;          //!< Temperature in degrees Celsius.
-    re_float humidity_rh;            //!< Humidity in relative humidity percentage.
-    re_float pressure_pa;            //!< Humidity in relative humidity percentage.
-    re_float pm1p0_ppm;              /*!< Particulate matter mass concentration PM1.0
-                                       in micrograms/m3. */
-    re_float pm2p5_ppm;              /*!< Particulate matter mass concentration PM2.5
-                                       in micrograms/m3. */
-    re_float pm4p0_ppm;              /*!< Particulate matter mass concentration PM4.0
-                                       in micrograms/m3. */
-    re_float pm10p0_ppm;             /*!< Particulate matter mass concentration PM10.0
-                                       in micrograms/m3. */
-    re_float      co2;               //!< CO2 concentration in ppm
-    re_float      voc;               //!< VOC index points.
-    re_float      nox;               //!< NOx index points.
-    re_float      luminosity;        //!< Luminosity.
-    re_float      sound_inst_dba;    //!< Sound dBA instant.
-    re_float      sound_avg_dba;     //!< Sound dBA average.
-    re_float      sound_peak_spl_db; //!< Sound dBA peak.
-    uint32_t      seq_cnt;           //!< Running counter of measurement.
-    re_e1_flags_t flags;             //!< Flags for additional information.
-    uint64_t      address;           //!< BLE address of device, most significant byte first.
+    re_float temperature_c;             //!< Temperature in degrees Celsius.
+    re_float humidity_rh;               //!< Humidity in relative humidity percentage.
+    re_float pressure_pa;               //!< Humidity in relative humidity percentage.
+    re_float pm1p0_ppm;                 /*!< Particulate matter mass concentration PM1.0
+                                          in micrograms/m3. */
+    re_float pm2p5_ppm;                 /*!< Particulate matter mass concentration PM2.5
+                                          in micrograms/m3. */
+    re_float pm4p0_ppm;                 /*!< Particulate matter mass concentration PM4.0
+                                          in micrograms/m3. */
+    re_float pm10p0_ppm;                /*!< Particulate matter mass concentration PM10.0
+                                          in micrograms/m3. */
+    re_float         co2;               //!< CO2 concentration in ppm
+    re_float         voc;               //!< VOC index points.
+    re_float         nox;               //!< NOx index points.
+    re_float         luminosity;        //!< Luminosity.
+    re_float         sound_inst_dba;    //!< Sound dBA instant.
+    re_float         sound_avg_dba;     //!< Sound dBA average.
+    re_float         sound_peak_spl_db; //!< Sound dBA peak.
+    re_e1_seq_cnt_t  seq_cnt;           //!< Running counter of measurement.
+    re_e1_flags_t    flags;             //!< Flags for additional information.
+    re_e1_mac_addr_t address;           /*!< BLE address of device,
+                                          most significant byte first. */
 } re_e1_data_t;
 
 /**
@@ -210,11 +214,11 @@ re_e1_decode (const uint8_t * const p_buffer, re_e1_data_t * const p_data);
 
 /**
  * @brief Create invalid Ruuvi DFxE1 data.
- * @param measurement_cnt Running counter of measurement.
+ * @param seq_cnt Running counter of measurement.
  * @param radio_mac BLE address of device.
  * @return /ref re_e1_data_t with all values set to NAN.
  */
 re_e1_data_t
-re_e1_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac);
+re_e1_data_invalid (const re_e1_seq_cnt_t seq_cnt, const re_e1_mac_addr_t radio_mac);
 
 #endif

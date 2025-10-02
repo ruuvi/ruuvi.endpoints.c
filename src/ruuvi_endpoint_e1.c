@@ -283,17 +283,17 @@ re_e1_decode_sound (const uint8_t * const p_slot, const uint8_t * const p_flags,
 }
 
 static void
-re_e1_encode_sequence (uint8_t * const p_slot, const uint32_t measurement_seq)
+re_e1_encode_sequence (uint8_t * const p_slot, const re_e1_seq_cnt_t measurement_seq)
 {
     p_slot[0] = (uint8_t) ( (measurement_seq >> RE_BYTE_2_SHIFT) & RE_BYTE_MASK);
     p_slot[1] = (uint8_t) ( (measurement_seq >> RE_BYTE_1_SHIFT) & RE_BYTE_MASK);
     p_slot[2] = (uint8_t) ( (measurement_seq >> RE_BYTE_0_SHIFT) & RE_BYTE_MASK);
 }
 
-static uint32_t
+static re_e1_seq_cnt_t
 re_e1_decode_sequence (const uint8_t * const p_buffer)
 {
-    uint32_t measurement_seq = 0;
+    re_e1_seq_cnt_t measurement_seq = 0;
     measurement_seq |= ( (uint32_t) p_buffer[0]) << RE_BYTE_2_SHIFT;
     measurement_seq |= ( (uint32_t) p_buffer[1]) << RE_BYTE_1_SHIFT;
     measurement_seq |= ( (uint32_t) p_buffer[2]) << RE_BYTE_0_SHIFT;
@@ -548,7 +548,7 @@ re_e1_decode (const uint8_t * const p_buffer, re_e1_data_t * const p_data)
 }
 
 re_e1_data_t
-re_e1_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
+re_e1_data_invalid (const re_e1_seq_cnt_t seq_cnt, const re_e1_mac_addr_t radio_mac)
 {
     const re_e1_data_t data =
     {
@@ -560,13 +560,13 @@ re_e1_data_invalid (const uint16_t measurement_cnt, const uint64_t radio_mac)
         .pm4p0_ppm         = NAN,
         .pm10p0_ppm        = NAN,
         .co2               = NAN,
-        .voc         = NAN,
-        .nox         = NAN,
+        .voc               = NAN,
+        .nox               = NAN,
         .luminosity        = NAN,
-        .sound_inst_dba     = NAN,
+        .sound_inst_dba    = NAN,
         .sound_avg_dba     = NAN,
-        .sound_peak_spl_db    = NAN,
-        .seq_cnt = measurement_cnt,
+        .sound_peak_spl_db = NAN,
+        .seq_cnt           = seq_cnt,
 
         .flags = {
             .flag_calibration_in_progress = false,

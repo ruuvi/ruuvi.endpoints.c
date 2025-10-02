@@ -9,9 +9,7 @@
 
 #define RE_6_DATA_MAC_ADDR_INIT(mac_byte3, mac_byte4, mac_byte5) \
     { \
-        .byte3 = mac_byte3, \
-        .byte4 = mac_byte4, \
-        .byte5 = mac_byte5, \
+        .byte3 = mac_byte3, .byte4 = mac_byte4, .byte5 = mac_byte5, \
     }
 
 void
