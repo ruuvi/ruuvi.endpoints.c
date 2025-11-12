@@ -1,4 +1,4 @@
-﻿#include "unity.h"
+#include "unity.h"
 
 #include <string.h>
 #include <stdint.h>
@@ -1153,8 +1153,8 @@ test_ruuvi_endpoint_6_get_ok_max (void)
         .temperature_c = 163.835f,
         .humidity_rh   = 100.0f,
         .pressure_pa   = 115534.0f,
-        .pm2p5_ppm     = 1000.0f,
-        .co2           = 40000,
+        .pm2p5_ppm     = 6553.4f,
+        .co2           = 65534,
         .voc           = 500,
         .nox           = 500,
         .luminosity    = 65535,
@@ -1169,8 +1169,8 @@ test_ruuvi_endpoint_6_get_ok_max (void)
         0x7F, 0xFF, // Temperature
         0x9C, 0x40, // Humidity
         0xFF, 0xFE, // Pressure
-        0x27, 0x10, // PM2.5
-        0x9C, 0x40, // CO2
+        0xFF, 0xFE, // PM2.5
+        0xFF, 0xFE, // CO2
         0xFA,       // VOC
         0xFA,       // NOX
         0xFE,       // Luminosity
@@ -1475,8 +1475,8 @@ test_ruuvi_endpoint_6_overflow (void)
         .temperature_c = 163.9f,
         .humidity_rh   = 100.1f,
         .pressure_pa   = 115535.0f,
-        .pm2p5_ppm     = 1000.1f,
-        .co2           = 40001,
+        .pm2p5_ppm     = 6553.4f,
+        .co2           = 65534,
         .voc           = 501,
         .nox           = 501,
         .luminosity    = 65536,
@@ -1491,8 +1491,8 @@ test_ruuvi_endpoint_6_overflow (void)
         0x7F, 0xFF, // Temperature
         0x9C, 0x40, // Humidity
         0xFF, 0xFE, // Pressure
-        0x27, 0x10, // PM2.5
-        0x9C, 0x40, // CO2
+        0xFF, 0xFE, // PM2.5
+        0xFF, 0xFE, // CO2
         0xFA,       // VOC
         0xFA,       // NOX
         0xFE,       // Luminosity
