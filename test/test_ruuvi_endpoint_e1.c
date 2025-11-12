@@ -1875,11 +1875,11 @@ test_ruuvi_endpoint_e1_get_ok_max (void)
         .temperature_c     = 163.835f,
         .humidity_rh       = 100.0f,
         .pressure_pa       = 115534.0f,
-        .pm1p0_ppm         = 1000.0f,
-        .pm2p5_ppm         = 1000.0f,
-        .pm4p0_ppm         = 1000.0f,
-        .pm10p0_ppm        = 1000.0f,
-        .co2               = 40000,
+        .pm1p0_ppm         = 6553.4f,
+        .pm2p5_ppm         = 6553.4f,
+        .pm4p0_ppm         = 6553.4f,
+        .pm10p0_ppm        = 6553.4f,
+        .co2               = 65534,
         .voc               = 500,
         .nox               = 500,
         .luminosity        = 144284.00f,
@@ -1896,11 +1896,11 @@ test_ruuvi_endpoint_e1_get_ok_max (void)
         0x7F, 0xFF,                        // Temperature
         0x9C, 0x40,                        // Humidity
         0xFF, 0xFE,                        // Pressure
-        0x27, 0x10,                        // PM1.0
-        0x27, 0x10,                        // PM2.5
-        0x27, 0x10,                        // PM4.0
-        0x27, 0x10,                        // PM10.0
-        0x9C, 0x40,                        // CO2
+        0xFF, 0xFE,                        // PM1.0
+        0xFF, 0xFE,                        // PM2.5
+        0xFF, 0xFE,                        // PM4.0
+        0xFF, 0xFE,                        // PM10.0
+        0xFF, 0xFE,                        // CO2
         0xFA,                              // VOC
         0xFA,                              // NOX
         0xDC, 0x28, 0xF0,                  // Luminosity
@@ -2265,11 +2265,11 @@ test_ruuvi_endpoint_e1_overflow (void)
         .temperature_c     = 163.9f,
         .humidity_rh       = 100.1f,
         .pressure_pa       = 115535.0f,
-        .pm1p0_ppm         = 1000.1,
-        .pm2p5_ppm         = 1000.1,
-        .pm4p0_ppm         = 1000.1,
-        .pm10p0_ppm        = 1000.1,
-        .co2               = 40001,
+        .pm1p0_ppm         = 6553.5f,
+        .pm2p5_ppm         = 6553.5f,
+        .pm4p0_ppm         = 6553.5f,
+        .pm10p0_ppm        = 6553.5f,
+        .co2               = 65535.0f,
         .voc               = 501,
         .nox               = 501,
         .luminosity        = 144285.00f,
@@ -2286,11 +2286,11 @@ test_ruuvi_endpoint_e1_overflow (void)
         0x7F, 0xFF,                        // Temperature
         0x9C, 0x40,                        // Humidity
         0xFF, 0xFE,                        // Pressure
-        0x27, 0x10,                        // PM1.0
-        0x27, 0x10,                        // PM2.5
-        0x27, 0x10,                        // PM4.0
-        0x27, 0x10,                        // PM10.0
-        0x9C, 0x40,                        // CO2
+        0xFF, 0xFE,                        // PM1.0
+        0xFF, 0xFE,                        // PM2.5
+        0xFF, 0xFE,                        // PM4.0
+        0xFF, 0xFE,                        // PM10.0
+        0xFF, 0xFE,                        // CO2
         0xFA,                              // VOC
         0xFA,                              // NOX
         0xDC, 0x28, 0xF0,                  // Luminosity

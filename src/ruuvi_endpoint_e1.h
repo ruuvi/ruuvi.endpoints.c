@@ -40,11 +40,11 @@
 #define RE_E1_PRESSURE_RATIO (1.0f)
 
 #define RE_E1_PM_MIN   (0.0f)
-#define RE_E1_PM_MAX   (1000.0f)
+#define RE_E1_PM_MAX   (6553.4f)
 #define RE_E1_PM_RATIO (10.0f)
 
 #define RE_E1_CO2_MIN   (0.0f)
-#define RE_E1_CO2_MAX   (40000.0f)
+#define RE_E1_CO2_MAX   (65534.0f)
 #define RE_E1_CO2_RATIO (1.0f)
 
 #define RE_E1_VOC_MIN   (0.0f)
