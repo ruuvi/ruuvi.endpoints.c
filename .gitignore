@@ -76,3 +76,6 @@ compile_commands.json
 
 \.idea/
 
+#VS Code settings
+.vscode/
+
