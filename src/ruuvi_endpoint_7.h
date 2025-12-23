@@ -28,75 +28,75 @@
 #define RE_7_DATA_LENGTH          (22U)
 
 /** Temperature: int16, 0.005°C resolution */
-#define RE_7_TEMP_MAX             (163.835f)
-#define RE_7_TEMP_MIN             (-163.835f)
+#define RE_7_TEMP_MAX (163.835f)
+#define RE_7_TEMP_MIN (-163.835f)
 
 /** Humidity: uint16, 0.0025% resolution */
-#define RE_7_HUMI_MAX             (163.835f)
-#define RE_7_HUMI_MIN             (0.0f)
+#define RE_7_HUMI_MAX (163.835f)
+#define RE_7_HUMI_MIN (0.0f)
 
 /** Pressure: uint16, 1 Pa resolution, offset 50000 Pa */
-#define RE_7_PRES_MAX             (115534.0f)
-#define RE_7_PRES_MIN             (50000.0f)
+#define RE_7_PRES_MAX (115534.0f)
+#define RE_7_PRES_MIN (50000.0f)
 
 /** Tilt: int8, 0.71° resolution, ±90° range */
-#define RE_7_TILT_MAX             (90.0f)
-#define RE_7_TILT_MIN             (-90.0f)
+#define RE_7_TILT_MAX (90.0f)
+#define RE_7_TILT_MIN (-90.0f)
 
 /** Luminosity: uint16, 1 lux resolution */
-#define RE_7_LUMI_MAX             (65534.0f)
-#define RE_7_LUMI_MIN             (0.0f)
+#define RE_7_LUMI_MAX (65534.0f)
+#define RE_7_LUMI_MIN (0.0f)
 
 /** Color temperature: uint8, 26K steps, 1000-7650K range */
-#define RE_7_COLOR_TEMP_MAX       (7650U)
-#define RE_7_COLOR_TEMP_MIN       (1000U)
+#define RE_7_COLOR_TEMP_MAX (7650U)
+#define RE_7_COLOR_TEMP_MIN (1000U)
 
 /** Battery: 4-bit, 1.8-3.6V range (~120mV steps) */
-#define RE_7_VOLTAGE_MAX          (3.6f)
-#define RE_7_VOLTAGE_MIN          (1.8f)
+#define RE_7_VOLTAGE_MAX (3.6f)
+#define RE_7_VOLTAGE_MIN (1.8f)
 
 /** Motion intensity: 4-bit, 0-15 scale */
-#define RE_7_MOTION_INT_MAX       (15U)
-#define RE_7_MOTION_INT_MIN       (0U)
+#define RE_7_MOTION_INT_MAX (15U)
+#define RE_7_MOTION_INT_MIN (0U)
 
 /** Motion count: 8-bit, 0-254 range */
-#define RE_7_MOTION_CNT_MAX       (254U)
-#define RE_7_MOTION_CNT_MIN       (0U)
+#define RE_7_MOTION_CNT_MAX (254U)
+#define RE_7_MOTION_CNT_MIN (0U)
 
 /** Sequence counter: 8-bit, 0-254 range */
-#define RE_7_SEQCTR_MAX           (254U)
-#define RE_7_SEQCTR_MIN           (0U)
+#define RE_7_SEQCTR_MAX (254U)
+#define RE_7_SEQCTR_MIN (0U)
 
 /** Payload offset in raw BLE advertisement (after company ID and header) */
-#define RE_7_OFFSET_PAYLOAD       (7U)
+#define RE_7_OFFSET_PAYLOAD (7U)
 
 /** Payload offsets within manufacturer data (22 bytes total) */
-#define RE_7_OFFSET_HEADER        (0U)   /**< Format header 0x07 */
-#define RE_7_OFFSET_SEQ           (1U)   /**< Message counter */
-#define RE_7_OFFSET_FLAGS         (2U)   /**< State flags */
-#define RE_7_OFFSET_TEMP_MSB      (3U)   /**< Temperature MSB */
-#define RE_7_OFFSET_TEMP_LSB      (4U)   /**< Temperature LSB */
-#define RE_7_OFFSET_HUMI_MSB      (5U)   /**< Humidity MSB */
-#define RE_7_OFFSET_HUMI_LSB      (6U)   /**< Humidity LSB */
-#define RE_7_OFFSET_PRES_MSB      (7U)   /**< Pressure MSB */
-#define RE_7_OFFSET_PRES_LSB      (8U)   /**< Pressure LSB */
-#define RE_7_OFFSET_TILT_X        (9U)   /**< Tilt X (pitch) */
-#define RE_7_OFFSET_TILT_Y        (10U)  /**< Tilt Y (roll) */
-#define RE_7_OFFSET_LUMI_MSB      (11U)  /**< Luminosity MSB */
-#define RE_7_OFFSET_LUMI_LSB      (12U)  /**< Luminosity LSB */
-#define RE_7_OFFSET_COLOR_TEMP    (13U)  /**< Color temperature */
-#define RE_7_OFFSET_BATT_MOTION   (14U)  /**< Battery (4-bit) + Motion intensity (4-bit) */
-#define RE_7_OFFSET_MOTION_CNT    (15U)  /**< Motion count */
-#define RE_7_OFFSET_CRC           (16U)  /**< CRC8 over bytes 0-15 */
-#define RE_7_OFFSET_MAC_0         (17U)  /**< MAC address byte 0 (MSB of 3 LSB) */
-#define RE_7_OFFSET_MAC_1         (18U)  /**< MAC address byte 1 */
-#define RE_7_OFFSET_MAC_2         (19U)  /**< MAC address byte 2 */
-#define RE_7_OFFSET_MAC_3         (20U)  /**< Reserved / MAC byte 3 */
-#define RE_7_OFFSET_MAC_4         (21U)  /**< Reserved / MAC byte 4 */
+#define RE_7_OFFSET_HEADER      (0U)  /**< Format header 0x07 */
+#define RE_7_OFFSET_SEQ         (1U)  /**< Message counter */
+#define RE_7_OFFSET_FLAGS       (2U)  /**< State flags */
+#define RE_7_OFFSET_TEMP_MSB    (3U)  /**< Temperature MSB */
+#define RE_7_OFFSET_TEMP_LSB    (4U)  /**< Temperature LSB */
+#define RE_7_OFFSET_HUMI_MSB    (5U)  /**< Humidity MSB */
+#define RE_7_OFFSET_HUMI_LSB    (6U)  /**< Humidity LSB */
+#define RE_7_OFFSET_PRES_MSB    (7U)  /**< Pressure MSB */
+#define RE_7_OFFSET_PRES_LSB    (8U)  /**< Pressure LSB */
+#define RE_7_OFFSET_TILT_X      (9U)  /**< Tilt X (pitch) */
+#define RE_7_OFFSET_TILT_Y      (10U) /**< Tilt Y (roll) */
+#define RE_7_OFFSET_LUMI_MSB    (11U) /**< Luminosity MSB */
+#define RE_7_OFFSET_LUMI_LSB    (12U) /**< Luminosity LSB */
+#define RE_7_OFFSET_COLOR_TEMP  (13U) /**< Color temperature */
+#define RE_7_OFFSET_BATT_MOTION (14U) /**< Battery (4-bit) + Motion intensity (4-bit) */
+#define RE_7_OFFSET_MOTION_CNT  (15U) /**< Motion count */
+#define RE_7_OFFSET_CRC         (16U) /**< CRC8 over bytes 0-15 */
+#define RE_7_OFFSET_MAC_0       (17U) /**< MAC address byte 0 (MSB of 3 LSB) */
+#define RE_7_OFFSET_MAC_1       (18U) /**< MAC address byte 1 */
+#define RE_7_OFFSET_MAC_2       (19U) /**< MAC address byte 2 */
+#define RE_7_OFFSET_MAC_3       (20U) /**< Reserved / MAC byte 3 */
+#define RE_7_OFFSET_MAC_4       (21U) /**< Reserved / MAC byte 4 */
 
 /** State flags bit positions */
-#define RE_7_FLAG_MOTION_NOW      (0U)   /**< Bit 0: Motion currently detected */
-#define RE_7_FLAG_PRESENCE        (1U)   /**< Bit 1: Presence/occupancy detected */
+#define RE_7_FLAG_MOTION_NOW (0U) /**< Bit 0: Motion currently detected */
+#define RE_7_FLAG_PRESENCE   (1U) /**< Bit 1: Presence/occupancy detected */
 
 /** @brief All data required for Ruuvi dataformat 7 package. */
 typedef struct
@@ -149,7 +149,8 @@ typedef struct
  * @retval RE_SUCCESS if data was encoded successfully.
  * @retval RE_ERROR_NULL if buffer or data is NULL.
  */
-re_status_t re_7_encode (uint8_t * const buffer, const re_7_data_t * data);
+re_status_t
+re_7_encode (uint8_t * const buffer, const re_7_data_t * data);
 
 /**
  * @brief Checks if the provided buffer conforms to the Ruuvi DF7 format.
@@ -160,7 +161,8 @@ re_status_t re_7_encode (uint8_t * const buffer, const re_7_data_t * data);
  * @param[in] p_buffer Pointer to a uint8_t input array with a length of 31 bytes to be checked.
  * @return Returns 'true' if the buffer format is Ruuvi DF7, 'false' otherwise.
  */
-bool re_7_check_format (const uint8_t * const p_buffer);
+bool
+re_7_check_format (const uint8_t * const p_buffer);
 
 /**
  * @brief Decodes a given buffer using the Ruuvi DF7 format.
@@ -176,6 +178,7 @@ bool re_7_check_format (const uint8_t * const p_buffer);
  * @retval RE_ERROR_INVALID_PARAM if format header is wrong.
  * @retval RE_ERROR_DECODING_CRC if CRC check fails.
  */
-re_status_t re_7_decode (const uint8_t * const p_buffer, re_7_data_t * const p_data);
+re_status_t
+re_7_decode (const uint8_t * const p_buffer, re_7_data_t * const p_data);
 
 #endif
