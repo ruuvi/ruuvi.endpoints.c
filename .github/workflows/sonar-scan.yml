@@ -35,7 +35,7 @@ jobs:
         build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} \
           gcc -c src/*.c -I./nRF5_SDK_15.3.0_59ac345/components/libraries/util -I./src
 
-    - name: Set up Ruby 3.0
+    - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: '3.0'
@@ -46,10 +46,8 @@ jobs:
         gem install ceedling
         pip install gcovr
 
-    - name: Run tests with coverage
-      run: |
-        ceedling gcov:all
-        gcov -b -c build_ceedling/gcov/out/*.gcno
+    - name: Run tests
+      run: make test_all_gcov
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarqube-scan-action@v5
