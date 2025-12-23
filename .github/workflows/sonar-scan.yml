@@ -49,7 +49,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         ceedling gcov:all
-        gcov -b -c build/gcov/out/*.gcno
+        gcov -b -c build_ceedling/gcov/out/*.gcno
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarqube-scan-action@v5
