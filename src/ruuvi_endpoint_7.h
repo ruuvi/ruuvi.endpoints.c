@@ -25,7 +25,7 @@
 #define RE_7_INVALID_MOTION_INT   (0x0FU)
 #define RE_7_INVALID_MOTION_COUNT (0xFFU)
 #define RE_7_INVALID_MAC          (0xFFFFFFU)
-#define RE_7_DATA_LENGTH          (22U)
+#define RE_7_DATA_LENGTH          (20U)
 
 /** Temperature: int16, 0.005°C resolution */
 #define RE_7_TEMP_MAX (163.835f)
@@ -39,7 +39,8 @@
 #define RE_7_PRES_MAX (115534.0f)
 #define RE_7_PRES_MIN (50000.0f)
 
-/** Tilt: int8, 0.71° resolution, ±90° range */
+/** Tilt: int8, ±90° range, ~0.71° resolution
+ *  Encoding: coded = tilt * (126/90), value 127 reserved for invalid */
 #define RE_7_TILT_MAX (90.0f)
 #define RE_7_TILT_MIN (-90.0f)
 
@@ -51,7 +52,8 @@
 #define RE_7_COLOR_TEMP_MAX (7650U)
 #define RE_7_COLOR_TEMP_MIN (1000U)
 
-/** Battery: 4-bit, 1.8-3.6V range (~120mV steps) */
+/** Battery: 4-bit, 1.8-3.6V range (~128mV steps)
+ *  Encoding: coded = (voltage - 1.8) * (14/1.8), value 15 reserved for invalid */
 #define RE_7_VOLTAGE_MAX (3.6f)
 #define RE_7_VOLTAGE_MIN (1.8f)
 
@@ -90,9 +92,7 @@
 #define RE_7_OFFSET_CRC         (16U) /**< CRC8 over bytes 0-15 */
 #define RE_7_OFFSET_MAC_0       (17U) /**< MAC address byte 0 (MSB of 3 LSB) */
 #define RE_7_OFFSET_MAC_1       (18U) /**< MAC address byte 1 */
-#define RE_7_OFFSET_MAC_2       (19U) /**< MAC address byte 2 */
-#define RE_7_OFFSET_MAC_3       (20U) /**< Reserved / MAC byte 3 */
-#define RE_7_OFFSET_MAC_4       (21U) /**< Reserved / MAC byte 4 */
+#define RE_7_OFFSET_MAC_2       (19U) /**< MAC address byte 2 (LSB) */
 
 /** State flags bit positions */
 #define RE_7_FLAG_MOTION_NOW (0U) /**< Bit 0: Motion currently detected */

@@ -24,7 +24,7 @@ static const re_7_data_t m_re_7_data_ok = { .temperature_c     = 24.3f,
                                             .sequence_counter  = 123U,
                                             .motion_detected   = true,
                                             .presence_detected = true,
-                                            .address           = 0xCBB8334C88ULL
+                                            .address           = 0x334C88ULL  /* 3 LSB of MAC */
                                           };
 
 /* Maximum valid data */
@@ -45,7 +45,7 @@ static const re_7_data_t m_re_7_data_ok_max = { .temperature_c     = 163.835f,
                                                 .sequence_counter  = 254U,
                                                 .motion_detected   = true,
                                                 .presence_detected = true,
-                                                .address           = 0xFFFFFFFFFFULL
+                                                .address           = 0xFFFFFFULL  /* 3 LSB max */
                                               };
 
 /* Minimum valid data */
@@ -86,7 +86,7 @@ static const re_7_data_t m_re_7_data_invalid = { .temperature_c     = NAN,
                                                  .sequence_counter  = 255U, /* Invalid */
                                                  .motion_detected   = false,
                                                  .presence_detected = false,
-                                                 .address           = 0xFFFFFFFFFFULL
+                                                 .address           = 0xFFFFFFULL  /* 3 LSB max */
                                                };
 
 /* Underflow data (below valid range) */
@@ -128,7 +128,7 @@ static const re_7_data_t m_re_7_data_overflow = { .temperature_c     = 170.0f,
                                                   .sequence_counter  = 254U, /* Clamped to max */
                                                   .motion_detected   = true,
                                                   .presence_detected = true,
-                                                  .address           = 0xCBB8334C88ULL
+                                                  .address           = 0x334C88ULL  /* 3 LSB of MAC */
                                                 };
 
 void
@@ -590,15 +590,15 @@ void
 test_ruuvi_endpoint_7_batt_motion_packed (void)
 {
     re_7_data_t data                      = m_re_7_data_ok;
-    data.battery_v                        = 2.7f; /* ~7.5 in 4-bit scale */
+    data.battery_v                        = 2.7f; /* ~7.0 in 4-bit scale */
     data.motion_intensity                 = 10U;
     uint8_t test_buffer[RE_7_DATA_LENGTH] = { 0 };
     re_7_encode (test_buffer, &data);
     uint8_t packed        = test_buffer[RE_7_OFFSET_BATT_MOTION];
     uint8_t batt_nibble   = (packed >> 4) & 0x0F;
     uint8_t motion_nibble = packed & 0x0F;
-    /* Battery: (2.7 - 1.8) * (15/1.8) = 7.5 -> 8 */
-    TEST_ASSERT_UINT8_WITHIN (1U, 8U, batt_nibble);
+    /* Battery: (2.7 - 1.8) * (14/1.8) = 0.9 * 7.778 = 7.0 */
+    TEST_ASSERT_UINT8_WITHIN (1U, 7U, batt_nibble);
     TEST_ASSERT_EQUAL_UINT8 (10U, motion_nibble);
 }
 /**

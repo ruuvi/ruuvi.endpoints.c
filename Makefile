@@ -247,9 +247,9 @@ TEST_MAKEFILE_EXT_ADV_MAX = ${BUILD_DIR}_ext_adv_max/MakefileTestSupport
 -include ${TEST_MAKEFILE_EXT_ADV_48}
 -include ${TEST_MAKEFILE_EXT_ADV_MAX}
 
-.PHONY: all clean doxygen sonar astyle
+.PHONY: all clean doxygen sonar format
 
-all: clean astyle doxygen sonar
+all: clean format doxygen sonar
 
 # Specify all tests as dependencies of 'all' (workaround for JetBrains CLion)
 # It is needed because on the first scan of Makefile the $(TEST_MAKEFILE) does not exist and it is not included.
@@ -275,9 +275,10 @@ $(SONAR): $(ANALYSIS)
 $(ANALYSIS): %.a: %.c
 	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
 
-astyle:
+astyle: format
+
+format:
 	./scripts/clang_format_all.sh
-	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
 
 clean:
 	rm -f $(ANALYSIS)

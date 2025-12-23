@@ -392,23 +392,19 @@ static void
 re_7_encode_mac (uint8_t * const buffer, const re_7_data_t * data)
 {
     uint64_t mac = data->address;
-    /* Store 5 bytes of MAC address (offset 17-21) */
-    buffer[RE_7_OFFSET_MAC_0] = (mac >> 32) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_1] = (mac >> 24) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_2] = (mac >> 16) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_3] = (mac >> 8) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_4] = (mac >> 0) & RE_BYTE_MASK;
+    /* Store 3 LSB of MAC address (offset 17-19) */
+    buffer[RE_7_OFFSET_MAC_0] = (mac >> 16) & RE_BYTE_MASK;
+    buffer[RE_7_OFFSET_MAC_1] = (mac >> 8) & RE_BYTE_MASK;
+    buffer[RE_7_OFFSET_MAC_2] = (mac >> 0) & RE_BYTE_MASK;
 }
 
 static uint64_t
 re_7_decode_mac (const uint8_t * const buffer)
 {
     uint64_t mac = 0;
-    mac |= ( (uint64_t) buffer[RE_7_OFFSET_MAC_0]) << 32;
-    mac |= ( (uint64_t) buffer[RE_7_OFFSET_MAC_1]) << 24;
-    mac |= ( (uint64_t) buffer[RE_7_OFFSET_MAC_2]) << 16;
-    mac |= ( (uint64_t) buffer[RE_7_OFFSET_MAC_3]) << 8;
-    mac |= ( (uint64_t) buffer[RE_7_OFFSET_MAC_4]) << 0;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_0]) << 16;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_1]) << 8;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_2]) << 0;
     return mac;
 }
 
