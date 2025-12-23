@@ -59,6 +59,6 @@ jobs:
           -Dsonar.organization=ruuvi
           -Dsonar.projectKey=ruuvi_ruuvi.endpoints.c
           -Dsonar.sources=./src
-          -Dsonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json
+          -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
           -Dsonar.cfamily.gcov.reportsPath=.
           -Dsonar.host.url=https://sonarcloud.io
