@@ -18,7 +18,7 @@ jobs:
     # Install clang-format-18
     - name: Install clang-format-18
       run: |
-        wget -qO- https://apt.llvm.org/llvm.sh | sudo bash -s 18
+        wget -qO- --max-redirect=0 https://apt.llvm.org/llvm.sh | sudo bash -s 18
         sudo apt-get install -y clang-format-18
 
     # Run clang-format check (dry-run)

@@ -20,6 +20,13 @@ Unit tests are run by Ceedling.
 ## Static code analysis
 Test coverage and code analysis are reported by [Sonarcloud](https://sonarcloud.io/dashboard?id=ruuvi.endpoints.c). Additionally the project is analyzed with PVS Studio and report is published to [GH Pages](https://ruuvi.github.io/ruuvi.endpoints.c/fullhtml)
 
+### SonarQube for IDE (VS Code)
+To enable C/C++ analysis in VS Code with SonarQube for IDE, generate a compilation database:
+```bash
+ls src/*.c | while read f; do echo "{\"directory\": \"$(pwd)\", \"file\": \"$f\", \"command\": \"gcc -c $f -I./src\"}"; done | jq -s '.' > compile_commands.json
+```
+The VS Code settings are pre-configured to use this file.
+
 ## Styling
 Styling is done via Artisitic Style, following configuration at .astylerc. 
 

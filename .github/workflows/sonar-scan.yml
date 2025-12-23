@@ -21,12 +21,12 @@ jobs:
         fetch-depth: 0  # Shallow clones should be disabled for better analysis
 
     - name: Install build-wrapper
-      uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5
+      uses: SonarSource/sonarqube-scan-action/install-build-wrapper@2f77a1ec69fb1d595b06f35ab27e97605bdef703 # v5
 
     - name: Download Nordic SDK
       run: |
         if [ ! -d "nRF5_SDK_15.3.0_59ac345/modules" ]; then
-          wget -q https://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/nRF5_SDK_15.3.0_59ac345.zip
+          wget -q --max-redirect=0 https://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/nRF5_SDK_15.3.0_59ac345.zip
           unzip -q nRF5_SDK_15.3.0_59ac345.zip
         fi
 
@@ -36,7 +36,7 @@ jobs:
           gcc -c src/*.c -I./nRF5_SDK_15.3.0_59ac345/components/libraries/util -I./src
 
     - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
       with:
         ruby-version: '3.0'
         bundler-cache: true
@@ -50,7 +50,7 @@ jobs:
       run: make test_all_gcov
 
     - name: SonarCloud Scan
-      uses: SonarSource/sonarqube-scan-action@v5
+      uses: SonarSource/sonarqube-scan-action@2f77a1ec69fb1d595b06f35ab27e97605bdef703 # v5
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

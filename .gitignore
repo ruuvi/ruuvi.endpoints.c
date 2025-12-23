@@ -71,5 +71,8 @@ doxygen.error
 # GCOV output
 *.gcov
 
+# Compilation database for SonarQube IDE analysis
+compile_commands.json
+
 \.idea/
 

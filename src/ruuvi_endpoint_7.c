@@ -190,7 +190,7 @@ re_7_encode_tilt (uint8_t * const buffer, const re_7_data_t * data)
     const re_float acc_z        = data->acceleration_z_g;
 
     /* Check if any acceleration component is valid */
-    if (!isnan (acc_x) && !isnan (acc_y) && !isnan (acc_z))
+    if ((!isnan (acc_x)) && (!isnan (acc_y)) && (!isnan (acc_z)))
     {
         /* Calculate magnitude of acceleration vector */
         const re_float magnitude = sqrtf (acc_x * acc_x + acc_y * acc_y + acc_z * acc_z);
@@ -299,8 +299,8 @@ re_7_encode_color_temp (uint8_t * const buffer, const re_7_data_t * data)
 {
     uint8_t coded_color_temp = RE_7_INVALID_COLOR_TEMP;
 
-    if (data->color_temp_k >= RE_7_COLOR_TEMP_MIN
-            && data->color_temp_k <= RE_7_COLOR_TEMP_MAX)
+    if ((data->color_temp_k >= RE_7_COLOR_TEMP_MIN)
+            && (data->color_temp_k <= RE_7_COLOR_TEMP_MAX))
     {
         coded_color_temp = (uint8_t) ( (data->color_temp_k - RE_7_COLOR_TEMP_OFFSET) /
                                        RE_7_COLOR_TEMP_STEP);
@@ -345,8 +345,8 @@ re_7_encode_batt_motion (uint8_t * const buffer, const re_7_data_t * data)
         coded_motion = data->motion_intensity;
     }
 
-    buffer[RE_7_OFFSET_BATT_MOTION] = (coded_battery << RE_7_NIBBLE_HIGH_SHIFT) |
-                                      (coded_motion & RE_7_NIBBLE_MASK);
+    buffer[RE_7_OFFSET_BATT_MOTION] = (uint8_t) (((uint8_t) (coded_battery << RE_7_NIBBLE_HIGH_SHIFT)) |
+                                                  (coded_motion & RE_7_NIBBLE_MASK));
 }
 
 static void
@@ -393,18 +393,18 @@ re_7_encode_mac (uint8_t * const buffer, const re_7_data_t * data)
 {
     uint64_t mac = data->address;
     /* Store 3 LSB of MAC address (offset 17-19) */
-    buffer[RE_7_OFFSET_MAC_0] = (mac >> 16) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_1] = (mac >> 8) & RE_BYTE_MASK;
-    buffer[RE_7_OFFSET_MAC_2] = (mac >> 0) & RE_BYTE_MASK;
+    buffer[RE_7_OFFSET_MAC_0] = (mac >> RE_BYTE_2_SHIFT) & RE_BYTE_MASK;
+    buffer[RE_7_OFFSET_MAC_1] = (mac >> RE_BYTE_1_SHIFT) & RE_BYTE_MASK;
+    buffer[RE_7_OFFSET_MAC_2] = (mac >> RE_BYTE_0_SHIFT) & RE_BYTE_MASK;
 }
 
 static uint64_t
 re_7_decode_mac (const uint8_t * const buffer)
 {
     uint64_t mac = 0;
-    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_0]) << 16;
-    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_1]) << 8;
-    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_2]) << 0;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_0]) << RE_BYTE_2_SHIFT;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_1]) << RE_BYTE_1_SHIFT;
+    mac |= ((uint64_t) buffer[RE_7_OFFSET_MAC_2]) << RE_BYTE_0_SHIFT;
     return mac;
 }
 
