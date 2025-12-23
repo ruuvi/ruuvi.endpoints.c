@@ -288,8 +288,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf $(BUILD_DIR)_ext_adv_48
 	rm -rf $(BUILD_DIR)_ext_adv_max
-	make setup_test
-	make generate_cmock_mocks_and_runners
+	rm -rf build_ceedling
 
 test_all:
 	rm -rf build_ceedling
