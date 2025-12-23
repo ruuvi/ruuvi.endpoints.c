@@ -47,7 +47,9 @@ jobs:
         pip install gcovr
 
     - name: Run tests with coverage
-      run: ceedling gcov:all utils:gcov
+      run: |
+        ceedling gcov:all
+        gcov -b -c build/gcov/out/*.gcno
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarqube-scan-action@v5
