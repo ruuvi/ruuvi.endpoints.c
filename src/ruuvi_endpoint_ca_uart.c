@@ -279,7 +279,7 @@ static re_status_t re_ca_uart_decode_led_ctrl (const uint8_t * const buffer,
     {
         payload->cmd = buffer[RE_CA_UART_CMD_INDEX];
         payload->params.led_ctrl_param.time_interval_ms = * ( (uint16_t *)
-            &buffer[RE_CA_UART_PAYLOAD_INDEX]);
+                &buffer[RE_CA_UART_PAYLOAD_INDEX]);
     }
 
     return err_code;
@@ -664,7 +664,7 @@ static re_status_t re_ca_uart_encode_adv_rprt (uint8_t * const buffer,
     uint32_t written = 0;
     const uint32_t tx_len = RE_CA_UART_TX_BUF_LEN (\
                             RE_CA_UART_TX_DATA_LEN_CMD_ADV_RPRT (\
-                                payload->params.adv.adv_len));
+                                    payload->params.adv.adv_len));
 
     if (tx_len > *buf_len)
     {
