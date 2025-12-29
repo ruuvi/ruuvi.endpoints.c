@@ -247,9 +247,9 @@ TEST_MAKEFILE_EXT_ADV_MAX = ${BUILD_DIR}_ext_adv_max/MakefileTestSupport
 -include ${TEST_MAKEFILE_EXT_ADV_48}
 -include ${TEST_MAKEFILE_EXT_ADV_MAX}
 
-.PHONY: all clean doxygen sonar format
+.PHONY: all clean doxygen sonar astyle
 
-all: clean format doxygen sonar
+all: clean astyle doxygen sonar
 
 # Specify all tests as dependencies of 'all' (workaround for JetBrains CLion)
 # It is needed because on the first scan of Makefile the $(TEST_MAKEFILE) does not exist and it is not included.
@@ -275,10 +275,9 @@ $(SONAR): $(ANALYSIS)
 $(ANALYSIS): %.a: %.c
 	$(CXX) $(CFLAGS) $< $(DFLAGS) $(INC_PARAMS) $(OFLAGS) -o $@
 
-astyle: format
-
-format:
+astyle:
 	./scripts/clang_format_all.sh
+	astyle --project=".astylerc" --recursive "src/*.c" "src/*.h" "test/*.c"
 
 clean:
 	rm -f $(ANALYSIS)
@@ -288,7 +287,8 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf $(BUILD_DIR)_ext_adv_48
 	rm -rf $(BUILD_DIR)_ext_adv_max
-	rm -rf build_ceedling
+	make setup_test
+	make generate_cmock_mocks_and_runners
 
 test_all:
 	rm -rf build_ceedling
@@ -298,10 +298,13 @@ test_all:
 
 test_all_gcov:
 	rm -rf build_ceedling
-	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all gcov:all
-	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling test:all gcov:all
-	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling test:all gcov:all
-	gcov -b -c build_ceedling/gcov/out/*/*.gcno
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project.yml ceedling gcov:all utils:gcov
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_48.yml ceedling gcov:all utils:gcov
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling test:all
+	CEEDLING_MAIN_PROJECT_FILE=./project_ext_adv_max.yml ceedling gcov:all utils:gcov
+	gcov  -b -c build_ceedling/gcov/out/*.gcno
 
 test:
 	@UNITY_DIR=${UNITY_DIR} BUILD_DIR=${BUILD_DIR} TEST_BUILD_DIR= ruby ${CMOCK_DIR}/scripts/test_summary.rb

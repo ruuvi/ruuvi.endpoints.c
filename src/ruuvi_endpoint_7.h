@@ -150,7 +150,7 @@ typedef struct
  * @retval RE_ERROR_NULL if buffer or data is NULL.
  */
 re_status_t
-re_7_encode(uint8_t* const buffer, const re_7_data_t* data);
+re_7_encode (uint8_t * const buffer, const re_7_data_t * data);
 
 /**
  * @brief Checks if the provided buffer conforms to the Ruuvi DF7 format.
@@ -162,7 +162,7 @@ re_7_encode(uint8_t* const buffer, const re_7_data_t* data);
  * @return Returns 'true' if the buffer format is Ruuvi DF7, 'false' otherwise.
  */
 bool
-re_7_check_format(const uint8_t* const p_buffer);
+re_7_check_format (const uint8_t * const p_buffer);
 
 /**
  * @brief Decodes a given buffer using the Ruuvi DF7 format.
@@ -179,6 +179,6 @@ re_7_check_format(const uint8_t* const p_buffer);
  * @retval RE_ERROR_DECODING_CRC if CRC check fails.
  */
 re_status_t
-re_7_decode(const uint8_t* const p_buffer, re_7_data_t* const p_data);
+re_7_decode (const uint8_t * const p_buffer, re_7_data_t * const p_data);
 
 #endif
