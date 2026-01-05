@@ -13,6 +13,9 @@
 #if !defined(RE_6_ENABLED)
 #   define RE_6_ENABLED  (1U)
 #endif
+#if !defined(RE_7_ENABLED)
+#   define RE_7_ENABLED  (1U)
+#endif
 #if !defined(RE_8_ENABLED)
 #   define RE_8_ENABLED  (1U)
 #endif

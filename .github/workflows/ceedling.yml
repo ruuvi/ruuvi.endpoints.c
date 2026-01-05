@@ -2,36 +2,27 @@
 
 name: Ceedling
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "unit-test"
   unit-test:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v4
 
     - name: Set up Ruby 3.0
-      uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
       with:
         ruby-version: '3.0'
+        bundler-cache: true
 
-    # Runs a single command using the runners shell
     - name: Install Ceedling
-      run: gem install ceedling -v 0.31.1
+      run: gem install ceedling
 
-    # Runs a set of commands using the runners shell
-    - name: Run a multi-line script
-      run: |
-        make test_all
+    - name: Run unit tests
+      run: ceedling test:all

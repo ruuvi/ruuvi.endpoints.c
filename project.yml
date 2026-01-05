@@ -7,7 +7,6 @@
 
 :project:
   :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
   :build_root: build_ceedling
 #  :release_build: TRUE
@@ -52,6 +51,8 @@
     - src/**
   :support:
     - test/support
+  :include:
+    - src/**
 
 :defines:
   # in order to add common defines:
@@ -96,11 +97,11 @@
 # You will need to have gcov and gcovr both installed to make it work.
 # For more information on these options, see docs in plugins/gcov
 :gcov:
-    :html_report: TRUE
-    :html_report_type: detailed
+  :reports:
+    - HtmlDetailed
+  :gcovr:
     :html_medium_threshold: 75
     :html_high_threshold: 90
-    :xml_report: FALSE
 
 #:tools:
 # Ceedling defaults to using gcc for compiling, linking, etc.
@@ -118,20 +119,13 @@
   :release: []
 
 :plugins:
-  :load_paths:
-    - "#{Ceedling.load_path}"
   :enabled:
-    - stdout_pretty_tests_report
+    - report_tests_pretty_stdout
     - module_generator
     - gcov 
 
 :flags:
   :test:
-    :compile:
-      :*:
-        - -Wall
-        - -std=c11
-  :gcov:
     :compile:
       :*:
         - -Wall
