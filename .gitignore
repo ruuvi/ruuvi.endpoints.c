@@ -79,3 +79,4 @@ compile_commands.json
 #VS Code settings
 .vscode/
 
+.local/
