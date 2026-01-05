@@ -228,7 +228,7 @@ typedef struct re_ca_uart_mosi_payload_buf_encoded_all_params_t
 {
     /** Buffer for the encoded 'all_params' payload. */
     uint8_t buf[RE_CA_UART_TX_BUF_LEN (
-                    RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS_WITH_MAX_ADV_LEN())];
+                                          RE_CA_UART_TX_DATA_LEN_CMD_ALL_PARAMS_WITH_MAX_ADV_LEN())];
 } re_ca_uart_mosi_payload_buf_encoded_all_params_t;
 
 /** @brief Buffer for the encoded 'led_ctrl' payload. */

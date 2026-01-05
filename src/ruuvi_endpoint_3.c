@@ -112,7 +112,7 @@ static void re_3_encode_data (uint8_t * const buffer,
         }
 
         buffer[RE_3_OFFSET_TEMPERATURE_DECIMAL] = (uint8_t) temperature | (uint8_t) (
-                sign << RE_3_BYTE_SIGN_OFFSET);
+                    sign << RE_3_BYTE_SIGN_OFFSET);
         uint8_t temperature_fraction = (uint8_t) roundf ( (temperature - floorf (
                                            temperature)) *
                                        RE_3_ENCODE_TEMP_CONVERT_RATIO);

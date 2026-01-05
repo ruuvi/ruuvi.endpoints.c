@@ -238,7 +238,7 @@ re_7_encode_tilt (uint8_t * const buffer, const re_7_data_t * data)
 }
 
 static void
-re_7_decode_tilt (const uint8_t * const buffer, re_float* tilt_x, re_float* tilt_y)
+re_7_decode_tilt (const uint8_t * const buffer, re_float * tilt_x, re_float * tilt_y)
 {
     const int8_t coded_tilt_x = (int8_t) buffer[RE_7_OFFSET_TILT_X];
     const int8_t coded_tilt_y = (int8_t) buffer[RE_7_OFFSET_TILT_Y];
@@ -351,7 +351,7 @@ re_7_encode_batt_motion (uint8_t * const buffer, const re_7_data_t * data)
 }
 
 static void
-re_7_decode_batt_motion (const uint8_t * const buffer, re_float* battery_v,
+re_7_decode_batt_motion (const uint8_t * const buffer, re_float * battery_v,
                          uint8_t * motion_intensity)
 {
     const uint8_t packed        = buffer[RE_7_OFFSET_BATT_MOTION];

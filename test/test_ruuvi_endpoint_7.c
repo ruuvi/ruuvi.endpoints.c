@@ -222,7 +222,7 @@ test_ruuvi_endpoint_7_encode_decode_max (void)
     re_status_t err_code                      = RE_SUCCESS;
     uint8_t     test_buffer[RE_7_DATA_LENGTH] = { 0 };
     err_code                                  = re_7_encode (test_buffer,
-        &m_re_7_data_ok_max);
+            &m_re_7_data_ok_max);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     uint8_t raw_buf[31] = { 0x02, 0x01, 0x04, 0x17, 0xFF, 0x99, 0x04 };
     memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
@@ -252,7 +252,7 @@ test_ruuvi_endpoint_7_encode_decode_min (void)
     re_status_t err_code                      = RE_SUCCESS;
     uint8_t     test_buffer[RE_7_DATA_LENGTH] = { 0 };
     err_code                                  = re_7_encode (test_buffer,
-        &m_re_7_data_ok_min);
+            &m_re_7_data_ok_min);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     uint8_t raw_buf[31] = { 0x02, 0x01, 0x04, 0x17, 0xFF, 0x99, 0x04 };
     memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
@@ -282,7 +282,7 @@ test_ruuvi_endpoint_7_encode_invalid_data (void)
     re_status_t err_code                      = RE_SUCCESS;
     uint8_t     test_buffer[RE_7_DATA_LENGTH] = { 0 };
     err_code                                  = re_7_encode (test_buffer,
-        &m_re_7_data_invalid);
+            &m_re_7_data_invalid);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     /* Verify invalid temperature marker */
     uint16_t temp = (test_buffer[RE_7_OFFSET_TEMP_MSB] << 8) |
@@ -335,7 +335,7 @@ test_ruuvi_endpoint_7_encode_underflow (void)
     re_status_t err_code                      = RE_SUCCESS;
     uint8_t     test_buffer[RE_7_DATA_LENGTH] = { 0 };
     err_code                                  = re_7_encode (test_buffer,
-        &m_re_7_data_underflow);
+            &m_re_7_data_underflow);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     uint8_t raw_buf[31] = { 0x02, 0x01, 0x04, 0x17, 0xFF, 0x99, 0x04 };
     memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
@@ -361,7 +361,7 @@ test_ruuvi_endpoint_7_encode_overflow (void)
     re_status_t err_code                      = RE_SUCCESS;
     uint8_t     test_buffer[RE_7_DATA_LENGTH] = { 0 };
     err_code                                  = re_7_encode (test_buffer,
-        &m_re_7_data_overflow);
+            &m_re_7_data_overflow);
     TEST_ASSERT_EQUAL (RE_SUCCESS, err_code);
     uint8_t raw_buf[31] = { 0x02, 0x01, 0x04, 0x17, 0xFF, 0x99, 0x04 };
     memcpy (&raw_buf[7], test_buffer, sizeof (test_buffer));
