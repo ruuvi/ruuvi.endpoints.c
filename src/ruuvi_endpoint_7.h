@@ -48,9 +48,9 @@
 #define RE_7_LUMI_MAX (65534.0f)
 #define RE_7_LUMI_MIN (0.0f)
 
-/** Color temperature: uint8, 26K steps, 1000-7650K range */
-#define RE_7_COLOR_TEMP_MAX (7650U)
-#define RE_7_COLOR_TEMP_MIN (1000U)
+/** Color temperature: uint8, 26K steps, 1000-7604K range, 255 reserved for invalid */
+#define RE_7_COLOR_TEMP_MAX (7604.0f)
+#define RE_7_COLOR_TEMP_MIN (1000.0f)
 
 /** Battery: 4-bit, 1.8-3.6V range (~128mV steps)
  *  Encoding: coded = (voltage - 1.8) * (14/1.8), value 15 reserved for invalid */
@@ -119,8 +119,8 @@ typedef struct
     //!< Tilt Y (roll) in degrees, -90 to +90. Output by decode.
     re_float luminosity_lux;
     //!< Luminosity in lux.
-    uint16_t color_temp_k;
-    //!< Color temperature in Kelvin, 1000-7650K.
+    re_float color_temp_k;
+    //!< Color temperature in Kelvin, 1000-7650K. Use NAN for invalid.
     re_float battery_v;
     //!< Battery voltage, 1.8-3.6V.
     uint8_t motion_intensity;

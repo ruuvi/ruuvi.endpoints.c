@@ -297,29 +297,30 @@ re_7_decode_luminosity (const uint8_t * const buffer)
 static void
 re_7_encode_color_temp (uint8_t * const buffer, const re_7_data_t * data)
 {
-    uint8_t coded_color_temp = RE_7_INVALID_COLOR_TEMP;
+    uint8_t  coded_color_temp = RE_7_INVALID_COLOR_TEMP;
+    re_float color_temp       = data->color_temp_k;
 
-    if ( (data->color_temp_k >= RE_7_COLOR_TEMP_MIN)
-            && (data->color_temp_k <= RE_7_COLOR_TEMP_MAX))
+    if (!isnan (color_temp))
     {
-        coded_color_temp = (uint8_t) ( (data->color_temp_k - RE_7_COLOR_TEMP_OFFSET) /
-                                       RE_7_COLOR_TEMP_STEP);
+        re_clip (&color_temp, RE_7_COLOR_TEMP_MIN, RE_7_COLOR_TEMP_MAX);
+        coded_color_temp = (uint8_t) lrintf ( (color_temp - (re_float) RE_7_COLOR_TEMP_OFFSET)
+                                              / (re_float) RE_7_COLOR_TEMP_STEP);
     }
 
     buffer[RE_7_OFFSET_COLOR_TEMP] = coded_color_temp;
 }
 
-static uint16_t
+static re_float
 re_7_decode_color_temp (const uint8_t * const buffer)
 {
     const uint8_t coded_color_temp = buffer[RE_7_OFFSET_COLOR_TEMP];
 
     if (RE_7_INVALID_COLOR_TEMP == coded_color_temp)
     {
-        return 0; /* Invalid */
+        return NAN;
     }
 
-    return (uint16_t) (coded_color_temp * RE_7_COLOR_TEMP_STEP + RE_7_COLOR_TEMP_OFFSET);
+    return (re_float) (coded_color_temp * RE_7_COLOR_TEMP_STEP + RE_7_COLOR_TEMP_OFFSET);
 }
 
 static void

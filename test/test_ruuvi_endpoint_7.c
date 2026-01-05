@@ -19,7 +19,7 @@ static const re_7_data_t m_re_7_data_ok =
     .tilt_x_deg        = 15.0f,  /* Expected after decode */
     .tilt_y_deg        = -30.0f, /* Expected after decode */
     .luminosity_lux    = 350.0f,
-    .color_temp_k      = 4500U,
+    .color_temp_k      = 4500.0f,
     .battery_v         = 2.9f,
     .motion_intensity  = 5U,
     .motion_count      = 42U,
@@ -42,7 +42,7 @@ static const re_7_data_t m_re_7_data_ok_max =
     .tilt_x_deg        = 90.0f, /* Expected after decode */
     .tilt_y_deg        = 0.0f,  /* Expected after decode */
     .luminosity_lux    = 65534.0f,
-    .color_temp_k      = 7650U,
+    .color_temp_k      = 7604.0f,
     .battery_v         = 3.6f,
     .motion_intensity  = 15U,
     .motion_count      = 254U,
@@ -63,7 +63,7 @@ static const re_7_data_t m_re_7_data_ok_min = { .temperature_c     = -163.835f,
                                                 .tilt_x_deg        = -90.0f, /* Expected after decode */
                                                 .tilt_y_deg        = 0.0f,   /* Expected after decode */
                                                 .luminosity_lux    = 0.0f,
-                                                .color_temp_k      = 1000U,
+                                                .color_temp_k      = 1000.0f,
                                                 .battery_v         = 1.8f,
                                                 .motion_intensity  = 0U,
                                                 .motion_count      = 0U,
@@ -85,7 +85,7 @@ static const re_7_data_t m_re_7_data_invalid =
     .tilt_x_deg        = NAN,
     .tilt_y_deg        = NAN,
     .luminosity_lux    = NAN,
-    .color_temp_k      = 0U, /* Invalid */
+    .color_temp_k      = NAN,
     .battery_v         = NAN,
     .motion_intensity  = 16U,  /* > max */
     .motion_count      = 255U, /* Invalid */
@@ -106,7 +106,7 @@ static const re_7_data_t m_re_7_data_underflow = { .temperature_c     = -170.0f,
                                                    .tilt_x_deg        = RE_7_TILT_MIN, /* Expected clamped value */
                                                    .tilt_y_deg        = 0.0f,
                                                    .luminosity_lux    = -1.0f,
-                                                   .color_temp_k      = 999U, /* Below min */
+                                                   .color_temp_k      = 999.0f, /* Below min */
                                                    .battery_v         = 1.5f,
                                                    .motion_intensity  = 0U,
                                                    .motion_count      = 0U,
@@ -129,7 +129,7 @@ static const re_7_data_t m_re_7_data_overflow =
     .tilt_x_deg        = RE_7_TILT_MAX, /* Expected clamped value */
     .tilt_y_deg        = 0.0f,
     .luminosity_lux    = 70000.0f,
-    .color_temp_k      = 8000U, /* Above max */
+    .color_temp_k      = 8000.0f, /* Above max */
     .battery_v         = 4.0f,
     .motion_intensity  = 20U,
     .motion_count      = 254U, /* Clamped to max */
@@ -197,7 +197,7 @@ test_ruuvi_endpoint_7_encode_decode_roundtrip (void)
     TEST_ASSERT_FLOAT_WITHIN (1.0f, m_re_7_data_ok.luminosity_lux,
                               decoded_data.luminosity_lux);
     /* Color temp: 26K steps */
-    TEST_ASSERT_UINT16_WITHIN (26U, m_re_7_data_ok.color_temp_k, decoded_data.color_temp_k);
+    TEST_ASSERT_FLOAT_WITHIN (26.0f, m_re_7_data_ok.color_temp_k, decoded_data.color_temp_k);
     /* Battery: ~120mV resolution */
     TEST_ASSERT_FLOAT_WITHIN (0.15f, m_re_7_data_ok.battery_v, decoded_data.battery_v);
     /* Motion intensity: exact */
@@ -323,6 +323,7 @@ test_ruuvi_endpoint_7_decode_invalid_returns_nan (void)
     TEST_ASSERT_TRUE (isnan (decoded_data.humidity_rh));
     TEST_ASSERT_TRUE (isnan (decoded_data.pressure_pa));
     TEST_ASSERT_TRUE (isnan (decoded_data.luminosity_lux));
+    TEST_ASSERT_TRUE (isnan (decoded_data.color_temp_k));
     TEST_ASSERT_TRUE (isnan (decoded_data.battery_v));
 }
 
@@ -349,6 +350,7 @@ test_ruuvi_endpoint_7_encode_underflow (void)
     TEST_ASSERT_FLOAT_WITHIN (1.0f, RE_7_TILT_MIN, decoded_data.tilt_x_deg);
     TEST_ASSERT_FLOAT_WITHIN (1.0f, 0.0f, decoded_data.tilt_y_deg);
     TEST_ASSERT_FLOAT_WITHIN (1.0f, RE_7_LUMI_MIN, decoded_data.luminosity_lux);
+    TEST_ASSERT_FLOAT_WITHIN (1.0f, RE_7_COLOR_TEMP_MIN, decoded_data.color_temp_k);
     TEST_ASSERT_FLOAT_WITHIN (0.15f, RE_7_VOLTAGE_MIN, decoded_data.battery_v);
 }
 
@@ -375,6 +377,7 @@ test_ruuvi_endpoint_7_encode_overflow (void)
     TEST_ASSERT_FLOAT_WITHIN (1.0f, RE_7_TILT_MAX, decoded_data.tilt_x_deg);
     TEST_ASSERT_FLOAT_WITHIN (1.0f, 0.0f, decoded_data.tilt_y_deg);
     TEST_ASSERT_FLOAT_WITHIN (1.0f, RE_7_LUMI_MAX, decoded_data.luminosity_lux);
+    TEST_ASSERT_FLOAT_WITHIN (26.0f, RE_7_COLOR_TEMP_MAX, decoded_data.color_temp_k);
     TEST_ASSERT_FLOAT_WITHIN (0.15f, RE_7_VOLTAGE_MAX, decoded_data.battery_v);
 }
 
@@ -575,20 +578,20 @@ test_ruuvi_endpoint_7_color_temp (void)
 {
     re_7_data_t data = m_re_7_data_ok;
     /* Test 1000K (min) */
-    data.color_temp_k                     = 1000U;
+    data.color_temp_k                     = 1000.0f;
     uint8_t test_buffer[RE_7_DATA_LENGTH] = { 0 };
     re_7_encode (test_buffer, &data);
     TEST_ASSERT_EQUAL_HEX8 (0x00U, test_buffer[RE_7_OFFSET_COLOR_TEMP]);
     /* Test ~4000K */
-    data.color_temp_k = 4000U;
+    data.color_temp_k = 4000.0f;
     re_7_encode (test_buffer, &data);
     /* (4000 - 1000) / 26 = 115.38 -> 115 */
     TEST_ASSERT_EQUAL_HEX8 (115U, test_buffer[RE_7_OFFSET_COLOR_TEMP]);
-    /* Test max (255 * 26 + 1000 = 7630K, clamped to 7650K) */
-    data.color_temp_k = 7650U;
+    /* Test max (254 * 26 + 1000 = 7604K, 255 reserved for invalid) */
+    data.color_temp_k = 7604.0f;
     re_7_encode (test_buffer, &data);
-    /* (7650 - 1000) / 26 = 255.76 -> 255 */
-    TEST_ASSERT_EQUAL_HEX8 (255U, test_buffer[RE_7_OFFSET_COLOR_TEMP]);
+    /* (7604 - 1000) / 26 = 254.0 -> 254 */
+    TEST_ASSERT_EQUAL_HEX8 (254U, test_buffer[RE_7_OFFSET_COLOR_TEMP]);
 }
 
 /**
