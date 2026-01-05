@@ -303,8 +303,8 @@ re_7_encode_color_temp (uint8_t * const buffer, const re_7_data_t * data)
     if (!isnan (color_temp))
     {
         re_clip (&color_temp, RE_7_COLOR_TEMP_MIN, RE_7_COLOR_TEMP_MAX);
-        coded_color_temp = (uint8_t) lrintf ( (color_temp - (re_float) RE_7_COLOR_TEMP_OFFSET)
-                                              / (re_float) RE_7_COLOR_TEMP_STEP);
+        coded_color_temp = (uint8_t) lrintf (
+                               (color_temp - (re_float) RE_7_COLOR_TEMP_OFFSET) / (re_float) RE_7_COLOR_TEMP_STEP);
     }
 
     buffer[RE_7_OFFSET_COLOR_TEMP] = coded_color_temp;
