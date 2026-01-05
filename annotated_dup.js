@@ -5,6 +5,7 @@ var annotated_dup =
     [ "re_6_data_t", "structre__6__data__t.html", "structre__6__data__t" ],
     [ "re_6_flags_t", "structre__6__flags__t.html", "structre__6__flags__t" ],
     [ "re_6_mac_addr_24_t", "structre__6__mac__addr__24__t.html", "structre__6__mac__addr__24__t" ],
+    [ "re_7_data_t", "structre__7__data__t.html", "structre__7__data__t" ],
     [ "re_8_data_t", "structre__8__data__t.html", "structre__8__data__t" ],
     [ "re_c5_data_t", "structre__c5__data__t.html", "structre__c5__data__t" ],
     [ "re_ca_uart_ble_ack_t", "structre__ca__uart__ble__ack__t.html", "structre__ca__uart__ble__ack__t" ],

@@ -102,6 +102,9 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Unit tests are run by Ceedling.</p>
 <h2>Static code analysis</h2>
 <p>Test coverage and code analysis are reported by <a href="https://sonarcloud.io/dashboard?id=ruuvi.endpoints.c">Sonarcloud</a>. Additionally the project is analyzed with PVS Studio and report is published to <a href="https://ruuvi.github.io/ruuvi.endpoints.c/fullhtml">GH Pages</a></p>
+<h3>SonarQube for IDE (VS Code)</h3>
+<p>To enable C/C++ analysis in VS Code with SonarQube for IDE, generate a compilation database: </p><div class="fragment"><div class="line">ls src/*.c | while read f; do echo &quot;{\&quot;directory\&quot;: \&quot;$(pwd)\&quot;, \&quot;file\&quot;: \&quot;$f\&quot;, \&quot;command\&quot;: \&quot;gcc -c $f -I./src\&quot;}&quot;; done | jq -s &#39;.&#39; &gt; compile_commands.json</div>
+</div><!-- fragment --><p> The VS Code settings are pre-configured to use this file.</p>
 <h2>Styling</h2>
 <p>Styling is done via Artisitic Style, following configuration at .astylerc.</p>
 <h2>Documentation</h2>

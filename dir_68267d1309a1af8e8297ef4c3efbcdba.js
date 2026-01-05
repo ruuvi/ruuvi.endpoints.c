@@ -6,6 +6,8 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "ruuvi_endpoint_5.h", "ruuvi__endpoint__5_8h_source.html", null ],
     [ "ruuvi_endpoint_6.c", "ruuvi__endpoint__6_8c_source.html", null ],
     [ "ruuvi_endpoint_6.h", "ruuvi__endpoint__6_8h_source.html", null ],
+    [ "ruuvi_endpoint_7.c", "ruuvi__endpoint__7_8c_source.html", null ],
+    [ "ruuvi_endpoint_7.h", "ruuvi__endpoint__7_8h_source.html", null ],
     [ "ruuvi_endpoint_8.c", "ruuvi__endpoint__8_8c_source.html", null ],
     [ "ruuvi_endpoint_8.h", "ruuvi__endpoint__8_8h.html", "ruuvi__endpoint__8_8h" ],
     [ "ruuvi_endpoint_c5.c", "ruuvi__endpoint__c5_8c_source.html", null ],
