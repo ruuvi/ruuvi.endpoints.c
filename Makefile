@@ -221,6 +221,7 @@ SOURCES=\
 	src/ruuvi_endpoint_3.c \
 	src/ruuvi_endpoint_5.c \
 	src/ruuvi_endpoint_6.c \
+	src/ruuvi_endpoint_7.c \
 	src/ruuvi_endpoint_c5.c \
 	src/ruuvi_endpoint_e0.c \
 	src/ruuvi_endpoint_e1.c \
