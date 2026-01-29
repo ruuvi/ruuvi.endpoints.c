@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#if RE_8_ENABLED
+#if (RE_7_ENABLED | RE_8_ENABLED)
 // CRC8 calculation https://oshgarage.com/the-crc8-checksum/
 
 static const uint8_t CRC_8_TABLE[256] =
