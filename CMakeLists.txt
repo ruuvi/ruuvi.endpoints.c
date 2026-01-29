@@ -8,6 +8,8 @@ if(IDF_VERSION_MAJOR GREATER_EQUAL 4)
         SRCS "src/ruuvi_endpoint_5.h"
         SRCS "src/ruuvi_endpoint_6.c"
         SRCS "src/ruuvi_endpoint_6.h"
+        SRCS "src/ruuvi_endpoint_7.c"
+        SRCS "src/ruuvi_endpoint_7.h"
         SRCS "src/ruuvi_endpoint_c5.c"
         SRCS "src/ruuvi_endpoint_c5.h"
         SRCS "src/ruuvi_endpoint_e0.c"
@@ -30,6 +32,7 @@ elseif (DEFINED ENV{ZEPHYR_BASE})
             src/ruuvi_endpoint_3.c
             src/ruuvi_endpoint_5.c
             src/ruuvi_endpoint_6.c
+            src/ruuvi_endpoint_7.c
             src/ruuvi_endpoint_c5.c
             src/ruuvi_endpoint_e0.c
             src/ruuvi_endpoint_e1.c
