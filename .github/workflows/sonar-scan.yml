@@ -10,12 +10,17 @@ on:
 
 jobs:
   sonar-scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       BUILD_WRAPPER_OUT_DIR: bw-output
 
     steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc g++ cmake make ninja-build gcovr
+
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0  # Shallow clones should be disabled for better analysis
