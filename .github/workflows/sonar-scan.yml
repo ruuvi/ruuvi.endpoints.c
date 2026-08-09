@@ -10,18 +10,23 @@ on:
 
 jobs:
   sonar-scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       BUILD_WRAPPER_OUT_DIR: bw-output
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc g++ cmake make ninja-build gcovr
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0  # Shallow clones should be disabled for better analysis
 
     - name: Install build-wrapper
-      uses: SonarSource/sonarqube-scan-action/install-build-wrapper@2f77a1ec69fb1d595b06f35ab27e97605bdef703 # v5
+      uses: SonarSource/sonarqube-scan-action/install-build-wrapper@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
 
     - name: Download Nordic SDK
       run: |
@@ -37,7 +42,7 @@ jobs:
           gcc -c src/*.c -I./nRF5_SDK_15.3.0_59ac345/components/libraries/util -I./src
 
     - name: Set up Ruby
-      uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
       with:
         ruby-version: '3.0'
         bundler-cache: true
@@ -51,7 +56,7 @@ jobs:
       run: make test_all_gcov
 
     - name: SonarCloud Scan
-      uses: SonarSource/sonarqube-scan-action@2f77a1ec69fb1d595b06f35ab27e97605bdef703 # v5
+      uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

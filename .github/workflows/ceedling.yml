@@ -10,13 +10,18 @@ on:
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc g++ cmake make ninja-build gcovr
+
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Set up Ruby 3.0
-      uses: ruby/setup-ruby@d354de180d0c9e813cfddfcbdc079945d4be589b # v1.275.0
+      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
       with:
         ruby-version: '3.0'
         bundler-cache: true
